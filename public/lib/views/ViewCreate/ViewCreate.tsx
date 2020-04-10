@@ -4,17 +4,17 @@ import React, { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import DataLoader from '../../components/DataLoader/DataLoader';
-import { useActiveTabs, useNavigate, useRoutes } from '../../hooks';
+import { useActiveTabs, useNavigate, useRoutesBreadcrumbs } from '../../hooks';
 import { MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
 import { LoadingState, Tab, ViewsRouteProps } from '../../views.types';
 
-const ViewCreate: FC<ViewsRouteProps> = ({ location, routes, tenantId }) => {
+const ViewCreate: FC<ViewsRouteProps> = ({ location, routes, tenantId, route }) => {
 	/**
 	 * Hooks
 	 */
 	const [initialLoading] = useState(LoadingState.Loaded);
-	const breadcrumbs = useRoutes();
+	const breadcrumbs = useRoutesBreadcrumbs();
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 	const { generatePath } = useNavigate();
 
@@ -22,23 +22,18 @@ const ViewCreate: FC<ViewsRouteProps> = ({ location, routes, tenantId }) => {
 	 * Render
 	 */
 	const renderChildRoutes = (): any => {
-		const activeRoute =
-			routes.find(item => item.path === generatePath(MODULE_PATHS.create)) || null;
+		/* const activeRoute =
+			route.routes.find(item => item.path === generatePath(MODULE_PATHS.create)) || null; */
 
-		console.log(activeRoute);
+		return Core.routes.render(route.routes as ModuleRouteConfig[], {
+			tenantId,
+			routes: route.routes,
+		});
 	};
 
 	return (
 		<>
-			<ContextHeader
-				tabs={activeTabs.slice(0, 1)}
-				linkProps={(props: any) => ({
-					...props,
-					to: props.href,
-					component: Link,
-				})}
-				title="Content overzicht aanmaken"
-			>
+			<ContextHeader tabs={activeTabs.slice(0, 1)} title="Content overzicht aanmaken">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<div className="u-margin-top">

@@ -17,6 +17,11 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 		return <Redirect to={`${location.pathname}/aanmaken`} />;
 	}
 
+	// if path is /views/aanmaken, redirect to /views/aanmaken/instellingen
+	if (/\/views\/aanmaken$/.test(location.pathname)) {
+		return <Redirect to={`${location.pathname}/aanmaken/instellingen`} />;
+	}
+
 	return (
 		<>
 			{Core.routes.render(route.routes as ModuleRouteConfig[], {
@@ -35,11 +40,6 @@ if (sitesAPI) {
 		component: ViewsComponent,
 		breadcrumb: 'Views',
 		exact: true,
-		navigation: {
-			renderContext: 'site',
-			context: 'site',
-			label: 'Views',
-		},
 		routes: [
 			{
 				path: '/:siteId/views/aanmaken',
@@ -49,6 +49,12 @@ if (sitesAPI) {
 					label: 'Create view',
 					parentPath: '/:siteId/views',
 				},
+				routes: [
+					{
+						path: MODULE_PATHS.createSettings,
+						component: ViewDetailSettings,
+					},
+				],
 			},
 		],
 	});

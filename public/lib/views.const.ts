@@ -17,11 +17,7 @@ export const VIEW_DETAIL_TAB_MAP: { [key: string]: Tab } = {
 	},
 };
 
-export const VIEW_DETAIL_TABS: Tab[] = [
-	VIEW_DETAIL_TAB_MAP.settings,
-	VIEW_DETAIL_TAB_MAP.contentComponenten,
-	VIEW_DETAIL_TAB_MAP.sites,
-];
+export const VIEW_DETAIL_TABS: Tab[] = [VIEW_DETAIL_TAB_MAP.settings, VIEW_DETAIL_TAB_MAP.config];
 
 export const MODULE_PATHS = {
 	root: '/:siteId/views',
