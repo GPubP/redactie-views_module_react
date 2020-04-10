@@ -82,6 +82,9 @@
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-cli": "3.3.10"
   },
+  "dependencies": {
+    "moment": "^2.22.1"
+  },
   "author": "Maarten De Weerdt",
   "license": "ISC"
 }
