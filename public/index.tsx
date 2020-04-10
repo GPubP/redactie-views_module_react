@@ -14,19 +14,14 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	);
 };
 
-const sitesAPI = Core.modules.getModuleAPI('sites-module');
-
-if (sitesAPI) {
-	sitesAPI.routes.register({
-		path: '/:siteId/views',
-		component: ViewsComponent,
-		breadcrumb: 'Views',
-		exact: true,
-		navigation: {
-			renderContext: 'site',
-			context: 'site',
-			label: 'Views',
-		},
-		routes: [],
-	});
-}
+// temp register routes on core due to conflicting dependencies
+// TODO: register on sites
+Core.routes.register({
+	path: '/views',
+	component: ViewsComponent,
+	exact: true,
+	navigation: {
+		label: 'Views',
+	},
+	routes: [],
+});
