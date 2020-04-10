@@ -24,9 +24,8 @@ export const VIEW_DETAIL_TABS: Tab[] = [
 ];
 
 export const MODULE_PATHS = {
-	root: '/:siteId/views',
-	admin: '/:siteId/views/beheer',
-	create: '/:siteId/views/aanmaken',
-	createSettings: '/:siteId/views/aanmaken/instellingen',
-	createConfig: '/:siteId/views/aanmaken/instellingen',
+	root: '/views',
+	create: '/views/aanmaken',
+	createSettings: '/views/aanmaken/instellingen',
+	createConfig: '/views/aanmaken/configuratie',
 };

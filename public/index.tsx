@@ -27,31 +27,24 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	);
 };
 
-console.log('core', Core.routes.getAll());
-
-const sitesAPI = Core.modules.getModuleAPI('sites-module');
-
-if (sitesAPI) {
-	sitesAPI.routes.register({
-		path: '/:siteId/views',
-		component: ViewsComponent,
-		exact: true,
-		navigation: {
-			renderContext: 'site',
-			context: 'site',
-			label: 'Structuur',
-		},
-		routes: [
-			{
-				path: MODULE_PATHS.create,
-				component: ViewCreate,
-				routes: [
-					{
-						path: MODULE_PATHS.createSettings,
-						component: ViewDetailSettings,
-					},
-				],
+// temp register routes on core
+// TODO: register on sites
+Core.routes.register({
+	path: MODULE_PATHS.root,
+	component: ViewsComponent,
+	breadcrumb: 'Views',
+	exact: true,
+	navigation: {
+		label: 'Views',
+	},
+	routes: [
+		{
+			path: MODULE_PATHS.create,
+			component: ViewCreate,
+			navigation: {
+				label: 'Create view',
+				parentPath: MODULE_PATHS.root,
 			},
-		],
-	});
-}
+		},
+	],
+});
