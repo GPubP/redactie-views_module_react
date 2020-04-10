@@ -2,7 +2,7 @@ import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editori
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, useEffect, useState } from 'react';
 
-import DataLoader from '../../components/DataLoader/DataLoader';
+import { DataLoader } from '../../components';
 import { useActiveTabs, useRoutesBreadcrumbs, useView } from '../../hooks';
 import { ViewMetaSchema, ViewSchema } from '../../services/view';
 import { VIEW_DETAIL_TAB_MAP, VIEW_DETAIL_TABS } from '../../views.const';
@@ -56,7 +56,7 @@ const ViewCreate: FC<ViewsRouteProps> = ({ location, tenantId, route }) => {
 
 	return (
 		<>
-			<ContextHeader tabs={activeTabs.slice(0, 1)} title="Content overzicht aanmaken">
+			<ContextHeader tabs={activeTabs} title="Content overzicht aanmaken">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<div className="u-margin-top">

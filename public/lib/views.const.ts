@@ -1,7 +1,12 @@
 import { Tab } from './views.types';
 
 export const BREADCRUMB_OPTIONS = {
-	excludePaths: ['/', '/:tenantId', '/:tenantId/sites/:siteId/views/aanmaken/instellingen'],
+	excludePaths: [
+		'/',
+		'/:tenantId',
+		'/:tenantId/sites/:siteId/views/aanmaken/instellingen',
+		'/:tenantId/sites/:siteId/views/aanmaken/configuratie',
+	],
 };
 
 export const VIEW_DETAIL_TAB_MAP: { [key: string]: Tab } = {

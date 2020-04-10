@@ -4,7 +4,7 @@ import 'moment/locale/nl';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { ViewCreate, ViewDetailSettings } from './lib/views';
+import { ViewCreate, ViewDetailConfig, ViewDetailSettings } from './lib/views';
 import { MODULE_PATHS } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
 
@@ -53,6 +53,10 @@ if (sitesAPI) {
 					{
 						path: MODULE_PATHS.createSettings,
 						component: ViewDetailSettings,
+					},
+					{
+						path: MODULE_PATHS.createConfig,
+						component: ViewDetailConfig,
 					},
 				],
 			},
