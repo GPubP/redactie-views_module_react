@@ -27,9 +27,6 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	);
 };
 
-// temp register routes on core
-// TODO: register on sites
-
 const sitesAPI = Core.modules.getModuleAPI('sites-module');
 
 if (sitesAPI) {
