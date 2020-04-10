@@ -36,18 +36,18 @@ const sitesAPI = Core.modules.getModuleAPI('sites-module');
 
 if (sitesAPI) {
 	sitesAPI.routes.register({
-		path: '/:siteId/views',
+		path: MODULE_PATHS.root,
 		component: ViewsComponent,
 		breadcrumb: 'Views',
 		exact: true,
 		routes: [
 			{
-				path: '/:siteId/views/aanmaken',
+				path: MODULE_PATHS.create,
 				component: ViewCreate,
 				navigation: {
 					context: 'site',
 					label: 'Create view',
-					parentPath: '/:siteId/views',
+					parentPath: MODULE_PATHS.root,
 				},
 				routes: [
 					{
