@@ -1,5 +1,6 @@
-export interface ViewCreate {
-	uuid?: string;
-	label: string;
-	description: string;
+export interface ViewSchema {
+	meta: {
+		description: string;
+		label: string;
+	};
 }

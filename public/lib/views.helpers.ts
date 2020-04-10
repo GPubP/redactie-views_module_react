@@ -1,6 +1,8 @@
-import { ViewCreate } from './services/view';
+import { ViewSchema } from './services/view';
 
-export const generateEmptyView = (): ViewCreate => ({
-	label: '',
-	description: '',
+export const generateEmptyView = (): ViewSchema => ({
+	meta: {
+		description: '',
+		label: '',
+	},
 });
