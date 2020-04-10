@@ -29,7 +29,7 @@ const ViewCreate: FC<ViewsRouteProps> = ({ location, tenantId, route }) => {
 	/**
 	 * Methods
 	 */
-	const upsertCT = (sectionData: any, tab: Tab): void => {
+	const upsertView = (sectionData: any, tab: Tab): void => {
 		switch (tab.name) {
 			case VIEW_DETAIL_TAB_MAP.settings.name:
 				createView({
@@ -50,7 +50,7 @@ const ViewCreate: FC<ViewsRouteProps> = ({ location, tenantId, route }) => {
 			tenantId,
 			routes: route.routes,
 			view: view || generateEmptyView(),
-			onSubmit: (sectionData: any, tab: Tab) => upsertCT(sectionData, tab),
+			onSubmit: (sectionData: any, tab: Tab) => upsertView(sectionData, tab),
 		});
 	};
 
