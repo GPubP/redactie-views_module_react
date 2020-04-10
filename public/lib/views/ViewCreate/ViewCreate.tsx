@@ -34,9 +34,6 @@ const ViewCreate: FC<ViewsRouteProps> = ({ location, tenantId, route }) => {
 	 * Render
 	 */
 	const renderChildRoutes = (): any => {
-		/* const activeRoute =
-			route.routes.find(item => item.path === generatePath(MODULE_PATHS.create)) || null; */
-
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {
 			tenantId,
 			routes: route.routes,
