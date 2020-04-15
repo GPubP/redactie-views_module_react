@@ -29,4 +29,6 @@ export const MODULE_PATHS = {
 	create: '/:siteId/views/aanmaken',
 	createSettings: '/:siteId/views/aanmaken/instellingen',
 	createConfig: '/:siteId/views/aanmaken/configuratie',
+	createConditions: '/:siteId/views/aanmaken/configuratie/voorwaarden',
+	createOptions: '/:siteId/views/aanmaken/configuratie/sorteer-opties',
 };

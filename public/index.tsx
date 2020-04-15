@@ -3,9 +3,15 @@ import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { TenantContext } from './lib/context';
-import { ViewCreate, ViewDetailConfig, ViewDetailSettings } from './lib/views';
+import {
+	ViewCreate,
+	ViewDetailConditions,
+	ViewDetailConfig,
+	ViewDetailSettings,
+} from './lib/views';
 import { MODULE_PATHS } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
+import ViewDetailOptions from './lib/views/ViewDetailConditions/ViewDetailConditions';
 
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	// if path is /views, redirect to /views/aanmaken
@@ -54,6 +60,16 @@ if (sitesAPI) {
 					{
 						path: MODULE_PATHS.createConfig,
 						component: ViewDetailConfig,
+						routes: [
+							{
+								path: MODULE_PATHS.createConditions,
+								component: ViewDetailConditions,
+							},
+							{
+								path: MODULE_PATHS.createOptions,
+								component: ViewDetailOptions,
+							},
+						],
 					},
 				],
 			},

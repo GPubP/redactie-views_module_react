@@ -1,22 +1,35 @@
 import { Button, Card } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
-import React, { FC } from 'react';
+import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
+import React, { FC, ReactElement } from 'react';
+import { generatePath } from 'react-router-dom';
 
-import { FormViewConditions, FormViewNewList, FormViewOptions, NavList } from '../../components';
+import { FormViewNewList, NavList } from '../../components';
+import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
 import {
 	DUMMY_CONTENTTYPE_OPTIONS,
 	DUMMY_METHOD_OPTIONS,
-	DUMMY_ORDER_OPTIONS,
-	DUMMY_SORT_OPTIONS,
 	VIEW_CC_NAV_LIST_ITEMS,
 } from './ViewDetailConfig.const';
 import { ViewDetailConfigProps } from './ViewDetailConfig.types';
 
-const ViewConfig: FC<ViewDetailConfigProps> = ({ view }) => {
+const ViewConfig: FC<ViewDetailConfigProps> = ({ view, route, tenantId, onSubmit }) => {
 	/**
 	 * Render
 	 */
+
+	const renderChildRoutes = (): ReactElement | null => {
+		return Core.routes.render(
+			route.routes as ModuleRouteConfig[],
+			{
+				tenantId,
+				view: view,
+				onSubmit: () => onSubmit({ ...view.meta }, VIEW_DETAIL_TAB_MAP.configuratie),
+			} as any
+		);
+	};
+
 	return (
 		<>
 			<div className="u-container u-wrapper">
@@ -37,37 +50,15 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({ view }) => {
 					</div>
 					<div className="col-xs-3">
 						<Card>
-							<NavList items={VIEW_CC_NAV_LIST_ITEMS} />
+							<NavList
+								items={VIEW_CC_NAV_LIST_ITEMS.map(listItem => ({
+									...listItem,
+									to: generatePath(`configuratie/${listItem.to}`),
+								}))}
+							/>
 						</Card>
 					</div>
-					<div className="col-xs-9">
-						<Card>
-							<div className="u-margin">
-								<h5>Voorwaarden</h5>
-
-								<FormViewConditions
-									formState={view}
-									onSubmit={() => {
-										console.log('submit conditions form');
-									}}
-								/>
-							</div>
-						</Card>
-						<Card>
-							<div className="u-margin">
-								<h5>Sorteer-opties</h5>
-
-								<FormViewOptions
-									sortOptions={DUMMY_SORT_OPTIONS}
-									orderOptions={DUMMY_ORDER_OPTIONS}
-									formState={view}
-									onSubmit={() => {
-										console.log('submit options form');
-									}}
-								/>
-							</div>
-						</Card>
-					</div>
+					<div className="col-xs-9">{renderChildRoutes()}</div>
 				</div>
 			</div>
 			<ActionBar show>
