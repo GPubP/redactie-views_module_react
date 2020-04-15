@@ -51,7 +51,7 @@ const ViewSettings: FC<ViewDetailSettingsProps> = ({ view, onSubmit }) => {
 
 								<div className="col-xs-12 col-md-4 u-margin-top u-margin-bottom">
 									<div>
-										Systeemnaam: <b>{kebabCase(values.meta.description)}</b>
+										Systeemnaam: <b>{kebabCase(values.meta.label)}</b>
 									</div>
 								</div>
 							</div>
@@ -66,13 +66,13 @@ const ViewSettings: FC<ViewDetailSettingsProps> = ({ view, onSubmit }) => {
 										required
 									/>
 									<div className="u-text-light u-margin-top-xs">
-										Geef ene beschrijving voor deze content lijst.
+										Geef een beschrijving voor deze content lijst.
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<ActionBar show>
+					<ActionBar className="o-action-bar--fixed" show>
 						<ActionBarContentSection>
 							<div className="u-wrapper">
 								<Button
