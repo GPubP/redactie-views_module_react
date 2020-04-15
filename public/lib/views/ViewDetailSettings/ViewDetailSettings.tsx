@@ -72,7 +72,7 @@ const ViewSettings: FC<ViewDetailSettingsProps> = ({ view, onSubmit }) => {
 							</div>
 						</div>
 					</div>
-					<ActionBar className="o-action-bar--fixed" show>
+					<ActionBar className="o-action-bar--fixed" isOpen>
 						<ActionBarContentSection>
 							<div className="u-wrapper">
 								<Button
