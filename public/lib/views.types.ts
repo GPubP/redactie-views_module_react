@@ -9,3 +9,7 @@ export interface ViewsRouteProps<
 	routes: ModuleRouteConfig[];
 	tenantId: string;
 }
+
+export interface FilterFormState {
+	name: string;
+}

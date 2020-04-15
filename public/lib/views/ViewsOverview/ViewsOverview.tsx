@@ -10,11 +10,13 @@ import moment from 'moment';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import DataLoader from '../../components/DataLoader/DataLoader';
+import FilterForm from '../../components/FilterForm/FilterForm';
 import useRoutes from '../../hooks/useRoutes/useRoutes';
 import { getViews, ViewSchema } from '../../services/views';
 import { LoadingState } from '../../types';
 import { BREADCRUMB_OPTIONS } from '../../views.const';
-import { ViewsRouteProps } from '../../views.types';
+import { generateFilterFormState } from '../../views.helpers';
+import { FilterFormState, ViewsRouteProps } from '../../views.types';
 
 const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
@@ -34,6 +36,24 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 				setLoadingState(LoadingState.Error);
 			});
 	}, []);
+
+	/**
+	 * Functions
+	 */
+	const onSubmit = ({ name }: FilterFormState): void => {
+		//add item to filterItems for Taglist
+		console.log(name);
+	};
+
+	const deleteAllFilters = (): void => {
+		//set empty array as Taglist
+		console.log('delete filters');
+	};
+
+	const deleteFilter = (item: any): void => {
+		//delete item from filterItems
+		console.log(item);
+	};
 
 	/**
 	 * Render
@@ -94,6 +114,15 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 
 		return (
 			<div className="u-container u-wrapper">
+				<div className="u-margin-top">
+					<FilterForm
+						initialState={generateFilterFormState()}
+						onCancel={deleteAllFilters}
+						onSubmit={onSubmit}
+						deleteActiveFilter={deleteFilter}
+						activeFilters={[]}
+					/>
+				</div>
 				<h5 className="u-margin-top">Resultaat ({viewsRows.length})</h5>
 				<Table className="u-margin-top" rows={viewsRows} columns={viewsColumns} />
 			</div>
