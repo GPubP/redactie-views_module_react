@@ -1,15 +1,10 @@
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import * as moment from 'moment';
-import 'moment/locale/nl';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { ViewCreate, ViewDetailConfig, ViewDetailSettings } from './lib/views';
 import { MODULE_PATHS } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
-
-// eslint-disable-next-line import/namespace
-moment.locale('nl');
 
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	// if path is /views, redirect to /views/aanmaken
