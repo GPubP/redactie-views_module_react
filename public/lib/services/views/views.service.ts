@@ -1,12 +1,23 @@
-import { api } from '../api';
+import { api, parseSearchParams, SearchParams } from '../api';
 
-import { ViewSchema, ViewsSchema } from './views.service.types';
+import { DEFAULT_VIEWS_SEARCH_PARAMS } from './views.service.const';
+import { ViewsSchema } from './views.service.types';
 
-export const getViews = async (): Promise<ViewSchema[] | null> => {
+export const getViews = async (
+	searchParams: SearchParams = DEFAULT_VIEWS_SEARCH_PARAMS
+): Promise<ViewsSchema | null> => {
 	try {
-		const response: ViewsSchema = await api.get('views').json();
+		const response: ViewsSchema = await api
+			.get(`content/views?${parseSearchParams(searchParams)}`)
+			.json();
 
-		return response.data;
+		if (!response.data) {
+			throw new Error('Failed to get views');
+		}
+
+		return {
+			data: response.data,
+		};
 	} catch (err) {
 		console.error(err);
 		return null;

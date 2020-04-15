@@ -12,47 +12,72 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import DataLoader from '../../components/DataLoader/DataLoader';
 import FilterForm from '../../components/FilterForm/FilterForm';
 import useRoutes from '../../hooks/useRoutes/useRoutes';
-import { getViews, ViewSchema } from '../../services/views';
+import useViews from '../../hooks/useViews/useViews';
+import { FilterItemSchema } from '../../services/filterItems/filterItems.service.types';
+import { ViewSchema } from '../../services/views';
+import { DEFAULT_VIEWS_SEARCH_PARAMS } from '../../services/views/views.service.const';
 import { LoadingState } from '../../types';
 import { BREADCRUMB_OPTIONS } from '../../views.const';
 import { generateFilterFormState } from '../../views.helpers';
 import { FilterFormState, ViewsRouteProps } from '../../views.types';
 
 const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
-	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
-	const [views, setViews] = useState<ViewSchema[] | null>(null);
+	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
+	const [viewsSearchParams, setViewsSearchParams] = useState(DEFAULT_VIEWS_SEARCH_PARAMS);
 	const routes = useRoutes();
 	const breadcrumbs = useBreadcrumbs(routes as ModuleRouteConfig[], BREADCRUMB_OPTIONS);
+	const [loadingState, views] = useViews(viewsSearchParams);
+	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 
 	useEffect(() => {
-		getViews()
-			.then(data => {
-				if (data?.length) {
-					setViews(data);
-				}
-				setLoadingState(LoadingState.Loaded);
-			})
-			.catch(() => {
-				setLoadingState(LoadingState.Error);
-			});
-	}, []);
+		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
+			setInitialLoading(LoadingState.Loaded);
+		}
+	}, [loadingState]);
 
 	/**
 	 * Functions
 	 */
 	const onSubmit = ({ name }: FilterFormState): void => {
 		//add item to filterItems for Taglist
-		console.log(name);
+		const request = { label: name, value: name };
+		const setFilter = filterItems?.concat(request);
+		setFilterItems(setFilter);
+		//get value array from filterItems
+		const names = setFilter.map(item => {
+			return item['value'];
+		});
+		//add array to searchParams
+		setViewsSearchParams({
+			...viewsSearchParams,
+			filter: names,
+		});
 	};
 
 	const deleteAllFilters = (): void => {
 		//set empty array as Taglist
-		console.log('delete filters');
+		const emptyFilter: [] = [];
+		setFilterItems(emptyFilter);
+		//delete search param from api call
+		setViewsSearchParams({
+			skip: 1,
+			limit: 10,
+		});
 	};
 
 	const deleteFilter = (item: any): void => {
 		//delete item from filterItems
-		console.log(item);
+		const setFilter = filterItems?.filter(el => el.value !== item.value);
+		setFilterItems(setFilter);
+		//get value array from filterItems
+		const names = setFilter.map(item => {
+			return item['value'];
+		});
+		//add array to searchParams
+		setViewsSearchParams({
+			...viewsSearchParams,
+			filter: names,
+		});
 	};
 
 	/**
@@ -63,7 +88,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 			return null;
 		}
 
-		const viewsRows = views.map(view => ({
+		const viewsRows = views.data.map(view => ({
 			id: view.uuid,
 			name: view.meta.label,
 			author: view.meta.lastEditor,
@@ -93,7 +118,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 				label: '',
 				classList: ['u-text-right'],
 				disableSorting: true,
-				component(value: unknown, rowData: unknown) {
+				component(value: unknown, rowData: ViewSchema) {
 					// TODO: add types for rowData
 					const { id } = rowData as any;
 
@@ -120,7 +145,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 						onCancel={deleteAllFilters}
 						onSubmit={onSubmit}
 						deleteActiveFilter={deleteFilter}
-						activeFilters={[]}
+						activeFilters={filterItems}
 					/>
 				</div>
 				<h5 className="u-margin-top">Resultaat ({viewsRows.length})</h5>
@@ -142,7 +167,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 					</Button>
 				</ContextHeaderActionsSection>
 			</ContextHeader>
-			<DataLoader loadingState={loadingState} render={renderOverview} />
+			<DataLoader loadingState={initialLoading} render={renderOverview} />
 		</>
 	);
 };
