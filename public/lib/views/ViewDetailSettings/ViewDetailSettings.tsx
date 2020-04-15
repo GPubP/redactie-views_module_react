@@ -9,9 +9,15 @@ import { ViewSchema } from '../../services/view';
 import { MODULE_PATHS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
 import { VIEW_SETTINGS_VALIDATION_SCHEMA } from './ViewDetailSettings.const';
-import { ViewDetailSettingsProps } from './ViewDetailSettings.types';
+import { ViewDetailSettingsMatchProps, ViewDetailSettingsProps } from './ViewDetailSettings.types';
 
-const ViewSettings: FC<ViewDetailSettingsProps> = ({ view, onSubmit }) => {
+const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = ({
+	view,
+	onSubmit,
+	match,
+}) => {
+	const { siteId } = match.params;
+
 	/**
 	 * Hooks
 	 */
@@ -20,7 +26,7 @@ const ViewSettings: FC<ViewDetailSettingsProps> = ({ view, onSubmit }) => {
 	 * Methods
 	 */
 	const navigateToOverview = (): void => {
-		navigate(MODULE_PATHS.root);
+		navigate(`/sites${MODULE_PATHS.root}`, { siteId });
 	};
 
 	return (
