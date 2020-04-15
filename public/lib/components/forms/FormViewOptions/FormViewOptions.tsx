@@ -18,7 +18,7 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 						<div className="col-xs-6">
 							<Field
 								label="Sorteer op"
-								name="sorting"
+								name="query.options.orderBy"
 								options={sortOptions}
 								as={Select}
 							/>
@@ -26,11 +26,12 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 						<div className="col-xs-6">
 							<Field
 								label="Volgorde"
-								name="order"
+								name="query.options.order"
 								options={orderOptions}
 								as={Select}
 							/>
 						</div>
+						{/* TODO: add offset and limit selectors */}
 					</div>
 				</>
 			)}

@@ -4,6 +4,7 @@ export interface ViewSchema {
 		options?: ViewOptionsSchema;
 		conditions: ViewConditionSchema[] | [];
 	};
+	contentType?: any;
 	uuid?: string;
 }
 
@@ -13,10 +14,10 @@ export interface ViewMetaSchema {
 }
 
 export interface ViewOptionsSchema {
-	offset: 0;
-	limit: 0;
-	orderBy?: any;
-	order?: string;
+	offset: number;
+	limit: number;
+	orderBy: any;
+	order: string;
 }
 
 export interface ViewConditionSchema {
