@@ -2,9 +2,9 @@ import { Button, Select } from '@acpaas-ui/react-components';
 import { Field, Formik } from 'formik';
 import React, { FC } from 'react';
 
-import { FormViewNewCCProps } from './FormViewNewCC.types';
+import { FormViewNewListProps } from './FormViewNewList.types';
 
-const FormGeneralCC: FC<FormViewNewCCProps> = ({
+const FormViewNewList: FC<FormViewNewListProps> = ({
 	methodOptions,
 	contentTypeOptions,
 	formState,
@@ -48,4 +48,4 @@ const FormGeneralCC: FC<FormViewNewCCProps> = ({
 	);
 };
 
-export default FormGeneralCC;
+export default FormViewNewList;

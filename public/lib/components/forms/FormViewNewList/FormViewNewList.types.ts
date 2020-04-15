@@ -1,4 +1,4 @@
-export interface FormViewNewCCProps {
+export interface FormViewNewListProps {
 	methodOptions: any[];
 	contentTypeOptions: any[];
 	formState: any;

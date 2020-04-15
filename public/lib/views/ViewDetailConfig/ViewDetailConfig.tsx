@@ -1,34 +1,22 @@
 import { Button, Card } from '@acpaas-ui/react-components';
-import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-editorial-components';
-import { Field, Formik } from 'formik';
-import React, { FC, ReactElement } from 'react';
+import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
+import React, { FC } from 'react';
 
-import { FormViewNewCC, NavList } from '../../components';
+import { FormViewConditions, FormViewNewList, FormViewOptions, NavList } from '../../components';
 
 import {
 	DUMMY_CONTENTTYPE_OPTIONS,
-	DUMMY_FIELDS,
 	DUMMY_METHOD_OPTIONS,
-	FIELD_COLUMNS,
+	DUMMY_ORDER_OPTIONS,
+	DUMMY_SORT_OPTIONS,
 	VIEW_CC_NAV_LIST_ITEMS,
 } from './ViewDetailConfig.const';
+import { ViewDetailConfigProps } from './ViewDetailConfig.types';
 
-const ViewConfig: FC = () => {
+const ViewConfig: FC<ViewDetailConfigProps> = ({ view }) => {
 	/**
 	 * Render
 	 */
-	const renderTableField = (): ReactElement => {
-		return <Table className="u-margin-top" columns={FIELD_COLUMNS} rows={DUMMY_FIELDS}></Table>;
-	};
-
-	const renderTableForm = (): ReactElement => {
-		return (
-			<Formik initialValues={DUMMY_FIELDS} onSubmit={() => console.log('submit table form')}>
-				{() => <Field name="fields" placeholder="No fields" as={renderTableField} />}
-			</Formik>
-		);
-	};
-
 	return (
 		<>
 			<div className="u-container u-wrapper">
@@ -36,10 +24,10 @@ const ViewConfig: FC = () => {
 					<div className="col-xs-12 u-margin-bottom">
 						<Card>
 							<div className="u-margin">
-								<FormViewNewCC
+								<FormViewNewList
 									contentTypeOptions={DUMMY_CONTENTTYPE_OPTIONS}
 									methodOptions={DUMMY_METHOD_OPTIONS}
-									formState={{}}
+									formState={view}
 									onSubmit={() => {
 										console.log('submit filter form');
 									}}
@@ -57,7 +45,26 @@ const ViewConfig: FC = () => {
 							<div className="u-margin">
 								<h5>Voorwaarden</h5>
 
-								{renderTableForm()}
+								<FormViewConditions
+									formState={view}
+									onSubmit={() => {
+										console.log('submit conditions form');
+									}}
+								/>
+							</div>
+						</Card>
+						<Card>
+							<div className="u-margin">
+								<h5>Sorteer-opties</h5>
+
+								<FormViewOptions
+									sortOptions={DUMMY_SORT_OPTIONS}
+									orderOptions={DUMMY_ORDER_OPTIONS}
+									formState={view}
+									onSubmit={() => {
+										console.log('submit options form');
+									}}
+								/>
 							</div>
 						</Card>
 					</div>
