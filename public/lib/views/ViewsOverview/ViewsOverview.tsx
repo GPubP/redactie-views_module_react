@@ -3,10 +3,13 @@ import {
 	ContextHeader,
 	ContextHeaderActionsSection,
 	ContextHeaderTopSection,
+	Table,
 } from '@acpaas-ui/react-editorial-components';
 import { ModuleRouteConfig, useBreadcrumbs } from '@redactie/redactie-core';
+import moment from 'moment';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
+import DataLoader from '../../components/DataLoader/DataLoader';
 import useRoutes from '../../hooks/useRoutes/useRoutes';
 import { getViews, ViewSchema } from '../../services/views';
 import { LoadingState } from '../../types';
@@ -32,6 +35,71 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 			});
 	}, []);
 
+	/**
+	 * Render
+	 */
+	const renderOverview = (): ReactElement | null => {
+		if (!views) {
+			return null;
+		}
+
+		const viewsRows = views.map(view => ({
+			id: view.uuid,
+			name: view.meta.label,
+			author: view.meta.lastEditor,
+			lastModified: view.meta.lastModified,
+		}));
+
+		const viewsColumns = [
+			{
+				label: 'Naam',
+				value: 'name',
+			},
+			{
+				label: 'Auteur',
+				value: 'author',
+				disableSorting: true,
+			},
+			{
+				label: 'Laatst aangepast',
+				value: 'lastModified',
+				disableSorting: true,
+				format(data: string) {
+					console.log(data);
+					return moment(data).format('DD/MM/YYYY');
+				},
+			},
+			{
+				label: '',
+				classList: ['u-text-right'],
+				disableSorting: true,
+				component(value: unknown, rowData: unknown) {
+					// TODO: add types for rowData
+					const { id } = rowData as any;
+
+					return (
+						<Button
+							ariaLabel="Edit"
+							icon="edit"
+							onClick={() =>
+								history.push(`/${tenantId}/content-types/${id}/bewerken`)
+							}
+							type="primary"
+							transparent
+						></Button>
+					);
+				},
+			},
+		];
+
+		return (
+			<div className="u-container u-wrapper">
+				<h5 className="u-margin-top">Resultaat ({viewsRows.length})</h5>
+				<Table className="u-margin-top" rows={viewsRows} columns={viewsColumns} />
+			</div>
+		);
+	};
+
 	return (
 		<>
 			<ContextHeader title="Views">
@@ -45,6 +113,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 					</Button>
 				</ContextHeaderActionsSection>
 			</ContextHeader>
+			<DataLoader loadingState={loadingState} render={renderOverview} />
 		</>
 	);
 };
