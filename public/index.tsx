@@ -2,6 +2,7 @@ import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import { TenantContext } from './lib/context';
 import { ViewCreate, ViewDetailConfig, ViewDetailSettings } from './lib/views';
 import { MODULE_PATHS } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
@@ -18,12 +19,13 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	}
 
 	return (
-		<>
+		<TenantContext.Provider value={{ tenantId }}>
 			{Core.routes.render(route.routes as ModuleRouteConfig[], {
 				basePath: match.url,
+				routes: route.routes,
 				tenantId,
 			})}
-		</>
+		</TenantContext.Provider>
 	);
 };
 
