@@ -87,7 +87,6 @@
     "formik": "2.1.4",
     "ky": "^0.17.0",
     "lodash.kebabcase": "4.1.1",
-    "moment": "2.22.1",
     "yup": "^0.28.3"
   },
   "author": "Maarten De Weerdt",
