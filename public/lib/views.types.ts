@@ -10,6 +10,10 @@ export interface ViewsRouteProps<
 	tenantId: string;
 }
 
+export interface FilterFormState {
+	name: string;
+}
+
 export enum LoadingState {
 	Loading = 'loading',
 	Loaded = 'loaded',
