@@ -65,7 +65,7 @@ const ViewConfig: FC<ViewDetailConfigProps<ViewDetailConfigMatchProps>> = ({
 					<div className="col-xs-9">{renderChildRoutes()}</div>
 				</div>
 			</div>
-			<ActionBar show>
+			<ActionBar className="o-action-bar--fixed" isOpen>
 				<ActionBarContentSection>
 					<div className="u-wrapper">
 						<Button className="u-margin-right" type="success">
