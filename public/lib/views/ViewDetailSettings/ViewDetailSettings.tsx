@@ -1,5 +1,9 @@
 import { Button, TextField } from '@acpaas-ui/react-components';
-import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
+import {
+	ActionBar,
+	ActionBarContentSection,
+	Container,
+} from '@acpaas-ui/react-editorial-components';
 import { Field, Formik } from 'formik';
 import kebabCase from 'lodash.kebabcase';
 import React, { FC } from 'react';
@@ -39,7 +43,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 		>
 			{({ submitForm, values }) => (
 				<>
-					<div className="u-container u-wrapper u-margin-bottom-lg">
+					<Container>
 						<div className="row">
 							<div className="col-xs-12 col-md-8 row middle-xs">
 								<div className="col-xs-12 col-md-8">
@@ -77,7 +81,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 								</div>
 							</div>
 						</div>
-					</div>
+					</Container>
 					<ActionBar className="o-action-bar--fixed" isOpen>
 						<ActionBarContentSection>
 							<div className="u-wrapper">

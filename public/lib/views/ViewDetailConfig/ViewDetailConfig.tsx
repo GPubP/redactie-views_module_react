@@ -1,5 +1,9 @@
 import { Button, Card } from '@acpaas-ui/react-components';
-import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
+import {
+	ActionBar,
+	ActionBarContentSection,
+	Container,
+} from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, ReactElement } from 'react';
 import { generatePath } from 'react-router-dom';
@@ -36,7 +40,7 @@ const ViewConfig: FC<ViewDetailConfigProps<ViewDetailConfigMatchProps>> = ({
 
 	return (
 		<>
-			<div className="u-container u-wrapper">
+			<Container>
 				<div className="row between-xs top-xs u-margin-bottom-lg">
 					<div className="col-xs-12 u-margin-bottom">
 						<Card>
@@ -64,7 +68,7 @@ const ViewConfig: FC<ViewDetailConfigProps<ViewDetailConfigMatchProps>> = ({
 					</div>
 					<div className="col-xs-9">{renderChildRoutes()}</div>
 				</div>
-			</div>
+			</Container>
 			<ActionBar className="o-action-bar--fixed" isOpen>
 				<ActionBarContentSection>
 					<div className="u-wrapper">
