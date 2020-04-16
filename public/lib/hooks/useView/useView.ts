@@ -18,8 +18,9 @@ const useView = (
 		setLoadingState(LoadingState.Loading);
 
 		return updateView(view)
-			.then(() => {
+			.then(result => {
 				setLoadingState(LoadingState.Loaded);
+				setView(result);
 			})
 			.catch(() => {
 				setLoadingState(LoadingState.Error);
