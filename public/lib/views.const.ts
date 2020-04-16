@@ -6,6 +6,8 @@ export const BREADCRUMB_OPTIONS = {
 		'/:tenantId',
 		'/:tenantId/sites/:siteId/views/aanmaken/instellingen',
 		'/:tenantId/sites/:siteId/views/aanmaken/configuratie',
+		'/:tenantId/sites/:siteId/views/aanmaken/configuratie/voorwaarden',
+		'/:tenantId/sites/:siteId/views/aanmaken/configuratie/sorteer-opties',
 	],
 };
 

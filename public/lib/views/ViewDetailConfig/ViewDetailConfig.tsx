@@ -12,22 +12,26 @@ import {
 	DUMMY_METHOD_OPTIONS,
 	VIEW_CC_NAV_LIST_ITEMS,
 } from './ViewDetailConfig.const';
-import { ViewDetailConfigProps } from './ViewDetailConfig.types';
+import { ViewDetailConfigMatchProps, ViewDetailConfigProps } from './ViewDetailConfig.types';
 
-const ViewConfig: FC<ViewDetailConfigProps> = ({ view, route, tenantId, onSubmit }) => {
+const ViewConfig: FC<ViewDetailConfigProps<ViewDetailConfigMatchProps>> = ({
+	view,
+	route,
+	tenantId,
+	onSubmit,
+	match,
+}) => {
+	const { siteId } = match.params;
+
 	/**
 	 * Render
 	 */
-
 	const renderChildRoutes = (): ReactElement | null => {
-		return Core.routes.render(
-			route.routes as ModuleRouteConfig[],
-			{
-				tenantId,
-				view: view,
-				onSubmit: () => onSubmit({ ...view.meta }, VIEW_DETAIL_TAB_MAP.configuratie),
-			} as any
-		);
+		return Core.routes.render(route.routes as ModuleRouteConfig[], {
+			tenantId,
+			view: view,
+			onSubmit: () => onSubmit({ view }, VIEW_DETAIL_TAB_MAP.configuratie),
+		});
 	};
 
 	return (
@@ -53,7 +57,7 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({ view, route, tenantId, onSubmit
 							<NavList
 								items={VIEW_CC_NAV_LIST_ITEMS.map(listItem => ({
 									...listItem,
-									to: generatePath(`configuratie/${listItem.to}`),
+									to: generatePath(`${route.path}/${listItem.to}`, { siteId }),
 								}))}
 							/>
 						</Card>

@@ -5,7 +5,7 @@ import { FormViewConditions } from '../../components';
 
 import { ViewDetailConditionsProps } from './ViewDetailConditions.types';
 
-const ViewDetailOptions: FC<ViewDetailConditionsProps> = ({ view, onSubmit }) => {
+const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, onSubmit }) => {
 	/**
 	 * Render
 	 */
@@ -20,4 +20,4 @@ const ViewDetailOptions: FC<ViewDetailConditionsProps> = ({ view, onSubmit }) =>
 	);
 };
 
-export default ViewDetailOptions;
+export default ViewDetailConditions;
