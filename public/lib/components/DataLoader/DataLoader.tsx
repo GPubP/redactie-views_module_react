@@ -1,7 +1,7 @@
 import { Spinner } from '@acpaas-ui/react-components';
 import React, { FC } from 'react';
 
-import { LoadingState } from '../../types';
+import { LoadingState } from '../../views.types';
 
 import { DataLoaderProps } from './DataLoader.types';
 

@@ -2,7 +2,9 @@ import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { ViewsOverview } from './lib/views';
+import { TenantContext } from './lib/context';
+import { ViewCreate, ViewDetailSettings, ViewsOverview } from './lib/views';
+import { MODULE_PATHS } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
 
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
@@ -11,29 +13,50 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 		return <Redirect to={`/${tenantId}/views/beheer`} />;
 	}
 
+	// if path is /views/aanmaken, redirect to /views/aanmaken/instellingen
+	if (/\/views\/aanmaken$/.test(location.pathname)) {
+		return <Redirect to={`${match.url}/aanmaken/instellingen`} />;
+	}
+
 	return (
-		<>
+		<TenantContext.Provider value={{ tenantId }}>
 			{Core.routes.render(route.routes as ModuleRouteConfig[], {
 				basePath: match.url,
+				routes: route.routes,
 				tenantId,
 			})}
-		</>
+		</TenantContext.Provider>
 	);
 };
 
-// temp register routes on core due to conflicting dependencies
-// TODO: register on sites
-Core.routes.register({
-	path: '/views',
-	component: ViewsComponent,
-	exact: true,
-	navigation: {
-		label: 'Views',
-	},
-	routes: [
-		{
-			path: '/views/beheer',
-			component: ViewsOverview,
+const sitesAPI = Core.modules.getModuleAPI('sites-module');
+
+if (sitesAPI) {
+	sitesAPI.routes.register({
+		path: MODULE_PATHS.root,
+		component: ViewsComponent,
+		breadcrumb: 'Views',
+		exact: true,
+		navigation: {
+			renderContext: 'site',
+			context: 'site',
+			label: 'Views',
 		},
-	],
-});
+		routes: [
+			{
+				path: MODULE_PATHS.overview,
+				component: ViewsOverview,
+			},
+			{
+				path: MODULE_PATHS.create,
+				component: ViewCreate,
+				routes: [
+					{
+						path: MODULE_PATHS.createSettings,
+						component: ViewDetailSettings,
+					},
+				],
+			},
+		],
+	});
+}

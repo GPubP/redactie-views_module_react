@@ -13,3 +13,16 @@ export interface ViewsRouteProps<
 export interface FilterFormState {
 	name: string;
 }
+
+export enum LoadingState {
+	Loading = 'loading',
+	Loaded = 'loaded',
+	Error = 'error',
+}
+
+export interface Tab {
+	name: string;
+	target: string;
+	active: boolean;
+	disabled?: boolean;
+}
