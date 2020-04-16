@@ -110,7 +110,6 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 				value: 'lastModified',
 				disableSorting: true,
 				format(data: string) {
-					console.log(data);
 					return moment(data).format('DD/MM/YYYY');
 				},
 			},
