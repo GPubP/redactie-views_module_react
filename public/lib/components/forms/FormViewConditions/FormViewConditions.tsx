@@ -12,7 +12,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({ formState, onSubmit }
 				className="u-margin-top"
 				columns={FIELD_COLUMNS}
 				rows={formState.query.conditions}
-			></Table>
+			/>
 		);
 	};
 
