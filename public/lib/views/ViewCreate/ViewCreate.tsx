@@ -1,15 +1,17 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, useEffect, useState } from 'react';
+import { generatePath, Link } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
 import { useActiveTabs, useRoutesBreadcrumbs, useView } from '../../hooks';
 import { ViewMetaSchema, ViewSchema } from '../../services/view';
 import { VIEW_DETAIL_TAB_MAP, VIEW_DETAIL_TABS } from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
-import { LoadingState, Tab, ViewsRouteProps } from '../../views.types';
+import { LoadingState, Tab, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
-const ViewCreate: FC<ViewsRouteProps> = ({ location, tenantId, route }) => {
+const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, route, match }) => {
+	const { siteId } = match.params;
 	/**
 	 * Hooks
 	 */
@@ -56,7 +58,15 @@ const ViewCreate: FC<ViewsRouteProps> = ({ location, tenantId, route }) => {
 
 	return (
 		<>
-			<ContextHeader tabs={activeTabs} title="Content overzicht aanmaken">
+			<ContextHeader
+				tabs={activeTabs}
+				linkProps={(props: any) => ({
+					...props,
+					to: generatePath(`${route.path}/${props.href}`, { siteId }),
+					component: Link,
+				})}
+				title="Content overzicht aanmaken"
+			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<div className="u-margin-top">

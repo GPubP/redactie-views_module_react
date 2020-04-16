@@ -10,6 +10,10 @@ export interface ViewsRouteProps<
 	tenantId: string;
 }
 
+export interface ViewsMatchProps {
+	siteId: string;
+}
+
 export enum LoadingState {
 	Loading = 'loading',
 	Loaded = 'loaded',
