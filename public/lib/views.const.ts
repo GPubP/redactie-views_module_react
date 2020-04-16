@@ -5,9 +5,10 @@ export const BREADCRUMB_OPTIONS = {
 		'/',
 		'/:tenantId',
 		'/:tenantId/sites/:siteId/views/aanmaken/instellingen',
-		'/:tenantId/sites/:siteId/views/aanmaken/configuratie',
-		'/:tenantId/sites/:siteId/views/aanmaken/configuratie/voorwaarden',
-		'/:tenantId/sites/:siteId/views/aanmaken/configuratie/sorteer-opties',
+		'/:tenantId/sites/:siteId/views/:viewUuid/instellingen',
+		'/:tenantId/sites/:siteId/views/:viewUuid/configuratie',
+		'/:tenantId/sites/:siteId/views/:viewUuid/configuratie/voorwaarden',
+		'/:tenantId/sites/:siteId/views/:viewUuid/configuratie/sorteer-opties',
 	],
 };
 
@@ -30,7 +31,9 @@ export const MODULE_PATHS = {
 	root: '/:siteId/views',
 	create: '/:siteId/views/aanmaken',
 	createSettings: '/:siteId/views/aanmaken/instellingen',
-	createConfig: '/:siteId/views/aanmaken/configuratie',
-	createConditions: '/:siteId/views/aanmaken/configuratie/voorwaarden',
-	createOptions: '/:siteId/views/aanmaken/configuratie/sorteer-opties',
+	detail: '/:siteId/views/:viewUuid',
+	detailSettings: '/:siteId/views/:viewUuid/instellingen',
+	detailConfig: '/:siteId/views/:viewUuid/configuratie',
+	detailConditions: '/:siteId/views/:viewUuid/configuratie/voorwaarden',
+	detailOptions: '/:siteId/views/:viewUuid/configuratie/sorteer-opties',
 };

@@ -15,4 +15,5 @@ export interface ViewDetailConfigProps<
 
 export interface ViewDetailConfigMatchProps {
 	siteId: string;
+	viewUuid: string;
 }

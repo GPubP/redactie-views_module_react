@@ -2,26 +2,23 @@ import { Button, Card } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, ReactElement } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { FormViewNewList, NavList } from '../../components';
 import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
+import { ViewsDetailRouteProps } from '../../views.types';
 
 import {
 	DUMMY_CONTENTTYPE_OPTIONS,
 	DUMMY_METHOD_OPTIONS,
 	VIEW_CC_NAV_LIST_ITEMS,
 } from './ViewDetailConfig.const';
-import { ViewDetailConfigMatchProps, ViewDetailConfigProps } from './ViewDetailConfig.types';
 
-const ViewConfig: FC<ViewDetailConfigProps<ViewDetailConfigMatchProps>> = ({
-	view,
-	route,
-	tenantId,
-	onSubmit,
-	match,
-}) => {
-	const { siteId } = match.params;
+const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onSubmit }) => {
+	/**
+	 * Hooks
+	 */
+	const { siteId, viewUuid } = useParams();
 
 	/**
 	 * Render
@@ -30,7 +27,7 @@ const ViewConfig: FC<ViewDetailConfigProps<ViewDetailConfigMatchProps>> = ({
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {
 			tenantId,
 			view: view,
-			onSubmit: () => onSubmit({ view }, VIEW_DETAIL_TAB_MAP.configuratie),
+			onSubmit: () => onSubmit(view, VIEW_DETAIL_TAB_MAP.configuratie),
 		});
 	};
 
@@ -57,7 +54,10 @@ const ViewConfig: FC<ViewDetailConfigProps<ViewDetailConfigMatchProps>> = ({
 							<NavList
 								items={VIEW_CC_NAV_LIST_ITEMS.map(listItem => ({
 									...listItem,
-									to: generatePath(`${route.path}/${listItem.to}`, { siteId }),
+									to: generatePath(`${route.path}/${listItem.to}`, {
+										siteId,
+										viewUuid,
+									}),
 								}))}
 							/>
 						</Card>
