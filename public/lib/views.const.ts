@@ -28,6 +28,7 @@ export const VIEW_DETAIL_TABS: Tab[] = [VIEW_DETAIL_TAB_MAP.settings, VIEW_DETAI
 
 export const MODULE_PATHS = {
 	root: '/:siteId/views',
+	overview: '/:siteId/views/beheer',
 	create: '/:siteId/views/aanmaken',
 	createSettings: '/:siteId/views/aanmaken/instellingen',
 	createConfig: '/:siteId/views/aanmaken/configuratie',

@@ -64,6 +64,7 @@
     "husky": "3.1.0",
     "install": "0.13.0",
     "jest": "25.1.0",
+    "moment": "^2.24.0",
     "node-sass": "4.13.1",
     "npm": "6.13.7",
     "postcss-loader": "^3.0.0",
@@ -86,7 +87,8 @@
   "dependencies": {
     "formik": "2.1.4",
     "ky": "^0.17.0",
-    "lodash.kebabcase": "4.1.1",
+    "lodash.kebabcase": "^4.1.1",
+    "query-string": "^6.12.1",
     "yup": "^0.28.3"
   },
   "author": "Maarten De Weerdt",

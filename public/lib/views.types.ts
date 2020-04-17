@@ -14,6 +14,10 @@ export interface ViewsMatchProps {
 	siteId: string;
 }
 
+export interface FilterFormState {
+	name: string;
+}
+
 export enum LoadingState {
 	Loading = 'loading',
 	Loaded = 'loaded',

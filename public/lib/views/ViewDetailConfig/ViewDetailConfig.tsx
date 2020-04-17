@@ -72,7 +72,7 @@ const ViewConfig: FC<ViewDetailConfigProps<ViewDetailConfigMatchProps>> = ({
 			<ActionBar className="o-action-bar--fixed" isOpen>
 				<ActionBarContentSection>
 					<div className="u-wrapper">
-						<Button className="u-margin-right" type="success">
+						<Button htmlType="submit" className="u-margin-right" type="success">
 							Bewaar
 						</Button>
 						<Button outline>Annuleer</Button>
