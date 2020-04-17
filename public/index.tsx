@@ -9,6 +9,7 @@ import {
 	ViewDetailConfig,
 	ViewDetailSettings,
 	ViewUpdate,
+	ViewsOverview,
 } from './lib/views';
 import { MODULE_PATHS } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
@@ -19,7 +20,7 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 
 	// if path is /views, redirect to /views/aanmaken
 	if (/\/views$/.test(location.pathname)) {
-		return <Redirect to={`${match.url}/aanmaken`} />;
+		return <Redirect to={`/${tenantId}/views/beheer`} />;
 	}
 
 	// if path is /views/aanmaken, redirect to /views/aanmaken/instellingen
@@ -57,6 +58,10 @@ if (sitesAPI) {
 			label: 'Views',
 		},
 		routes: [
+			{
+				path: MODULE_PATHS.overview,
+				component: ViewsOverview,
+			},
 			{
 				path: MODULE_PATHS.create,
 				component: ViewCreate,

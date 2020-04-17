@@ -17,16 +17,18 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 					<div className="row u-margin-top u-margin-bottom">
 						<div className="col-xs-6">
 							<Field
-								label="Sorteer op"
+								id="query.options.orderBy"
 								name="query.options.orderBy"
+								label="Sorteer op"
 								options={sortOptions}
 								as={Select}
 							/>
 						</div>
 						<div className="col-xs-6">
 							<Field
-								label="Volgorde"
+								id="query.options.order"
 								name="query.options.order"
+								label="Volgorde"
 								options={orderOptions}
 								as={Select}
 							/>

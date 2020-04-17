@@ -12,28 +12,32 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 }) => {
 	return (
 		<Formik initialValues={formState} onSubmit={onSubmit}>
-			{({ submitForm, values }) => (
+			{({ submitForm }) => (
 				<>
 					<div className="row u-margin-top u-margin-bottom">
 						<div className="col-xs-6">
 							<Field
-								label="Methode"
+								aria-describedby="descMethod"
+								id="method"
 								name="method"
+								label="Methode"
 								options={methodOptions}
 								as={Select}
 							/>
-							<div className="u-text-light u-margin-top-xs">
+							<div id="descMethod" className="u-text-light u-margin-top-xs">
 								Selecteer hoe je de lijst wil opbouwen.
 							</div>
 						</div>
 						<div className="col-xs-6">
 							<Field
-								label="Content type"
+								aria-describedby="descContentType"
+								id="contentType"
 								name="contentType"
+								label="Content type"
 								options={contentTypeOptions}
 								as={Select}
 							/>
-							<div className="u-text-light u-margin-top-xs">
+							<div id="descContentType" className="u-text-light u-margin-top-xs">
 								Selecteer van welk content type je een lijst wil maken.
 							</div>
 						</div>
