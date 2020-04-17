@@ -50,7 +50,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 		//add array to searchParams
 		setViewsSearchParams({
 			...viewsSearchParams,
-			filter: names,
+			search: names,
 		});
 	};
 
@@ -76,7 +76,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 		//add array to searchParams
 		setViewsSearchParams({
 			...viewsSearchParams,
-			filter: names,
+			search: names,
 		});
 	};
 

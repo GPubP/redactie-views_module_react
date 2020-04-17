@@ -1,5 +1,5 @@
 export interface SearchParams {
 	skip: number;
 	limit: number;
-	filter?: Array<string>;
+	search?: Array<string>;
 }
