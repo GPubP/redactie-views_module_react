@@ -17,7 +17,7 @@ import ViewDetailOptions from './lib/views/ViewDetailConditions/ViewDetailCondit
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	// if path is /views, redirect to /views/beheer
 	if (/\/views$/.test(location.pathname)) {
-		return <Redirect to={`/${tenantId}/views/beheer`} />;
+		return <Redirect to={`${match.url}/beheer`} />;
 	}
 
 	// if path is /views/aanmaken, redirect to /views/aanmaken/instellingen
