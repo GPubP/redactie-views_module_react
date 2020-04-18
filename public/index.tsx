@@ -2,6 +2,7 @@ import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
 import {
 	ViewCreate,
@@ -44,58 +45,55 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	);
 };
 
-const sitesAPI = Core.modules.getModuleAPI('sites-module');
 
-if (sitesAPI) {
-	sitesAPI.routes.register({
-		path: MODULE_PATHS.root,
-		component: ViewsComponent,
-		breadcrumb: 'Views',
-		exact: true,
-		navigation: {
-			renderContext: 'site',
-			context: 'site',
-			label: 'Views',
+registerRoutes({
+	path: MODULE_PATHS.root,
+	component: ViewsComponent,
+	breadcrumb: 'Views',
+	exact: true,
+	navigation: {
+		renderContext: 'site',
+		context: 'site',
+		label: 'Views',
+	},
+	routes: [
+		{
+			path: MODULE_PATHS.overview,
+			component: ViewsOverview,
 		},
-		routes: [
-			{
-				path: MODULE_PATHS.overview,
-				component: ViewsOverview,
-			},
-			{
-				path: MODULE_PATHS.create,
-				component: ViewCreate,
-				routes: [
-					{
-						path: MODULE_PATHS.createSettings,
-						component: ViewDetailSettings,
-					},
-				],
-			},
-			{
-				path: MODULE_PATHS.detail,
-				component: ViewUpdate,
-				routes: [
-					{
-						path: MODULE_PATHS.detailSettings,
-						component: ViewDetailSettings,
-					},
-					{
-						path: MODULE_PATHS.detailConfig,
-						component: ViewDetailConfig,
-						routes: [
-							{
-								path: MODULE_PATHS.detailConditions,
-								component: ViewDetailConditions,
-							},
-							{
-								path: MODULE_PATHS.detailOptions,
-								component: ViewDetailOptions,
-							},
-						],
-					},
-				],
-			},
-		],
-	});
-}
+		{
+			path: MODULE_PATHS.create,
+			component: ViewCreate,
+			routes: [
+				{
+					path: MODULE_PATHS.createSettings,
+					component: ViewDetailSettings,
+				},
+			],
+		},
+		{
+			path: MODULE_PATHS.detail,
+			component: ViewUpdate,
+			routes: [
+				{
+					path: MODULE_PATHS.detailSettings,
+					component: ViewDetailSettings,
+				},
+				{
+					path: MODULE_PATHS.detailConfig,
+					component: ViewDetailConfig,
+					routes: [
+						{
+							path: MODULE_PATHS.detailConditions,
+							component: ViewDetailConditions,
+						},
+						{
+							path: MODULE_PATHS.detailOptions,
+							component: ViewDetailOptions,
+						},
+					],
+				},
+			],
+		},
+	],
+});

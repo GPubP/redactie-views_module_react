@@ -7,7 +7,7 @@ export const getViews = async (
 ): Promise<ViewsSchema | null> => {
 	try {
 		const response: ViewsSchema = await api
-			.get(`content/views?${parseSearchParams(searchParams)}`)
+			.get(`views?${parseSearchParams(searchParams)}`)
 			.json();
 
 		if (!response.data) {
