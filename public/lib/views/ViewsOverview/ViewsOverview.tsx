@@ -146,7 +146,10 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 							ariaLabel="Edit"
 							icon="edit"
 							onClick={() =>
-								navigate(`/sites${MODULE_PATHS.detail}`, { siteId, viewUuid: id })
+								navigate(`/sites${MODULE_PATHS.detailSettings}`, {
+									siteId,
+									viewUuid: id,
+								})
 							}
 							type="primary"
 							transparent
