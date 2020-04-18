@@ -1,5 +1,7 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
+import { ResponseMeta } from '../api';
+
 export interface ViewsRouteProps extends RouteConfigComponentProps {
 	basePath: string;
 	routes: ModuleRouteConfig[];
@@ -24,4 +26,5 @@ export interface ViewSchema {
 
 export interface ViewsSchema {
 	data: ViewSchema[];
+	paging: ResponseMeta;
 }

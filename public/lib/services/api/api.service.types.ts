@@ -1,5 +1,20 @@
+export interface OrderBy {
+	key: string;
+	order: 'asc' | 'desc';
+}
+
 export interface SearchParams {
-	skip: number;
 	limit: number;
-	search?: Array<string>;
+	page: number;
+	skip: number;
+	direction?: number;
+	search?: string[];
+	sort?: string;
+}
+
+export interface ResponseMeta {
+	limit: number;
+	skip: number;
+	total: number;
+	moreResults: boolean;
 }
