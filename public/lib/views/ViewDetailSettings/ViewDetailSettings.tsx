@@ -34,14 +34,16 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 	};
 
 	return (
-		<Formik
-			initialValues={view}
-			onSubmit={(value: ViewSchema) => onSubmit(value, VIEW_DETAIL_TAB_MAP.settings)}
-			validationSchema={VIEW_SETTINGS_VALIDATION_SCHEMA}
-		>
-			{({ submitForm, values }) => (
-				<>
-					<Container>
+		<Container>
+			<Formik
+				initialValues={view}
+				onSubmit={(value: ViewSchema) =>
+					onSubmit({ ...view.meta, ...value.meta }, VIEW_DETAIL_TAB_MAP.settings)
+				}
+				validationSchema={VIEW_SETTINGS_VALIDATION_SCHEMA}
+			>
+				{({ submitForm, values }) => (
+					<>
 						<div className="row">
 							<div className="col-xs-12 col-md-8 row middle-xs">
 								<div className="col-xs-12 col-md-8">
@@ -79,26 +81,26 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 								</div>
 							</div>
 						</div>
-					</Container>
-					<ActionBar className="o-action-bar--fixed" isOpen>
-						<ActionBarContentSection>
-							<div className="u-wrapper">
-								<Button
-									className="u-margin-right-xs"
-									onClick={submitForm}
-									type="success"
-								>
-									Bewaar
-								</Button>
-								<Button onClick={navigateToOverview} outline>
-									Annuleer
-								</Button>
-							</div>
-						</ActionBarContentSection>
-					</ActionBar>
-				</>
-			)}
-		</Formik>
+						<ActionBar className="o-action-bar--fixed" isOpen>
+							<ActionBarContentSection>
+								<div className="u-wrapper">
+									<Button
+										className="u-margin-right-xs"
+										onClick={submitForm}
+										type="success"
+									>
+										Bewaar
+									</Button>
+									<Button onClick={navigateToOverview} outline>
+										Annuleer
+									</Button>
+								</div>
+							</ActionBarContentSection>
+						</ActionBar>
+					</>
+				)}
+			</Formik>
+		</Container>
 	);
 };
 

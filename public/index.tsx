@@ -8,8 +8,8 @@ import {
 	ViewDetailConditions,
 	ViewDetailConfig,
 	ViewDetailSettings,
-	ViewUpdate,
 	ViewsOverview,
+	ViewUpdate,
 } from './lib/views';
 import { MODULE_PATHS } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';

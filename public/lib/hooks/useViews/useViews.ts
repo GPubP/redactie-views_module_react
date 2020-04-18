@@ -1,18 +1,26 @@
 import { useEffect, useState } from 'react';
 
-import { SearchParams } from '../../services/api';
-import { getViews, ViewsSchema } from '../../services/views';
+import { ResponseMeta, SearchParams } from '../../services/api';
+import { getViews, ViewSchema } from '../../services/views';
 import { LoadingState } from '../../types';
 
-const useViews = (searchParams: SearchParams): [LoadingState, ViewsSchema | null] => {
+type UseViewsReturn = [LoadingState, ViewSchema[], ResponseMeta | null];
+
+const useViews = (searchParams: SearchParams): UseViewsReturn => {
 	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
-	const [views, setViews] = useState<ViewsSchema | null>(null);
+	const [views, setViews] = useState<ViewSchema[]>([]);
+	const [viewsMeta, setViewsMeta] = useState<ResponseMeta | null>(null);
 
 	useEffect(() => {
+		setLoadingState(LoadingState.Loading);
+
 		getViews(searchParams)
 			.then(result => {
-				if (result?.data) {
-					setViews(result);
+				if (result?.data && result.data.length) {
+					setViews(result.data);
+				}
+				if (result?.paging) {
+					setViewsMeta(result.paging);
 				}
 				setLoadingState(LoadingState.Loaded);
 			})
@@ -21,7 +29,7 @@ const useViews = (searchParams: SearchParams): [LoadingState, ViewsSchema | null
 			});
 	}, [searchParams]);
 
-	return [loadingState, views];
+	return [loadingState, views, viewsMeta];
 };
 
 export default useViews;

@@ -8,9 +8,9 @@ import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../..
 import { ViewSchema } from '../../services/view';
 import { internalService } from '../../store/internal';
 import { MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
-import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
+import { LoadingState, ViewsRouteProps } from '../../views.types';
 
-const ViewUpdate: FC<ViewsRouteProps> = ({ location, routes, route, tenantId, match }) => {
+const ViewUpdate: FC<ViewsRouteProps> = ({ location, route }) => {
 	/**
 	 * Hooks
 	 */

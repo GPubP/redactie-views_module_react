@@ -1,10 +1,9 @@
-import { api, parseSearchParams, SearchParams } from '../api';
+import { api, DEFAULT_SEARCH_PARAMS, parseSearchParams, SearchParams } from '../api';
 
-import { DEFAULT_VIEWS_SEARCH_PARAMS } from './views.service.const';
 import { ViewsSchema } from './views.service.types';
 
 export const getViews = async (
-	searchParams: SearchParams = DEFAULT_VIEWS_SEARCH_PARAMS
+	searchParams: SearchParams = DEFAULT_SEARCH_PARAMS
 ): Promise<ViewsSchema | null> => {
 	try {
 		const response: ViewsSchema = await api
@@ -15,9 +14,7 @@ export const getViews = async (
 			throw new Error('Failed to get views');
 		}
 
-		return {
-			data: response.data,
-		};
+		return response;
 	} catch (err) {
 		console.error(err);
 		return null;
