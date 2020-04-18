@@ -1,7 +1,7 @@
 import ky from 'ky';
 import { stringify } from 'query-string';
 
-import { SearchParams } from './api.service.types';
+import { OrderBy, SearchParams } from './api.service.types';
 
 export type KyInstance = typeof ky;
 
@@ -9,6 +9,13 @@ export type KyInstance = typeof ky;
 const api: KyInstance = ky.create({
 	prefixUrl: '/v1/proxy/',
 });
+
+export const parseOrderBy = (orderBy: OrderBy): { sort: string; direction: number } => {
+	return {
+		sort: orderBy.key,
+		direction: orderBy.order === 'asc' ? 1 : -1,
+	};
+};
 
 export const parseSearchParams = (searchParams: SearchParams): string => {
 	return stringify(searchParams, { arrayFormat: 'comma' });

@@ -1,9 +1,10 @@
 import { Button } from '@acpaas-ui/react-components';
 import {
+	Container,
 	ContextHeader,
 	ContextHeaderActionsSection,
 	ContextHeaderTopSection,
-	Table,
+	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
 import { ModuleRouteConfig, useBreadcrumbs } from '@redactie/redactie-core';
 import moment from 'moment';
@@ -13,21 +14,29 @@ import DataLoader from '../../components/DataLoader/DataLoader';
 import FilterForm from '../../components/FilterForm/FilterForm';
 import useRoutes from '../../hooks/useRoutes/useRoutes';
 import useViews from '../../hooks/useViews/useViews';
+import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING, OrderBy } from '../../services/api';
+import { parseOrderBy } from '../../services/api/api.service';
 import { FilterItemSchema } from '../../services/filterItems/filterItems.service.types';
-import { ViewSchema } from '../../services/views';
-import { DEFAULT_VIEWS_SEARCH_PARAMS } from '../../services/views/views.service.const';
 import { LoadingState } from '../../types';
 import { BREADCRUMB_OPTIONS } from '../../views.const';
 import { generateFilterFormState } from '../../views.helpers';
 import { FilterFormState, ViewsRouteProps } from '../../views.types';
 
+import { ViewsOverviewTableRow } from './ViewsOverview.types';
+
 const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
+	/**
+	 * Hooks
+	 */
+	const [activeSorting, setActiveSorting] = useState(DEFAULT_SORTING);
+	const [currentPage, setCurrentPage] = useState(DEFAULT_SEARCH_PARAMS.page);
 	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
-	const [viewsSearchParams, setViewsSearchParams] = useState(DEFAULT_VIEWS_SEARCH_PARAMS);
+	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
+	const [searchParams, setSearchParams] = useState(DEFAULT_SEARCH_PARAMS);
+
 	const routes = useRoutes();
 	const breadcrumbs = useBreadcrumbs(routes as ModuleRouteConfig[], BREADCRUMB_OPTIONS);
-	const [loadingState, views] = useViews(viewsSearchParams);
-	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
+	const [loadingState, views, viewsMeta] = useViews(searchParams);
 
 	useEffect(() => {
 		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
@@ -39,44 +48,56 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 	 * Functions
 	 */
 	const onSubmit = ({ name }: FilterFormState): void => {
-		//add item to filterItems for Taglist
+		// Add item to filterItems for Taglist
 		const request = { label: name, value: name };
-		const setFilter = filterItems?.concat(request);
-		setFilterItems(setFilter);
-		//get value array from filterItems
-		const names = setFilter.map(item => {
-			return item['value'];
-		});
-		//add array to searchParams
-		setViewsSearchParams({
-			...viewsSearchParams,
-			search: names,
+		const newFilters = filterItems?.concat(request);
+		// Get value array from filterItems
+		const search = newFilters.map(item => item['value']);
+
+		setFilterItems(newFilters);
+		// Add array to searchParams
+		setSearchParams({
+			...searchParams,
+			search,
 		});
 	};
 
 	const deleteAllFilters = (): void => {
-		//set empty array as Taglist
-		const emptyFilter: [] = [];
-		setFilterItems(emptyFilter);
-		//delete search param from api call
-		setViewsSearchParams({
-			skip: 1,
-			limit: 10,
-		});
+		// Clear filter items
+		setFilterItems([]);
+		// Reset search params
+		setSearchParams(DEFAULT_SEARCH_PARAMS);
 	};
 
 	const deleteFilter = (item: any): void => {
-		//delete item from filterItems
-		const setFilter = filterItems?.filter(el => el.value !== item.value);
-		setFilterItems(setFilter);
-		//get value array from filterItems
-		const names = setFilter.map(item => {
-			return item['value'];
+		// Delete item from filterItems
+		const newFilters = filterItems?.filter(el => el.value !== item.value);
+		// Get value array from filterItems
+		const search = newFilters.map(item => item['value']);
+
+		setFilterItems(newFilters);
+		// Add search to searchParams
+		setSearchParams({
+			...searchParams,
+			search,
 		});
-		//add array to searchParams
-		setViewsSearchParams({
-			...viewsSearchParams,
-			search: names,
+	};
+
+	const handlePageChange = (pageNumber: number): void => {
+		setCurrentPage(pageNumber);
+
+		setSearchParams({
+			...searchParams,
+			page: pageNumber,
+			skip: (pageNumber - 1) * searchParams.limit,
+		});
+	};
+
+	const handleOrderBy = (orderBy: OrderBy): void => {
+		setActiveSorting(orderBy);
+		setSearchParams({
+			...searchParams,
+			...parseOrderBy({ ...orderBy, key: `meta.${orderBy.key}` }),
 		});
 	};
 
@@ -88,21 +109,21 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 			return null;
 		}
 
-		const viewsRows = views.data.map(view => ({
+		const viewsRows = views.map(view => ({
 			id: view.uuid,
-			name: view.meta.label,
-			author: view.meta.lastEditor,
+			label: view.meta.label,
+			lastEditor: view.meta.lastEditor,
 			lastModified: view.meta.lastModified,
 		}));
 
 		const viewsColumns = [
 			{
 				label: 'Naam',
-				value: 'name',
+				value: 'label',
 			},
 			{
 				label: 'Auteur',
-				value: 'author',
+				value: 'lastEditor',
 				disableSorting: true,
 			},
 			{
@@ -117,9 +138,8 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 				label: '',
 				classList: ['u-text-right'],
 				disableSorting: true,
-				component(value: unknown, rowData: ViewSchema) {
-					// TODO: add types for rowData
-					const { id } = rowData as any;
+				component(value: unknown, rowData: ViewsOverviewTableRow) {
+					const { id } = rowData;
 
 					return (
 						<Button
@@ -130,26 +150,34 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 							}
 							type="primary"
 							transparent
-						></Button>
+						/>
 					);
 				},
 			},
 		];
 
 		return (
-			<div className="u-container u-wrapper">
-				<div className="u-margin-top">
-					<FilterForm
-						initialState={generateFilterFormState()}
-						onCancel={deleteAllFilters}
-						onSubmit={onSubmit}
-						deleteActiveFilter={deleteFilter}
-						activeFilters={filterItems}
-					/>
-				</div>
-				<h5 className="u-margin-top">Resultaat ({viewsRows.length})</h5>
-				<Table className="u-margin-top" rows={viewsRows} columns={viewsColumns} />
-			</div>
+			<>
+				<FilterForm
+					initialState={generateFilterFormState()}
+					onCancel={deleteAllFilters}
+					onSubmit={onSubmit}
+					deleteActiveFilter={deleteFilter}
+					activeFilters={filterItems}
+				/>
+				<PaginatedTable
+					className="u-margin-top"
+					columns={viewsColumns}
+					rows={viewsRows}
+					currentPage={currentPage}
+					itemsPerPage={DEFAULT_SEARCH_PARAMS.limit}
+					onPageChange={handlePageChange}
+					orderBy={handleOrderBy}
+					activeSorting={activeSorting}
+					totalValues={viewsMeta?.total || 0}
+					loading={loadingState === LoadingState.Loading}
+				/>
+			</>
 		);
 	};
 
@@ -166,7 +194,9 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 					</Button>
 				</ContextHeaderActionsSection>
 			</ContextHeader>
-			<DataLoader loadingState={initialLoading} render={renderOverview} />
+			<Container>
+				<DataLoader loadingState={initialLoading} render={renderOverview} />
+			</Container>
 		</>
 	);
 };
