@@ -13,6 +13,16 @@ export const getView = async (uuid: string): Promise<ViewSchema | null> => {
 	}
 };
 
+export const updateView = async (view: ViewSchema): Promise<ViewSchema | null> => {
+	const response: ViewSchema = await api
+		.put(`views/${view.uuid}`, {
+			json: view,
+		})
+		.json();
+
+	return response;
+};
+
 export const createView = async (view: ViewSchema): Promise<ViewSchema | null> => {
 	const response: ViewSchema = await api
 		.post('views', {
