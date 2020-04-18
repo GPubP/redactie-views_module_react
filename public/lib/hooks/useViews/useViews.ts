@@ -12,6 +12,8 @@ const useViews = (searchParams: SearchParams): UseViewsReturn => {
 	const [viewsMeta, setViewsMeta] = useState<ResponseMeta | null>(null);
 
 	useEffect(() => {
+		setLoadingState(LoadingState.Loading);
+
 		getViews(searchParams)
 			.then(result => {
 				if (result?.data && result.data.length) {

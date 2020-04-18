@@ -85,7 +85,6 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 
 	const handlePageChange = (pageNumber: number): void => {
 		setCurrentPage(pageNumber);
-
 		setSearchParams({
 			...searchParams,
 			page: pageNumber,
@@ -112,7 +111,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 		const viewsRows = views.map(view => ({
 			id: view.uuid,
 			label: view.meta.label,
-			lastEditor: view.meta.lastEditor,
+			lastEditor: view.meta.lastEditor || 'N/A',
 			lastModified: view.meta.lastModified,
 		}));
 
