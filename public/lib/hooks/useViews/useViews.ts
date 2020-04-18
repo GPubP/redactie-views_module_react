@@ -11,7 +11,6 @@ const useViews = (searchParams: SearchParams): [LoadingState, ViewsSchema | null
 	useEffect(() => {
 		getViews(searchParams)
 			.then(result => {
-				console.log(result);
 				if (result?.data) {
 					setViews(result);
 				}

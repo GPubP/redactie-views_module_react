@@ -10,4 +10,13 @@ export const generateEmptyView = (): ViewSchema => ({
 		description: '',
 		label: '',
 	},
+	query: {
+		options: {
+			offset: 0,
+			limit: 0,
+			orderBy: 'name',
+			order: 'asc',
+		},
+		conditions: [],
+	},
 });
