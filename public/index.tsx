@@ -8,6 +8,7 @@ import {
 	ViewDetailConditions,
 	ViewDetailConfig,
 	ViewDetailSettings,
+	ViewUpdate,
 	ViewsOverview,
 } from './lib/views';
 import { MODULE_PATHS } from './lib/views.const';
@@ -15,7 +16,9 @@ import { ViewsRouteProps } from './lib/views.types';
 import ViewDetailOptions from './lib/views/ViewDetailConditions/ViewDetailConditions';
 
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
-	// if path is /views, redirect to /views/beheer
+	const uuidRegex = '\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b';
+
+	// if path is /views, redirect to /views/aanmaken
 	if (/\/views$/.test(location.pathname)) {
 		return <Redirect to={`${match.url}/beheer`} />;
 	}
@@ -23,6 +26,11 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	// if path is /views/aanmaken, redirect to /views/aanmaken/instellingen
 	if (/\/views\/aanmaken$/.test(location.pathname)) {
 		return <Redirect to={`${match.url}/aanmaken/instellingen`} />;
+	}
+
+	//if path is /views/VIEWUUID, redirect to /views/VIEWUUID/instellingen
+	if (new RegExp(`/views/${uuidRegex}$`).test(location.pathname)) {
+		return <Redirect to={`${location.pathname}/instellingen`} />;
 	}
 
 	return (
@@ -62,16 +70,26 @@ if (sitesAPI) {
 						path: MODULE_PATHS.createSettings,
 						component: ViewDetailSettings,
 					},
+				],
+			},
+			{
+				path: MODULE_PATHS.detail,
+				component: ViewUpdate,
+				routes: [
 					{
-						path: MODULE_PATHS.createConfig,
+						path: MODULE_PATHS.detailSettings,
+						component: ViewDetailSettings,
+					},
+					{
+						path: MODULE_PATHS.detailConfig,
 						component: ViewDetailConfig,
 						routes: [
 							{
-								path: MODULE_PATHS.createConditions,
+								path: MODULE_PATHS.detailConditions,
 								component: ViewDetailConditions,
 							},
 							{
-								path: MODULE_PATHS.createOptions,
+								path: MODULE_PATHS.detailOptions,
 								component: ViewDetailOptions,
 							},
 						],

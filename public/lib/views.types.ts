@@ -1,5 +1,8 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
+import { ViewSchema } from './services/view';
+import { InternalState } from './store/internal';
+
 export interface ViewsRouteProps<
 	Params extends {
 		[K in keyof Params]?: string;
@@ -12,6 +15,16 @@ export interface ViewsRouteProps<
 
 export interface ViewsMatchProps {
 	siteId: string;
+	viewUuid?: string;
+}
+
+export interface ViewsDetailRouteProps<Params = {}> extends RouteConfigComponentProps<Params> {
+	view: ViewSchema;
+	onCancel: () => void;
+	onSubmit: (data: ViewSchema, tab: Tab) => void;
+	routes: ModuleRouteConfig[];
+	state: InternalState;
+	tenantId: string;
 }
 
 export interface FilterFormState {
