@@ -16,7 +16,7 @@ const useViews = (searchParams: SearchParams): UseViewsReturn => {
 
 		getViews(searchParams)
 			.then(result => {
-				if (result?.data && result.data.length) {
+				if (result?.data && result.data.length >= 0) {
 					setViews(result.data);
 				}
 				if (result?.paging) {
