@@ -12,19 +12,19 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import DataLoader from '../../components/DataLoader/DataLoader';
 import FilterForm from '../../components/FilterForm/FilterForm';
-import useRoutes from '../../hooks/useRoutes/useRoutes';
-import useViews from '../../hooks/useViews/useViews';
+import { useNavigate, useRoutes, useViews } from '../../hooks';
 import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING, OrderBy } from '../../services/api';
 import { parseOrderBy } from '../../services/api/api.service';
 import { FilterItemSchema } from '../../services/filterItems/filterItems.service.types';
 import { LoadingState } from '../../types';
-import { BREADCRUMB_OPTIONS } from '../../views.const';
+import { BREADCRUMB_OPTIONS, MODULE_PATHS } from '../../views.const';
 import { generateFilterFormState } from '../../views.helpers';
-import { FilterFormState, ViewsRouteProps } from '../../views.types';
+import { FilterFormState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
 
-const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
+const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
+	const { siteId } = match.params;
 	/**
 	 * Hooks
 	 */
@@ -33,6 +33,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [searchParams, setSearchParams] = useState(DEFAULT_SEARCH_PARAMS);
+	const { navigate } = useNavigate();
 
 	const routes = useRoutes();
 	const breadcrumbs = useBreadcrumbs(routes as ModuleRouteConfig[], BREADCRUMB_OPTIONS);
@@ -145,7 +146,10 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 							ariaLabel="Edit"
 							icon="edit"
 							onClick={() =>
-								history.push(`/${tenantId}/content-types/${id}/bewerken`)
+								navigate(`/sites${MODULE_PATHS.detailSettings}`, {
+									siteId,
+									viewUuid: id,
+								})
 							}
 							type="primary"
 							transparent
@@ -187,7 +191,7 @@ const ViewsOverview: FC<ViewsRouteProps> = ({ tenantId, history }) => {
 				<ContextHeaderActionsSection>
 					<Button
 						iconLeft="plus"
-						onClick={() => history.push(`/${tenantId}/content-types/aanmaken`)}
+						onClick={() => navigate(`/sites${MODULE_PATHS.create}`, { siteId })}
 					>
 						Nieuwe maken
 					</Button>
