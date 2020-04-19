@@ -8,13 +8,13 @@ import {
 	ViewCreate,
 	ViewDetailConditions,
 	ViewDetailConfig,
+	ViewDetailOptions,
 	ViewDetailSettings,
 	ViewsOverview,
 	ViewUpdate,
 } from './lib/views';
 import { MODULE_PATHS } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
-import ViewDetailOptions from './lib/views/ViewDetailConditions/ViewDetailConditions';
 
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	const uuidRegex = '\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b';
@@ -44,7 +44,6 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 		</TenantContext.Provider>
 	);
 };
-
 
 registerRoutes({
 	path: MODULE_PATHS.root,

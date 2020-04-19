@@ -34,4 +34,5 @@ export interface OperatorSchema {
 
 export interface ConditionFieldSchema {
 	label: string;
+	[key: string]: any;
 }

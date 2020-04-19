@@ -31,6 +31,12 @@ export interface FilterFormState {
 	name: string;
 }
 
+export interface SelectOptions {
+	key: string;
+	value: string;
+	label: string;
+}
+
 export enum LoadingState {
 	Loading = 'loading',
 	Loaded = 'loaded',
