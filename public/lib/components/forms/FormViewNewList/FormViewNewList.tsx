@@ -33,6 +33,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 								aria-describedby="descContentType"
 								id="contentType"
 								name="contentType"
+								loading={contentTypeOptions?.length === 0}
 								label="Content type"
 								options={contentTypeOptions}
 								as={Select}

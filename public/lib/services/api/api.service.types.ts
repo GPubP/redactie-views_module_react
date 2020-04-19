@@ -5,7 +5,7 @@ export interface OrderBy {
 
 export interface SearchParams {
 	limit: number;
-	page: number;
+	page?: number;
 	skip: number;
 	direction?: number;
 	search?: string[];
