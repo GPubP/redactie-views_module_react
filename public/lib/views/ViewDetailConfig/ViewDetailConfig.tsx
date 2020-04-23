@@ -46,6 +46,10 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 		onSubmit(view, VIEW_DETAIL_TAB_MAP.configuratie);
 	};
 
+	const onConfigChange = (updatedView: any): void => {
+		internalService.updateView(updatedView);
+	};
+
 	/**
 	 * Render
 	 */
@@ -54,7 +58,7 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 			tenantId,
 			view,
 			contentType,
-			onSubmit: (newView: ViewSchema) => onSubmit(newView, VIEW_DETAIL_TAB_MAP.configuratie),
+			onSubmit: onConfigChange,
 		});
 	};
 
@@ -108,7 +112,7 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 						<Button
 							onClick={onConfigSave}
 							htmlType="submit"
-							className="u-margin-right"
+							className="u-margin-right-xs"
 							type="success"
 						>
 							Bewaar
