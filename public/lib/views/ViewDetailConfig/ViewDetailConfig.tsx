@@ -18,7 +18,7 @@ import { ViewsDetailRouteProps } from '../../views.types';
 
 import { DUMMY_METHOD_OPTIONS, VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfig.const';
 
-const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onSubmit }) => {
+const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel, onSubmit }) => {
 	/**
 	 * Hooks
 	 */
@@ -113,7 +113,9 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onSubmit
 						>
 							Bewaar
 						</Button>
-						<Button outline>Annuleer</Button>
+						<Button onClick={onCancel} outline>
+							Annuleer
+						</Button>
 					</div>
 				</ActionBarContentSection>
 			</ActionBar>

@@ -57,16 +57,16 @@ const ViewUpdate: FC<ViewsRouteProps> = ({ location, route }) => {
 	 * Methods
 	 */
 	const navigateToOverview = (): void => {
-		navigate(MODULE_PATHS.root);
+		navigate(`/sites${MODULE_PATHS.root}`, { siteId });
 	};
 
-	const update = (view: ViewSchema): void => {
-		if (!view) {
+	const update = (updatedView: ViewSchema): void => {
+		if (!updatedView) {
 			return;
 		}
 
 		// TODO: fix with store integration
-		updateView(view);
+		updateView(updatedView);
 	};
 	/**
 	 * Render
