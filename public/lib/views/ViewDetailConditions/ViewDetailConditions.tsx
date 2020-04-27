@@ -1,35 +1,68 @@
-import { Card, Button } from '@acpaas-ui/react-components';
+import { Button, Card } from '@acpaas-ui/react-components';
 import React, { FC, useState } from 'react';
 
 import { FormCreateCondition, FormViewConditions } from '../../components';
 import { DEFAULT_OPERATORS } from '../../components/forms/FormCreateCondition/FormCreateCondition.const';
 import { FormCreateConditionValue } from '../../components/forms/FormCreateCondition/FormCreateCondition.types';
 import { ContentTypeFieldSchema } from '../../services/contentTypes';
-import { internalService } from '../../store/internal';
+import { ViewConditionSchema } from '../../services/view';
 import { SelectOptions } from '../../views.types';
 
 import { ViewDetailConditionsProps } from './ViewDetailConditions.types';
 
 const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType, onSubmit }) => {
+	/**
+	 * Hooks
+	 */
 	const [showCreateConditionForm, setshowCreateConditionForm] = useState(false);
 
-	const addCondition = (value: FormCreateConditionValue): void => {
-		setshowCreateConditionForm(false);
-		const condition = {
+	/**
+	 * Methods
+	 */
+	const parseCondition = (rawCondition: FormCreateConditionValue): ViewConditionSchema => {
+		return {
 			field: contentType.fields.find(
-				field => field.uuid === value.field
+				field => field.uuid === rawCondition.field
 			) as ContentTypeFieldSchema,
-			value: value.value,
+			value: rawCondition.value,
 			operator:
-				DEFAULT_OPERATORS.find(operator => operator.value === value.operator) ||
+				DEFAULT_OPERATORS.find(operator => operator.value === rawCondition.operator) ||
 				DEFAULT_OPERATORS[0],
 		};
+	};
 
-		internalService.updateView({
+	const addCondition = (newCondition: FormCreateConditionValue): void => {
+		onSubmit({
 			...view,
 			query: {
 				...view.query,
-				conditions: [...view.query.conditions, condition],
+				conditions: [...view.query.conditions, parseCondition(newCondition)],
+			},
+		});
+		setshowCreateConditionForm(false);
+	};
+
+	const deleteCondition = (conditionIndex: number): void => {
+		onSubmit({
+			...view,
+			query: {
+				...view.query,
+				conditions: view.query.conditions.filter((c, index) => index !== conditionIndex),
+			},
+		});
+	};
+
+	const updateCondition = (
+		updatedCondition: FormCreateConditionValue,
+		updatedConditionIndex: number
+	): void => {
+		onSubmit({
+			...view,
+			query: {
+				...view.query,
+				conditions: view.query.conditions.map((condition, index) =>
+					updatedConditionIndex === index ? parseCondition(updatedCondition) : condition
+				),
 			},
 		});
 	};
@@ -37,6 +70,15 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 	const showForm = (): void => {
 		setshowCreateConditionForm(!showCreateConditionForm);
 	};
+
+	const conditionFields =
+		contentType?.fields.map(
+			(field): SelectOptions => ({
+				key: field.uuid as string,
+				label: field.label,
+				value: field.uuid as string,
+			})
+		) || [];
 
 	/**
 	 * Render
@@ -46,21 +88,26 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 			<div className="u-margin">
 				<h5>Voorwaarden</h5>
 
-				<FormViewConditions formState={view} onSubmit={onSubmit} />
+				<FormViewConditions
+					formState={view}
+					fields={conditionFields}
+					onDelete={deleteCondition}
+					onSubmit={updateCondition}
+				/>
 
 				{showCreateConditionForm && (
-					<FormCreateCondition
-						onSubmit={addCondition}
-						fields={
-							contentType?.fields.map(
-								(field): SelectOptions => ({
-									key: field.uuid as string,
-									label: field.label,
-									value: field.uuid as string,
-								})
-							) || []
-						}
-					/>
+					<FormCreateCondition onSubmit={addCondition} fields={conditionFields}>
+						{({ submitForm }) => (
+							<>
+								<Button className="u-margin-right-xs" onClick={submitForm}>
+									Voeg toe
+								</Button>
+								<Button onClick={() => setshowCreateConditionForm(false)} outline>
+									Annuleer
+								</Button>
+							</>
+						)}
+					</FormCreateCondition>
 				)}
 
 				{!showCreateConditionForm && (

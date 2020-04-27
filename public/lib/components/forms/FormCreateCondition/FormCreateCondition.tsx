@@ -1,23 +1,28 @@
-import { Button, Select, TextField } from '@acpaas-ui/react-components';
-import { Field, Formik } from 'formik';
+import { Select, TextField } from '@acpaas-ui/react-components';
+import { Field, Formik, FormikProps } from 'formik';
 import React, { FC, useMemo } from 'react';
 
 import { DEFAULT_OPERATORS } from './FormCreateCondition.const';
-import { FormCreateConditionProps } from './FormCreateCondition.types';
+import { FormCreateConditionProps, FormCreateConditionValue } from './FormCreateCondition.types';
 
-const FormCreateCondition: FC<FormCreateConditionProps> = ({ onSubmit, fields }) => {
-	const initialValues = useMemo(
+const FormCreateCondition: FC<FormCreateConditionProps> = ({
+	children,
+	onSubmit,
+	fields,
+	initialValues,
+}) => {
+	const formValues = useMemo(
 		() => ({
-			field: fields && fields.length > 0 ? fields[0].key : '',
-			operator: DEFAULT_OPERATORS[0].value,
-			value: '',
+			field: initialValues?.field || (fields && fields.length > 0) ? fields[0].key : '',
+			operator: initialValues?.operator || DEFAULT_OPERATORS[0].value,
+			value: initialValues?.value || '',
 		}),
-		[fields]
+		[fields, initialValues]
 	);
 
 	return (
-		<Formik enableReinitialize={true} initialValues={initialValues} onSubmit={onSubmit}>
-			{({ submitForm }) => (
+		<Formik enableReinitialize={true} initialValues={formValues} onSubmit={onSubmit}>
+			{props => (
 				<div className="u-margin-top">
 					<div className="row">
 						<div className="col-xs-12 col-sm-6">
@@ -51,9 +56,11 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({ onSubmit, fields })
 							/>
 						</div>
 					</div>
-					<Button onClick={submitForm} outline>
-						Voeg toe
-					</Button>
+					{typeof children === 'function'
+						? (children as (
+								formikBag: FormikProps<FormCreateConditionValue>
+						  ) => React.ReactNode)(props)
+						: null}
 				</div>
 			)}
 		</Formik>

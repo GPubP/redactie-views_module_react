@@ -43,7 +43,7 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 	 */
 
 	const onConfigSave = (): void => {
-		onSubmit(view, VIEW_DETAIL_TAB_MAP.configuratie);
+		onSubmit(view, VIEW_DETAIL_TAB_MAP.config);
 	};
 
 	const onConfigChange = (updatedView: any): void => {
