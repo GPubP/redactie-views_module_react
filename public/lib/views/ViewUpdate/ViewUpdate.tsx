@@ -50,7 +50,7 @@ const ViewUpdate: FC<ViewsRouteProps> = ({ location, route }) => {
 		}
 
 		// TODO: fix with store integration
-		// updateView(updatedView);
+		updateView(updatedView);
 	};
 
 	/**
