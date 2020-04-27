@@ -45,7 +45,7 @@ const ViewUpdate: FC<ViewsRouteProps> = ({ location, route }) => {
 	};
 
 	const update = (updatedView: ViewSchema): void => {
-		if (!internalView) {
+		if (!updatedView) {
 			return;
 		}
 
