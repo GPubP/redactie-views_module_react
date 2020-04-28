@@ -7,6 +7,7 @@ import {
 import { Field, Formik } from 'formik';
 import kebabCase from 'lodash.kebabcase';
 import React, { FC } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { useNavigate } from '../../hooks';
 import { ViewSchema } from '../../services/view';
@@ -26,6 +27,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 	 * Hooks
 	 */
 	const { navigate } = useNavigate();
+
 	/**
 	 * Methods
 	 */
@@ -81,6 +83,27 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 								</div>
 							</div>
 						</div>
+						{view.uuid && (
+							<div className="row u-margin-top">
+								<div className="col-xs-12 ">
+									<span>UID</span>
+									<p className="u-margin-top-xs">
+										<span className="u-text-light u-margin-right-xs">
+											{view.uuid}
+										</span>
+										<CopyToClipboard text={view.uuid}>
+											<Button
+												className="u-button-as-link"
+												htmlType="button"
+												type="transparent"
+											>
+												Kopieer
+											</Button>
+										</CopyToClipboard>
+									</p>
+								</div>
+							</div>
+						)}
 						<ActionBar className="o-action-bar--fixed" isOpen>
 							<ActionBarContentSection>
 								<div className="u-wrapper">
