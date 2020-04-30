@@ -7,6 +7,7 @@ import {
 import { ErrorMessage, Field, Formik } from 'formik';
 import kebabCase from 'lodash.kebabcase';
 import React, { FC } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { ViewSchema } from '../../services/view';
 import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
@@ -19,9 +20,6 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 	onCancel,
 	onSubmit,
 }) => {
-	/**
-	 * Render
-	 */
 	return (
 		<Container>
 			<Formik
@@ -79,6 +77,27 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 								</div>
 							</div>
 						</div>
+						{view.uuid && (
+							<div className="row u-margin-top">
+								<div className="col-xs-12 ">
+									<span>UID</span>
+									<p className="u-margin-top-xs">
+										<span className="u-text-light u-margin-right-xs">
+											{view.uuid}
+										</span>
+										<CopyToClipboard text={view.uuid}>
+											<Button
+												className="u-button-as-link"
+												htmlType="button"
+												type="transparent"
+											>
+												Kopieer
+											</Button>
+										</CopyToClipboard>
+									</p>
+								</div>
+							</div>
+						)}
 						<ActionBar className="o-action-bar--fixed" isOpen>
 							<ActionBarContentSection>
 								<div className="u-wrapper">
