@@ -19,19 +19,19 @@ import { ViewsRouteProps } from './lib/views.types';
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	const uuidRegex = '\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b';
 
-	// if path is /views, redirect to /views/aanmaken
+	// Redirect /views to /views/aanmaken
 	if (/\/views$/.test(location.pathname)) {
 		return <Redirect to={`${match.url}/beheer`} />;
 	}
 
-	// if path is /views/aanmaken, redirect to /views/aanmaken/instellingen
+	// Redirect /views/aanmaken to /views/aanmaken/instellingen
 	if (/\/views\/aanmaken$/.test(location.pathname)) {
 		return <Redirect to={`${match.url}/aanmaken/instellingen`} />;
 	}
 
-	//if path is /views/VIEWUUID, redirect to /views/VIEWUUID/instellingen
+	//Redirect /views/:viewUuid to /views/:viewUuid/instellingen
 	if (new RegExp(`/views/${uuidRegex}$`).test(location.pathname)) {
-		return <Redirect to={`${location.pathname}/instellingen`} />;
+		return <Redirect to={`${match.url}/instellingen`} />;
 	}
 
 	return (

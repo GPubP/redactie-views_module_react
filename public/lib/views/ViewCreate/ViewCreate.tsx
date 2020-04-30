@@ -35,6 +35,10 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	/**
 	 * Methods
 	 */
+	const navigateToOverview = (): void => {
+		navigate(`/sites${MODULE_PATHS.root}`, { siteId });
+	};
+
 	const upsertView = (sectionData: any, tab: Tab): void => {
 		switch (tab.name) {
 			case VIEW_DETAIL_TAB_MAP.settings.name:
@@ -56,6 +60,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 			tenantId,
 			routes: route.routes,
 			view: view || generateEmptyView(),
+			onCancel: navigateToOverview,
 			onSubmit: (sectionData: any, tab: Tab) => upsertView(sectionData, tab),
 		});
 	};

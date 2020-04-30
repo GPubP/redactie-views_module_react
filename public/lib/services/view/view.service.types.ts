@@ -2,7 +2,7 @@ export interface ViewSchema {
 	meta: ViewMetaSchema;
 	query: {
 		options?: ViewOptionsSchema;
-		conditions: ViewConditionSchema[] | [];
+		conditions: ViewConditionSchema[];
 	};
 	contentType?: any;
 	uuid?: string;

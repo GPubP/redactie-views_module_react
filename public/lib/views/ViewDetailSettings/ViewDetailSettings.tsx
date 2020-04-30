@@ -1,40 +1,25 @@
-import { Button, TextField } from '@acpaas-ui/react-components';
+import { Button, Textarea, TextField } from '@acpaas-ui/react-components';
 import {
 	ActionBar,
 	ActionBarContentSection,
 	Container,
 } from '@acpaas-ui/react-editorial-components';
-import { Field, Formik } from 'formik';
+import { ErrorMessage, Field, Formik } from 'formik';
 import kebabCase from 'lodash.kebabcase';
 import React, { FC } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-import { useNavigate } from '../../hooks';
 import { ViewSchema } from '../../services/view';
-import { MODULE_PATHS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
+import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
 import { VIEW_SETTINGS_VALIDATION_SCHEMA } from './ViewDetailSettings.const';
 import { ViewDetailSettingsMatchProps, ViewDetailSettingsProps } from './ViewDetailSettings.types';
 
 const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = ({
 	view,
+	onCancel,
 	onSubmit,
-	match,
 }) => {
-	const { siteId } = match.params;
-
-	/**
-	 * Hooks
-	 */
-	const { navigate } = useNavigate();
-
-	/**
-	 * Methods
-	 */
-	const navigateToOverview = (): void => {
-		navigate(`/sites${MODULE_PATHS.root}`, { siteId });
-	};
-
 	return (
 		<Container>
 			<Formik
@@ -44,42 +29,51 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 				}
 				validationSchema={VIEW_SETTINGS_VALIDATION_SCHEMA}
 			>
-				{({ submitForm, values }) => (
+				{({ errors, submitForm, values }) => (
 					<>
-						<div className="row">
-							<div className="col-xs-12 col-md-8 row middle-xs">
-								<div className="col-xs-12 col-md-8">
-									<Field
-										as={TextField}
-										label="Label"
-										name="meta.label"
-										required
-									/>
-									<div className="u-text-light u-margin-top-xs">
-										Geef deze contentlijst een gebruiksvriendelijke naam,
-										bijvoorbeeld &lsquo;Titel&lsquo;
-									</div>
+						<div className="row top-xs u-margin-bottom">
+							<div className="col-xs-12 col-md-8">
+								<Field
+									as={TextField}
+									label="Label"
+									name="meta.label"
+									required
+									state={errors.meta?.label && 'error'}
+								/>
+								<ErrorMessage
+									className="u-text-danger"
+									component="p"
+									name="meta.label"
+								/>
+								<div className="u-text-light u-margin-top-xs">
+									Geef deze contentlijst een gebruiksvriendelijke naam,
+									bijvoorbeeld &lsquo;Titel&lsquo;
 								</div>
+							</div>
 
-								<div className="col-xs-12 col-md-4 u-margin-top u-margin-bottom">
-									<div>
-										Systeemnaam: <b>{kebabCase(values.meta.label)}</b>
-									</div>
+							<div className="col-xs-12 col-md-4 u-margin-top">
+								<div className="u-margin-top-xs">
+									Systeemnaam: <b>{kebabCase(values.meta.label)}</b>
 								</div>
 							</div>
 						</div>
 						<div className="row">
-							<div className="col-xs-12 row middle-xs u-margin-top">
-								<div className="col-xs-12">
-									<Field
-										as={TextField}
-										label="Beschrijving"
-										name="meta.description"
-										required
-									/>
-									<div className="u-text-light u-margin-top-xs">
-										Geef een beschrijving voor deze content lijst.
-									</div>
+							<div className="col-xs-12">
+								<Field
+									as={Textarea}
+									className="a-input--small"
+									label="Beschrijving"
+									name="meta.description"
+									required
+									state={errors.meta?.description && 'error'}
+								/>
+								<ErrorMessage
+									className="u-text-danger"
+									component="p"
+									name="meta.description"
+								/>
+								<div className="u-text-light u-margin-top-xs">
+									Geef een beschrijving voor deze content lijst.
 								</div>
 							</div>
 						</div>
@@ -114,7 +108,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 									>
 										Bewaar
 									</Button>
-									<Button onClick={navigateToOverview} outline>
+									<Button onClick={onCancel} outline>
 										Annuleer
 									</Button>
 								</div>

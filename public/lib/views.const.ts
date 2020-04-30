@@ -12,7 +12,7 @@ export const BREADCRUMB_OPTIONS = {
 	],
 };
 
-export const VIEW_DETAIL_TAB_MAP: { [key: string]: Tab } = {
+export const VIEW_DETAIL_TAB_MAP: { [key in 'settings' | 'config']: Tab } = {
 	settings: {
 		name: 'Instellingen',
 		target: 'instellingen',
