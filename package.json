@@ -42,6 +42,7 @@
     "@datorama/akita": "^4.22.1",
     "@redactie/module-webpack-plugin": "2.0.0",
     "@redactie/redactie-core": "^1.2.0",
+    "@redactie/translations-module": "^0.2.0",
     "@testing-library/jest-dom": "5.0.2",
     "@testing-library/react": "9.4.0",
     "@types/jest": "24.9.1",
@@ -66,11 +67,9 @@
     "eslint-plugin-react": "7.18.0",
     "eslint-plugin-react-hooks": "2.3.0",
     "husky": "3.1.0",
-    "install": "0.13.0",
     "jest": "25.1.0",
     "moment": "^2.24.0",
     "node-sass": "4.13.1",
-    "npm": "6.13.7",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
     "prettier": "1.19.1",
@@ -86,17 +85,17 @@
     "typescript-plugin-css-modules": "^2.1.2",
     "webpack": "4.41.5",
     "webpack-bundle-analyzer": "^3.6.1",
-    "webpack-cli": "3.3.10"
-  },
-  "dependencies": {
+    "webpack-cli": "3.3.10",
     "formik": "2.1.4",
     "ky": "^0.17.0",
+    "ramda": "^0.27.0",
+    "yup": "^0.28.3"
+  },
+  "dependencies": {
     "lodash.debounce": "^4.0.8",
     "lodash.kebabcase": "4.1.1",
     "query-string": "^6.12.1",
-    "ramda": "^0.27.0",
-    "react-copy-to-clipboard": "^5.0.2",
-    "yup": "^0.28.3"
+    "react-copy-to-clipboard": "^5.0.2"
   },
   "author": "Maarten De Weerdt",
   "license": "ISC"
