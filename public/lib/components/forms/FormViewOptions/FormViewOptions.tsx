@@ -1,6 +1,8 @@
-import { Select } from '@acpaas-ui/react-components';
+import { Select, TextField } from '@acpaas-ui/react-components';
 import { Field, Formik } from 'formik';
 import React, { FC } from 'react';
+
+import AutoSubmit from '../AutoSubmit/AutoSubmit';
 
 import { FormViewOptionsProps } from './FormViewOptions.types';
 
@@ -14,6 +16,7 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 		<Formik initialValues={formState} onSubmit={onSubmit}>
 			{() => (
 				<>
+					<AutoSubmit />
 					<div className="row u-margin-top u-margin-bottom">
 						<div className="col-xs-6">
 							<Field
@@ -33,7 +36,26 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 								as={Select}
 							/>
 						</div>
-						{/* TODO: add offset and limit selectors */}
+					</div>
+					<div className="row">
+						<div className="col-xs-3">
+							<Field
+								as={TextField}
+								type="number"
+								id="query.options.offset"
+								name="query.options.offset"
+								label="Aantal items overslaan"
+							/>
+						</div>
+						<div className="col-xs-3">
+							<Field
+								as={TextField}
+								type="number"
+								id="query.options.limit"
+								name="query.options.limit"
+								label="Beperkt tot"
+							/>
+						</div>
 					</div>
 				</>
 			)}

@@ -2,13 +2,11 @@ import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editori
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { generatePath, Link, useParams } from 'react-router-dom';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 import DataLoader from '../../components/DataLoader/DataLoader';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
 import { ViewSchema } from '../../services/view';
-import { internalQuery, internalService } from '../../store/internal';
+import { internalService, useViewFacade } from '../../store/internal';
 import { MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
 import { LoadingState, ViewsRouteProps } from '../../views.types';
 
@@ -17,12 +15,13 @@ const ViewUpdate: FC<ViewsRouteProps> = ({ location, route }) => {
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
+
 	const { siteId, viewUuid } = useParams();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [viewLoadingState, view, updateView] = useView(viewUuid);
-	const [internalView, setInternalView] = useState<ViewSchema | null>(null);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 	const { navigate } = useNavigate();
+	const internalView = useViewFacade();
 
 	useEffect(() => {
 		if (viewLoadingState !== LoadingState.Loading) {
@@ -38,36 +37,22 @@ const ViewUpdate: FC<ViewsRouteProps> = ({ location, route }) => {
 		}
 	}, [view, viewLoadingState]);
 
-	useEffect(() => {
-		const destroyed$: Subject<boolean> = new Subject<boolean>();
-
-		internalQuery.view$.pipe(takeUntil(destroyed$)).subscribe(internalView => {
-			if (internalView) {
-				return setInternalView(internalView);
-			}
-		});
-
-		return () => {
-			destroyed$.next(true);
-			destroyed$.complete();
-		};
-	}, []);
-
 	/**
 	 * Methods
 	 */
 	const navigateToOverview = (): void => {
-		navigate(MODULE_PATHS.root);
+		navigate(`/sites${MODULE_PATHS.root}`, { siteId });
 	};
 
-	const update = (view: ViewSchema): void => {
-		if (!view) {
+	const update = (updatedView: ViewSchema): void => {
+		if (!updatedView) {
 			return;
 		}
 
 		// TODO: fix with store integration
-		updateView(view);
+		updateView(updatedView);
 	};
+
 	/**
 	 * Render
 	 */

@@ -18,7 +18,7 @@ import { ViewsDetailRouteProps } from '../../views.types';
 
 import { DUMMY_METHOD_OPTIONS, VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfig.const';
 
-const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onSubmit }) => {
+const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel, onSubmit }) => {
 	/**
 	 * Hooks
 	 */
@@ -41,9 +41,12 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onSubmit
 	/**
 	 * Functions
 	 */
-
 	const onConfigSave = (): void => {
-		onSubmit(view, VIEW_DETAIL_TAB_MAP.configuratie);
+		onSubmit(view, VIEW_DETAIL_TAB_MAP.config);
+	};
+
+	const onConfigChange = (updatedView: any): void => {
+		internalService.updateView(updatedView);
 	};
 
 	/**
@@ -54,7 +57,7 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onSubmit
 			tenantId,
 			view,
 			contentType,
-			onSubmit: (newView: ViewSchema) => onSubmit(newView, VIEW_DETAIL_TAB_MAP.configuratie),
+			onSubmit: onConfigChange,
 		});
 	};
 
@@ -108,12 +111,14 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onSubmit
 						<Button
 							onClick={onConfigSave}
 							htmlType="submit"
-							className="u-margin-right"
+							className="u-margin-right-xs"
 							type="success"
 						>
 							Bewaar
 						</Button>
-						<Button outline>Annuleer</Button>
+						<Button onClick={onCancel} outline>
+							Annuleer
+						</Button>
 					</div>
 				</ActionBarContentSection>
 			</ActionBar>
