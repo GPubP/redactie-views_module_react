@@ -7,11 +7,13 @@ import {
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
 import { ModuleRouteConfig, useBreadcrumbs } from '@redactie/redactie-core';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import moment from 'moment';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import DataLoader from '../../components/DataLoader/DataLoader';
 import FilterForm from '../../components/FilterForm/FilterForm';
+import { useCoreTranslation } from '../../connectors/translations';
 import { useNavigate, useRoutes, useViews } from '../../hooks';
 import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING, OrderBy } from '../../services/api';
 import { parseOrderBy } from '../../services/api/api.service';
@@ -34,6 +36,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [searchParams, setSearchParams] = useState(DEFAULT_SEARCH_PARAMS);
 	const { navigate } = useNavigate();
+	const [t] = useCoreTranslation();
 
 	const routes = useRoutes();
 	const breadcrumbs = useBreadcrumbs(routes as ModuleRouteConfig[], BREADCRUMB_OPTIONS);
@@ -118,7 +121,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 
 		const viewsColumns = [
 			{
-				label: 'Naam',
+				label: t(CORE_TRANSLATIONS.TABLE_NAME),
 				value: 'label',
 			},
 			{
@@ -127,7 +130,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 				disableSorting: true,
 			},
 			{
-				label: 'Laatst aangepast',
+				label: t(CORE_TRANSLATIONS['TABLE_LAST-MODIFIED']),
 				value: 'lastModified',
 				disableSorting: true,
 				format(data: string) {
@@ -193,7 +196,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 						iconLeft="plus"
 						onClick={() => navigate(`/sites${MODULE_PATHS.create}`, { siteId })}
 					>
-						Nieuwe maken
+						{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
 					</Button>
 				</ContextHeaderActionsSection>
 			</ContextHeader>

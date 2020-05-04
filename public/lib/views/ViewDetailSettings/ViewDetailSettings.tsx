@@ -4,11 +4,13 @@ import {
 	ActionBarContentSection,
 	Container,
 } from '@acpaas-ui/react-editorial-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { ErrorMessage, Field, Formik } from 'formik';
 import kebabCase from 'lodash.kebabcase';
 import React, { FC } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
+import { useCoreTranslation } from '../../connectors/translations';
 import { ViewSchema } from '../../services/view';
 import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
@@ -20,6 +22,8 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 	onCancel,
 	onSubmit,
 }) => {
+	const [t] = useCoreTranslation();
+
 	return (
 		<Container>
 			<Formik
@@ -53,7 +57,8 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 
 							<div className="col-xs-12 col-md-4 u-margin-top">
 								<div className="u-margin-top-xs">
-									Systeemnaam: <b>{kebabCase(values.meta.label)}</b>
+									{t(CORE_TRANSLATIONS['GENERAL_SYSTEM-NAME'])}:{' '}
+									<b>{kebabCase(values.meta.label)}</b>
 								</div>
 							</div>
 						</div>
@@ -106,10 +111,10 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 										onClick={submitForm}
 										type="success"
 									>
-										Bewaar
+										{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
 									</Button>
 									<Button onClick={onCancel} outline>
-										Annuleer
+										{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 									</Button>
 								</div>
 							</ActionBarContentSection>
