@@ -29,7 +29,7 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 		return <Redirect to={`${match.url}/aanmaken/instellingen`} />;
 	}
 
-	//Redirect /views/:viewUuid to /views/:viewUuid/instellingen
+	// Redirect /views/:viewUuid to /views/:viewUuid/instellingen
 	if (new RegExp(`/views/${uuidRegex}$`).test(location.pathname)) {
 		return <Redirect to={`${match.url}/instellingen`} />;
 	}

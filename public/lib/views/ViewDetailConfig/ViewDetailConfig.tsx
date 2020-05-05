@@ -6,13 +6,16 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import React, { FC, ReactElement, useMemo } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
 import { FormViewNewList, NavList } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useContentType, useContentTypes } from '../../hooks';
-import { DEFAULT_CONTENT_TYPES_SEARCH_PARAMS } from '../../services/contentTypes';
+import { useContentTypes } from '../../hooks';
+import {
+	ContentTypeSchema,
+	DEFAULT_CONTENT_TYPES_SEARCH_PARAMS,
+} from '../../services/contentTypes';
 import { ViewSchema } from '../../services/view';
 import { internalService } from '../../store/internal';
 import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
@@ -26,16 +29,29 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 	 */
 	const { siteId, viewUuid } = useParams();
 	const [, contentTypes] = useContentTypes(DEFAULT_CONTENT_TYPES_SEARCH_PARAMS);
-	const [, contentType] = useContentType(view.contentType);
 	const [t] = useCoreTranslation();
+
+	useEffect(() => {
+		internalService.updateView(view);
+	}, [view]);
 
 	const contentTypeOptions = useMemo(() => {
 		if (Array.isArray(contentTypes)) {
-			return contentTypes.map(ct => ({
+			const cts = contentTypes.map(ct => ({
 				key: ct.uuid,
 				value: ct.uuid,
 				label: ct.meta?.label,
 			}));
+
+			return [
+				{
+					key: 'none',
+					value: null,
+					label: 'Kies een content-type',
+					disabled: true,
+				},
+				...cts,
+			];
 		}
 
 		return [];
@@ -59,9 +75,34 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {
 			tenantId,
 			view,
-			contentType,
+			contentType: view?.query?.contentType,
 			onSubmit: onConfigChange,
 		});
+	};
+
+	const renderConfigSection = (): ReactElement | null => {
+		if (!view?.query?.contentType) {
+			return null;
+		}
+
+		return (
+			<>
+				<div className="col-xs-3">
+					<Card>
+						<NavList
+							items={VIEW_CC_NAV_LIST_ITEMS.map(listItem => ({
+								...listItem,
+								to: generatePath(`${route.path}/${listItem.to}`, {
+									siteId,
+									viewUuid,
+								}),
+							}))}
+						/>
+					</Card>
+				</div>
+				<div className="col-xs-9">{renderChildRoutes()}</div>
+			</>
+		);
 	};
 
 	return (
@@ -80,7 +121,14 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 											...view,
 											query: {
 												...view.query,
+												contentType: (contentTypes?.find(
+													ct => ct.uuid === view?.query?.contentType?.uuid
+												) as unknown) as ContentTypeSchema,
 												conditions: [],
+												options: {
+													offset: 0,
+													limit: 10,
+												},
 											},
 										})
 									}
@@ -88,24 +136,7 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 							</div>
 						</Card>
 					</div>
-					{view.contentType && (
-						<>
-							<div className="col-xs-3">
-								<Card>
-									<NavList
-										items={VIEW_CC_NAV_LIST_ITEMS.map(listItem => ({
-											...listItem,
-											to: generatePath(`${route.path}/${listItem.to}`, {
-												siteId,
-												viewUuid,
-											}),
-										}))}
-									/>
-								</Card>
-							</div>
-							<div className="col-xs-9">{renderChildRoutes()}</div>
-						</>
-					)}
+					{renderConfigSection()}
 				</div>
 			</Container>
 			<ActionBar className="o-action-bar--fixed" isOpen>

@@ -32,7 +32,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 							<Field
 								aria-describedby="descContentType"
 								id="contentType"
-								name="contentType"
+								name="query.contentType.uuid"
 								loading={contentTypeOptions?.length === 0}
 								label="Content type"
 								options={contentTypeOptions}
