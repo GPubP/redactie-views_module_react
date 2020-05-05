@@ -13,7 +13,7 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 	onSubmit,
 }) => {
 	return (
-		<Formik initialValues={formState} onSubmit={onSubmit} enableReinitialize={true}>
+		<Formik initialValues={formState} onSubmit={onSubmit} enableReinitialize>
 			{() => (
 				<>
 					<AutoSubmit />
