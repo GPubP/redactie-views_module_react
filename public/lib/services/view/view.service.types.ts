@@ -1,10 +1,12 @@
+import { ContentTypeSchema } from '../contentTypes';
+
 export interface ViewSchema {
 	meta: ViewMetaSchema;
 	query: {
 		options?: ViewOptionsSchema;
 		conditions: ViewConditionSchema[];
+		contentType?: ContentTypeSchema;
 	};
-	contentType?: any;
 	uuid?: string;
 }
 
@@ -16,8 +18,8 @@ export interface ViewMetaSchema {
 export interface ViewOptionsSchema {
 	offset: number;
 	limit: number;
-	orderBy: any;
-	order: string;
+	orderBy?: any;
+	order?: string;
 }
 
 export interface ViewConditionSchema {

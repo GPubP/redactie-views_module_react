@@ -1,7 +1,7 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { generatePath, Link, useParams } from 'react-router-dom';
+import { generatePath, Link, Redirect, useParams } from 'react-router-dom';
 
 import DataLoader from '../../components/DataLoader/DataLoader';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
@@ -10,7 +10,7 @@ import { internalService, useViewFacade } from '../../store/internal';
 import { MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
 import { LoadingState, ViewsRouteProps } from '../../views.types';
 
-const ViewUpdate: FC<ViewsRouteProps> = ({ location, route }) => {
+const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({ location, route, match }) => {
 	/**
 	 * Hooks
 	 */
@@ -59,6 +59,14 @@ const ViewUpdate: FC<ViewsRouteProps> = ({ location, route }) => {
 	const renderChildRoutes = (): ReactElement | null => {
 		if (!internalView) {
 			return null;
+		}
+
+		const uuidRegex =
+			'\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b';
+
+		// Redirect /views/:viewUuid/configuratie to /views/:viewUuid/instellingen/configuratie/voorwaarden
+		if (new RegExp(`/views/${uuidRegex}/configuratie$`).test(location.pathname)) {
+			return <Redirect to={`${match.url}/configuratie/voorwaarden`} />;
 		}
 
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {

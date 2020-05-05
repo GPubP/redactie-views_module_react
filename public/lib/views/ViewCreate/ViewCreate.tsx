@@ -45,7 +45,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 				createView({
 					...generateEmptyView(),
 					meta: {
-						...(sectionData as ViewMetaSchema),
+						...sectionData?.meta,
 					},
 				} as ViewSchema);
 				break;

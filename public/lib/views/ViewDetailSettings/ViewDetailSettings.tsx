@@ -29,7 +29,10 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 			<Formik
 				initialValues={view}
 				onSubmit={(value: ViewSchema) =>
-					onSubmit({ ...view.meta, ...value.meta }, VIEW_DETAIL_TAB_MAP.settings)
+					onSubmit(
+						{ ...view, meta: { ...view.meta, ...value.meta } },
+						VIEW_DETAIL_TAB_MAP.settings
+					)
 				}
 				validationSchema={VIEW_SETTINGS_VALIDATION_SCHEMA}
 			>
