@@ -1,7 +1,7 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { generatePath, Link, Redirect, useParams } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 
 import DataLoader from '../../components/DataLoader/DataLoader';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
@@ -17,10 +17,17 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({ location, rout
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 
 	const { siteId, viewUuid } = useParams();
-	const breadcrumbs = useRoutesBreadcrumbs();
+	const { navigate, generatePath } = useNavigate();
+	const breadcrumbs = useRoutesBreadcrumbs([
+		{
+			name: 'Views',
+			target: generatePath(MODULE_PATHS.overview, {
+				siteId,
+			}),
+		},
+	]);
 	const [viewLoadingState, view, updateView] = useView(viewUuid);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
-	const { navigate } = useNavigate();
 	const internalView = useViewFacade();
 
 	useEffect(() => {
@@ -41,7 +48,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({ location, rout
 	 * Methods
 	 */
 	const navigateToOverview = (): void => {
-		navigate(`/sites${MODULE_PATHS.root}`, { siteId });
+		navigate(`${MODULE_PATHS.root}`, { siteId });
 	};
 
 	const update = (updatedView: ViewSchema): void => {
@@ -83,7 +90,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({ location, rout
 				tabs={activeTabs}
 				linkProps={(props: any) => ({
 					...props,
-					to: generatePath(`${route.path}/${props.href}`, { siteId, viewUuid }),
+					to: generatePath(`${MODULE_PATHS.detail}/${props.href}`, { siteId, viewUuid }),
 					component: Link,
 				})}
 				title="View bewerken"

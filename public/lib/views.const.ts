@@ -4,6 +4,9 @@ export const BREADCRUMB_OPTIONS = {
 	excludePaths: [
 		'/',
 		'/:tenantId',
+		'/:tenantId/sites',
+		'/:tenantId/sites/:siteId',
+		'/:tenantId/sites/:siteId/views',
 		'/:tenantId/sites/:siteId/views/aanmaken/instellingen',
 		'/:tenantId/sites/:siteId/views/:viewUuid/instellingen',
 		'/:tenantId/sites/:siteId/views/:viewUuid/configuratie',
@@ -28,6 +31,7 @@ export const VIEW_DETAIL_TAB_MAP: { [key in 'settings' | 'config']: Tab } = {
 export const VIEW_DETAIL_TABS: Tab[] = [VIEW_DETAIL_TAB_MAP.settings, VIEW_DETAIL_TAB_MAP.config];
 
 export const MODULE_PATHS = {
+	dashboard: '/:siteId/content',
 	root: '/:siteId/views',
 	overview: '/:siteId/views/beheer',
 	create: '/:siteId/views/aanmaken',

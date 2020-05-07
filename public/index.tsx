@@ -48,7 +48,6 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 registerRoutes({
 	path: MODULE_PATHS.root,
 	component: ViewsComponent,
-	breadcrumb: 'Views',
 	exact: true,
 	navigation: {
 		renderContext: 'site',
