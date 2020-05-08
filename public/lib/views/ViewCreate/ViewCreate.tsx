@@ -5,7 +5,7 @@ import { generatePath, Link } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
-import { ViewMetaSchema, ViewSchema } from '../../services/view';
+import { ViewSchema } from '../../services/view';
 import { MODULE_PATHS, VIEW_DETAIL_TAB_MAP, VIEW_DETAIL_TABS } from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
 import { LoadingState, Tab, ViewsMatchProps, ViewsRouteProps } from '../../views.types';

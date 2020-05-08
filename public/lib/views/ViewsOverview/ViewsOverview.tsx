@@ -8,11 +8,11 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { ModuleRouteConfig, useBreadcrumbs } from '@redactie/redactie-core';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
+import { FormikHelpers } from 'formik';
 import moment from 'moment';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
-import DataLoader from '../../components/DataLoader/DataLoader';
-import FilterForm from '../../components/FilterForm/FilterForm';
+import { DataLoader, FilterForm, FilterFormState, ResetForm } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { useNavigate, useRoutes, useViews } from '../../hooks';
 import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING, OrderBy } from '../../services/api';
@@ -20,10 +20,10 @@ import { parseOrderBy } from '../../services/api/api.service';
 import { FilterItemSchema } from '../../services/filterItems/filterItems.service.types';
 import { LoadingState } from '../../types';
 import { BREADCRUMB_OPTIONS, MODULE_PATHS } from '../../views.const';
-import { generateFilterFormState } from '../../views.helpers';
-import { FilterFormState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
+import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
+import { VIEWS_OVERVIEW_INITIAL_FILTER_STATE } from './viewsOverview.const';
 
 const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const { siteId } = match.params;
@@ -51,9 +51,18 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	/**
 	 * Functions
 	 */
-	const onSubmit = ({ name }: FilterFormState): void => {
+	const onSubmit = (
+		{ name }: FilterFormState,
+		formikHelpers: FormikHelpers<FilterFormState>
+	): void => {
 		// Add item to filterItems for Taglist
 		const request = { label: name, value: name };
+
+		// Return when search term already exist
+		if (filterItems.find(filterItem => filterItem.value === name)) {
+			return;
+		}
+
 		const newFilters = filterItems?.concat(request);
 		// Get value array from filterItems
 		const search = newFilters.map(item => item['value']);
@@ -64,13 +73,15 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 			...searchParams,
 			search,
 		});
+		formikHelpers.resetForm();
 	};
 
-	const deleteAllFilters = (): void => {
+	const deleteAllFilters = (resetForm: ResetForm): void => {
 		// Clear filter items
 		setFilterItems([]);
 		// Reset search params
 		setSearchParams(DEFAULT_SEARCH_PARAMS);
+		resetForm();
 	};
 
 	const deleteFilter = (item: any): void => {
@@ -165,7 +176,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		return (
 			<>
 				<FilterForm
-					initialState={generateFilterFormState()}
+					initialState={VIEWS_OVERVIEW_INITIAL_FILTER_STATE}
 					onCancel={deleteAllFilters}
 					onSubmit={onSubmit}
 					deleteActiveFilter={deleteFilter}

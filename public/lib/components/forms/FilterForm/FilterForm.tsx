@@ -16,17 +16,18 @@ const FilterForm: FC<FilterFormProps> = ({
 	return (
 		<>
 			<Formik
+				enableReinitialize={true}
 				initialValues={initialState}
 				onSubmit={onSubmit}
 				validationSchema={FILTER_FORM_VALIDATION_SCHEMA}
 			>
-				{({ submitForm }) => {
+				{({ submitForm, resetForm }) => {
 					return (
 						<Filter
 							title="Filter"
 							noFilterText="Geen filters beschikbaar"
 							onConfirm={submitForm}
-							onClean={onCancel}
+							onClean={() => onCancel(resetForm)}
 							confirmText="Toepassen"
 							cleanText="Alles leegmaken"
 							activeFilters={activeFilters}
@@ -39,7 +40,6 @@ const FilterForm: FC<FilterFormProps> = ({
 										label="Naam"
 										name="name"
 										id="name"
-										required
 										placeholder="Zoeken op naam"
 										iconright="search"
 									/>
