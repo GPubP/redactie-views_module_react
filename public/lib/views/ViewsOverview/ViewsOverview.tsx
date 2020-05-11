@@ -6,7 +6,6 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { ModuleRouteConfig, useBreadcrumbs } from '@redactie/redactie-core';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import moment from 'moment';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
@@ -14,12 +13,12 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import DataLoader from '../../components/DataLoader/DataLoader';
 import FilterForm from '../../components/FilterForm/FilterForm';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useNavigate, useRoutes, useViews } from '../../hooks';
+import { useNavigate, useRoutesBreadcrumbs, useViews } from '../../hooks';
 import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING, OrderBy } from '../../services/api';
 import { parseOrderBy } from '../../services/api/api.service';
 import { FilterItemSchema } from '../../services/filterItems/filterItems.service.types';
 import { LoadingState } from '../../types';
-import { BREADCRUMB_OPTIONS, MODULE_PATHS } from '../../views.const';
+import { MODULE_PATHS } from '../../views.const';
 import { generateFilterFormState } from '../../views.helpers';
 import { FilterFormState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
@@ -38,8 +37,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const { navigate } = useNavigate();
 	const [t] = useCoreTranslation();
 
-	const routes = useRoutes();
-	const breadcrumbs = useBreadcrumbs(routes as ModuleRouteConfig[], BREADCRUMB_OPTIONS);
+	const breadcrumbs = useRoutesBreadcrumbs();
 	const [loadingState, views, viewsMeta] = useViews(searchParams);
 
 	useEffect(() => {
@@ -149,7 +147,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 							ariaLabel="Edit"
 							icon="edit"
 							onClick={() =>
-								navigate(`/sites${MODULE_PATHS.detailSettings}`, {
+								navigate(`${MODULE_PATHS.detailSettings}`, {
 									siteId,
 									viewUuid: id,
 								})
@@ -194,7 +192,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 				<ContextHeaderActionsSection>
 					<Button
 						iconLeft="plus"
-						onClick={() => navigate(`/sites${MODULE_PATHS.create}`, { siteId })}
+						onClick={() => navigate(`${MODULE_PATHS.create}`, { siteId })}
 					>
 						{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
 					</Button>
