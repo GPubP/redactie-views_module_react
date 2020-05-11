@@ -1,7 +1,7 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, useEffect, useState } from 'react';
-import { generatePath, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
@@ -16,14 +16,21 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const breadcrumbs = useRoutesBreadcrumbs();
+	const { navigate, generatePath } = useNavigate();
+	const breadcrumbs = useRoutesBreadcrumbs([
+		{
+			name: 'Views',
+			target: generatePath(MODULE_PATHS.overview, {
+				siteId,
+			}),
+		},
+	]);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 	const [viewLoadingState, view, , createView] = useView();
-	const { navigate } = useNavigate();
 
 	useEffect(() => {
 		if (view) {
-			navigate(`/sites${MODULE_PATHS.detailConfig}`, { siteId, viewUuid: view.uuid });
+			navigate(`${MODULE_PATHS.detailConfig}`, { siteId, viewUuid: view.uuid });
 		}
 		if (viewLoadingState !== LoadingState.Loading) {
 			return setInitialLoading(LoadingState.Loaded);
@@ -36,7 +43,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	 * Methods
 	 */
 	const navigateToOverview = (): void => {
-		navigate(`/sites${MODULE_PATHS.root}`, { siteId });
+		navigate(`${MODULE_PATHS.root}`, { siteId });
 	};
 
 	const upsertView = (sectionData: any, tab: Tab): void => {
