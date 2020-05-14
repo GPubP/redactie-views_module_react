@@ -27,10 +27,6 @@ export interface ViewsDetailRouteProps<Params = {}> extends RouteConfigComponent
 	tenantId: string;
 }
 
-export interface FilterFormState {
-	name: string;
-}
-
 export interface SelectOptions {
 	key: string;
 	value: string;
