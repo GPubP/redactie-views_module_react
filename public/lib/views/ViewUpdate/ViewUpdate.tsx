@@ -2,8 +2,7 @@ import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editori
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { Link, Redirect, useParams } from 'react-router-dom';
 
-import DataLoader from '../../components/DataLoader/DataLoader';
-import { renderRoutes } from '../../helpers';
+import { DataLoader, RenderChildRoutes } from '../../components';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
 import { ViewSchema } from '../../services/view';
 import { internalService, useViewFacade } from '../../store/internal';
@@ -64,7 +63,6 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
 		// TODO: fix with store integration
 		updateView(updatedView);
 	};
-
 	/**
 	 * Render
 	 */
@@ -81,17 +79,19 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
 			return <Redirect to={`${match.url}/configuratie/voorwaarden`} />;
 		}
 
-		return renderRoutes(
-			route.routes,
-			{
-				tenantId,
-			},
-			{
-				onCancel: navigateToOverview,
-				onSubmit: update,
-				routes: route.routes,
-				view: internalView,
-			}
+		return (
+			<RenderChildRoutes
+				routes={route.routes}
+				guardsMeta={{
+					tenantId,
+				}}
+				extraOptions={{
+					onCancel: navigateToOverview,
+					onSubmit: update,
+					routes: route.routes,
+					view: internalView,
+				}}
+			/>
 		);
 	};
 

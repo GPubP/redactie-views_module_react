@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import { RenderChildRoutes } from './lib/components';
 import rolesRightsConnector from './lib/connectors/rolesRights';
 import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
-import { renderRoutes } from './lib/helpers';
 import {
 	ViewCreate,
 	ViewDetailConditions,
@@ -19,6 +19,20 @@ import { ViewsRouteProps } from './lib/views.types';
 
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 	const uuidRegex = '\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b';
+	const guardsMeta = useMemo(
+		() => ({
+			tenantId,
+		}),
+		[tenantId]
+	);
+	const extraOptions = useMemo(
+		() => ({
+			basePath: match.url,
+			routes: route.routes,
+			tenantId,
+		}),
+		[match.url, tenantId, route.routes]
+	);
 
 	// Redirect /views to /views/aanmaken
 	if (/\/views$/.test(location.pathname)) {
@@ -37,17 +51,11 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
-			{renderRoutes(
-				route.routes,
-				{
-					tenantId,
-				},
-				{
-					basePath: match.url,
-					routes: route.routes,
-					tenantId,
-				}
-			)}
+			<RenderChildRoutes
+				routes={route.routes}
+				guardsMeta={guardsMeta}
+				extraOptions={extraOptions}
+			/>
 		</TenantContext.Provider>
 	);
 };
