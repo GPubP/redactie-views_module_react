@@ -1,5 +1,5 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { Link, Redirect, useParams } from 'react-router-dom';
 
 import DataLoader from '../../components/DataLoader/DataLoader';
@@ -68,7 +68,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
 	/**
 	 * Render
 	 */
-	const renderChildRoutes = (): ReactNode | null => {
+	const renderChildRoutes = (): ReactElement | null => {
 		if (!internalView) {
 			return null;
 		}

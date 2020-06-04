@@ -8,7 +8,6 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { FormikHelpers } from 'formik';
-import moment from 'moment';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm, FilterFormState, ResetForm } from '../../components';
@@ -22,7 +21,7 @@ import { MODULE_PATHS } from '../../views.const';
 import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
-import { VIEWS_OVERVIEW_INITIAL_FILTER_STATE, VIEWS_OVERVIEW_COLUMNS } from './viewsOverview.const';
+import { VIEWS_OVERVIEW_COLUMNS, VIEWS_OVERVIEW_INITIAL_FILTER_STATE } from './viewsOverview.const';
 
 const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const { siteId } = match.params;
