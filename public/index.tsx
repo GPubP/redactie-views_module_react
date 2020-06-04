@@ -1,9 +1,10 @@
-import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import rolesRightsConnector from './lib/connectors/rolesRights';
 import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
+import { renderRoutes } from './lib/helpers';
 import {
 	ViewCreate,
 	ViewDetailConditions,
@@ -13,7 +14,7 @@ import {
 	ViewsOverview,
 	ViewUpdate,
 } from './lib/views';
-import { MODULE_PATHS } from './lib/views.const';
+import { MODULE_PATHS, urlSiteParam } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
 
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
@@ -36,62 +37,100 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
-			{Core.routes.render(route.routes as ModuleRouteConfig[], {
-				basePath: match.url,
-				routes: route.routes,
-				tenantId,
-			})}
+			{renderRoutes(
+				route.routes,
+				{
+					tenantId,
+				},
+				{
+					basePath: match.url,
+					routes: route.routes,
+					tenantId,
+				}
+			)}
 		</TenantContext.Provider>
 	);
 };
 
-registerRoutes({
-	path: MODULE_PATHS.root,
-	component: ViewsComponent,
-	exact: true,
-	navigation: {
-		renderContext: 'site',
-		context: 'site',
-		label: 'Views',
-	},
-	routes: [
-		{
-			path: MODULE_PATHS.overview,
-			component: ViewsOverview,
-		},
-		{
-			path: MODULE_PATHS.create,
-			component: ViewCreate,
-			routes: [
-				{
-					path: MODULE_PATHS.createSettings,
-					component: ViewDetailSettings,
-				},
+if (rolesRightsConnector.api) {
+	registerRoutes({
+		path: MODULE_PATHS.root,
+		component: ViewsComponent,
+		exact: true,
+		guardOptions: {
+			guards: [
+				rolesRightsConnector.api.guards.securityRightsSiteGuard(urlSiteParam, [
+					rolesRightsConnector.securityRights.read,
+				]),
 			],
 		},
-		{
-			path: MODULE_PATHS.detail,
-			component: ViewUpdate,
-			routes: [
-				{
-					path: MODULE_PATHS.detailSettings,
-					component: ViewDetailSettings,
-				},
-				{
-					path: MODULE_PATHS.detailConfig,
-					component: ViewDetailConfig,
-					routes: [
-						{
-							path: MODULE_PATHS.detailConditions,
-							component: ViewDetailConditions,
-						},
-						{
-							path: MODULE_PATHS.detailOptions,
-							component: ViewDetailOptions,
-						},
+		navigation: {
+			renderContext: 'site',
+			context: 'site',
+			label: 'Views',
+			canShown: [
+				rolesRightsConnector.api.canShowns.securityRightsSiteCanShown(urlSiteParam, [
+					rolesRightsConnector.securityRights.read,
+				]),
+			],
+		},
+		routes: [
+			{
+				path: MODULE_PATHS.overview,
+				component: ViewsOverview,
+			},
+			{
+				path: MODULE_PATHS.create,
+				component: ViewCreate,
+				guardOptions: {
+					guards: [
+						rolesRightsConnector.api.guards.securityRightsSiteGuard(urlSiteParam, [
+							rolesRightsConnector.securityRights.create,
+						]),
 					],
 				},
-			],
-		},
-	],
-});
+				routes: [
+					{
+						path: MODULE_PATHS.createSettings,
+						component: ViewDetailSettings,
+					},
+				],
+			},
+			{
+				path: MODULE_PATHS.detail,
+				component: ViewUpdate,
+				guardOptions: {
+					guards: [
+						rolesRightsConnector.api.guards.securityRightsSiteGuard(urlSiteParam, [
+							rolesRightsConnector.securityRights.update,
+						]),
+					],
+				},
+				routes: [
+					{
+						path: MODULE_PATHS.detailSettings,
+						component: ViewDetailSettings,
+					},
+					{
+						path: MODULE_PATHS.detailConfig,
+						component: ViewDetailConfig,
+						routes: [
+							{
+								path: MODULE_PATHS.detailConditions,
+								component: ViewDetailConditions,
+							},
+							{
+								path: MODULE_PATHS.detailOptions,
+								component: ViewDetailOptions,
+							},
+						],
+					},
+				],
+			},
+		],
+	});
+} else {
+	throw new Error(
+		`Views Module can't resolve the following dependency: ${rolesRightsConnector.apiName}, please add the module to the dependency list.`
+	);
+}

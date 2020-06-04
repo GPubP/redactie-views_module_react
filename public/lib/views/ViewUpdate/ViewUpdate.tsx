@@ -1,16 +1,21 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { Link, Redirect, useParams } from 'react-router-dom';
 
 import DataLoader from '../../components/DataLoader/DataLoader';
+import { renderRoutes } from '../../helpers';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
 import { ViewSchema } from '../../services/view';
 import { internalService, useViewFacade } from '../../store/internal';
 import { MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
 import { LoadingState, ViewsRouteProps } from '../../views.types';
 
-const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({ location, route, match }) => {
+const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
+	location,
+	route,
+	match,
+	tenantId,
+}) => {
 	/**
 	 * Hooks
 	 */
@@ -63,7 +68,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({ location, rout
 	/**
 	 * Render
 	 */
-	const renderChildRoutes = (): ReactElement | null => {
+	const renderChildRoutes = (): ReactNode | null => {
 		if (!internalView) {
 			return null;
 		}
@@ -76,12 +81,18 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({ location, rout
 			return <Redirect to={`${match.url}/configuratie/voorwaarden`} />;
 		}
 
-		return Core.routes.render(route.routes as ModuleRouteConfig[], {
-			onCancel: navigateToOverview,
-			onSubmit: update,
-			routes: route.routes,
-			view: internalView,
-		});
+		return renderRoutes(
+			route.routes,
+			{
+				tenantId,
+			},
+			{
+				onCancel: navigateToOverview,
+				onSubmit: update,
+				routes: route.routes,
+				view: internalView,
+			}
+		);
 	};
 
 	return (

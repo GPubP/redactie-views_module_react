@@ -3,4 +3,5 @@ export interface ViewsOverviewTableRow {
 	label: string;
 	lastEditor: string;
 	lastModified: string;
+	navigate: (viewUuid: string) => void;
 }

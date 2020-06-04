@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { SearchParams } from '../../services/api';
 import { ContentTypeResponse, getContentTypes } from '../../services/contentTypes';
-import { LoadingState } from '../../types';
+import { LoadingState } from '../../views.types';
 
 const useContentTypes = (
 	searchParams: SearchParams
