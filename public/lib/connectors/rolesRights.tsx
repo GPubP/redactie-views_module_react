@@ -4,9 +4,9 @@ import { RolesRightsModuleAPI } from '@redactie/roles-rights-module';
 class RolesRightsConnector {
 	public apiName = 'roles-rights-module';
 	public securityRights = {
-		create: 'view-create',
-		update: 'view-update',
-		read: 'view-read',
+		create: 'view_create',
+		update: 'view_update',
+		read: 'view_read',
 	};
 	public api: RolesRightsModuleAPI;
 
