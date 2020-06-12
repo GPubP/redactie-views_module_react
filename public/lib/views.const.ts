@@ -29,16 +29,16 @@ export const VIEW_DETAIL_TAB_MAP: { [key in 'settings' | 'config']: Tab } = {
 };
 
 export const VIEW_DETAIL_TABS: Tab[] = [VIEW_DETAIL_TAB_MAP.settings, VIEW_DETAIL_TAB_MAP.config];
-
+export const urlSiteParam = 'siteId';
 export const MODULE_PATHS = {
-	dashboard: '/:siteId/content',
-	root: '/:siteId/views',
-	overview: '/:siteId/views/beheer',
-	create: '/:siteId/views/aanmaken',
-	createSettings: '/:siteId/views/aanmaken/instellingen',
-	detail: '/:siteId/views/:viewUuid',
-	detailSettings: '/:siteId/views/:viewUuid/instellingen',
-	detailConfig: '/:siteId/views/:viewUuid/configuratie',
-	detailConditions: '/:siteId/views/:viewUuid/configuratie/voorwaarden',
-	detailOptions: '/:siteId/views/:viewUuid/configuratie/sorteer-opties',
+	dashboard: `/:${urlSiteParam}/content`,
+	root: `/:${urlSiteParam}/views`,
+	overview: `/:${urlSiteParam}/views/beheer`,
+	create: `/:${urlSiteParam}/views/aanmaken`,
+	createSettings: `/:${urlSiteParam}/views/aanmaken/instellingen`,
+	detail: `/:${urlSiteParam}/views/:viewUuid`,
+	detailSettings: `/:${urlSiteParam}/views/:viewUuid/instellingen`,
+	detailConfig: `/:${urlSiteParam}/views/:viewUuid/configuratie`,
+	detailConditions: `/:${urlSiteParam}/views/:viewUuid/configuratie/voorwaarden`,
+	detailOptions: `/:${urlSiteParam}/views/:viewUuid/configuratie/sorteer-opties`,
 };

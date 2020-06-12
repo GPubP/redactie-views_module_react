@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { ContentTypeResponse, getContentType } from '../../services/contentTypes';
-import { LoadingState } from '../../types';
+import { LoadingState } from '../../views.types';
 
 const useContentType = (uuid: string | null = null): [LoadingState, ContentTypeResponse | null] => {
 	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);

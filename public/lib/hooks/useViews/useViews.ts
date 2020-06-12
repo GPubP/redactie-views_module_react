@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { ResponseMeta, SearchParams } from '../../services/api';
 import { getViews, ViewSchema } from '../../services/views';
-import { LoadingState } from '../../types';
+import { LoadingState } from '../../views.types';
 
 type UseViewsReturn = [LoadingState, ViewSchema[], ResponseMeta | null];
 

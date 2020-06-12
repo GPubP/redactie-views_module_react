@@ -8,21 +8,20 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { FormikHelpers } from 'formik';
-import moment from 'moment';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm, FilterFormState, ResetForm } from '../../components';
+import rolesRightsConnector from '../../connectors/rolesRights';
 import { useCoreTranslation } from '../../connectors/translations';
 import { useNavigate, useRoutesBreadcrumbs, useViews } from '../../hooks';
 import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING, OrderBy } from '../../services/api';
 import { parseOrderBy } from '../../services/api/api.service';
 import { FilterItemSchema } from '../../services/filterItems/filterItems.service.types';
-import { LoadingState } from '../../types';
 import { MODULE_PATHS } from '../../views.const';
-import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
+import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
-import { VIEWS_OVERVIEW_INITIAL_FILTER_STATE } from './viewsOverview.const';
+import { VIEWS_OVERVIEW_COLUMNS, VIEWS_OVERVIEW_INITIAL_FILTER_STATE } from './viewsOverview.const';
 
 const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const { siteId } = match.params;
@@ -34,6 +33,12 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [searchParams, setSearchParams] = useState(DEFAULT_SEARCH_PARAMS);
+	const [
+		mySecurityRightsLoadingState,
+		mySecurityrights,
+	] = rolesRightsConnector.api.hooks.useMySecurityRightsForSite({
+		onlyKeys: true,
+	});
 	const { navigate } = useNavigate();
 	const [t] = useCoreTranslation();
 
@@ -41,10 +46,13 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const [loadingState, views, viewsMeta] = useViews(searchParams);
 
 	useEffect(() => {
-		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
+		if (
+			loadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading
+		) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [loadingState]);
+	}, [loadingState, mySecurityRightsLoadingState]);
 
 	/**
 	 * Functions
@@ -121,55 +129,14 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 			return null;
 		}
 
-		const viewsRows = views.map(view => ({
+		const viewsRows: ViewsOverviewTableRow[] = views.map(view => ({
 			id: view.uuid,
 			label: view.meta.label,
 			lastEditor: view.meta.lastEditor || 'N/A',
 			lastModified: view.meta.lastModified,
+			navigate: (viewUuid: string) =>
+				navigate(MODULE_PATHS.detailSettings, { siteId, viewUuid }),
 		}));
-
-		const viewsColumns = [
-			{
-				label: t(CORE_TRANSLATIONS.TABLE_NAME),
-				value: 'label',
-			},
-			{
-				label: 'Auteur',
-				value: 'lastEditor',
-				disableSorting: true,
-			},
-			{
-				label: t(CORE_TRANSLATIONS['TABLE_LAST-MODIFIED']),
-				value: 'lastModified',
-				disableSorting: true,
-				format(data: string) {
-					return moment(data).format('DD/MM/YYYY');
-				},
-			},
-			{
-				label: '',
-				classList: ['u-text-right'],
-				disableSorting: true,
-				component(value: unknown, rowData: ViewsOverviewTableRow) {
-					const { id } = rowData;
-
-					return (
-						<Button
-							ariaLabel="Edit"
-							icon="edit"
-							onClick={() =>
-								navigate(`${MODULE_PATHS.detailSettings}`, {
-									siteId,
-									viewUuid: id,
-								})
-							}
-							type="primary"
-							transparent
-						/>
-					);
-				},
-			},
-		];
 
 		return (
 			<>
@@ -182,7 +149,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 				/>
 				<PaginatedTable
 					className="u-margin-top"
-					columns={viewsColumns}
+					columns={VIEWS_OVERVIEW_COLUMNS(t, mySecurityrights)}
 					rows={viewsRows}
 					currentPage={currentPage}
 					itemsPerPage={DEFAULT_SEARCH_PARAMS.limit}
@@ -201,12 +168,17 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 			<ContextHeader title="Views">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 				<ContextHeaderActionsSection>
-					<Button
-						iconLeft="plus"
-						onClick={() => navigate(`${MODULE_PATHS.create}`, { siteId })}
+					<rolesRightsConnector.api.components.SecurableRender
+						userSecurityRights={mySecurityrights}
+						requiredSecurityRights={[rolesRightsConnector.securityRights.create]}
 					>
-						{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
-					</Button>
+						<Button
+							iconLeft="plus"
+							onClick={() => navigate(`${MODULE_PATHS.create}`, { siteId })}
+						>
+							{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
+						</Button>
+					</rolesRightsConnector.api.components.SecurableRender>
 				</ContextHeaderActionsSection>
 			</ContextHeader>
 			<Container>
