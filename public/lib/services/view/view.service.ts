@@ -2,9 +2,9 @@ import { api } from '../api';
 
 import { ViewSchema } from './view.service.types';
 
-export const getView = async (uuid: string): Promise<ViewSchema | null> => {
+export const getView = async (siteId: string, uuid: string): Promise<ViewSchema | null> => {
 	try {
-		const response: ViewSchema = await api.get(`views/${uuid}`).json();
+		const response: ViewSchema = await api.get(`${siteId}/views/${uuid}`).json();
 
 		return response;
 	} catch (err) {
@@ -13,9 +13,9 @@ export const getView = async (uuid: string): Promise<ViewSchema | null> => {
 	}
 };
 
-export const updateView = async (view: ViewSchema): Promise<ViewSchema | null> => {
+export const updateView = async (siteId: string, view: ViewSchema): Promise<ViewSchema | null> => {
 	const response: ViewSchema = await api
-		.put(`views/${view.uuid}`, {
+		.put(`${siteId}/views/${view.uuid}`, {
 			json: view,
 		})
 		.json();
@@ -23,9 +23,9 @@ export const updateView = async (view: ViewSchema): Promise<ViewSchema | null> =
 	return response;
 };
 
-export const createView = async (view: ViewSchema): Promise<ViewSchema | null> => {
+export const createView = async (siteId: string, view: ViewSchema): Promise<ViewSchema | null> => {
 	const response: ViewSchema = await api
-		.post('views', {
+		.post(`${siteId}/views`, {
 			json: view,
 		})
 		.json();

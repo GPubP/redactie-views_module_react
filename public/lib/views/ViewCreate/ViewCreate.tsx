@@ -26,7 +26,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 		},
 	]);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
-	const [viewLoadingState, view, , createView] = useView();
+	const [viewLoadingState, view, , createView] = useView(siteId);
 
 	useEffect(() => {
 		if (view) {

@@ -5,13 +5,14 @@ import { ContentTypeResponse, getContentTypes } from '../../services/contentType
 import { LoadingState } from '../../views.types';
 
 const useContentTypes = (
+	siteId: string,
 	searchParams: SearchParams
 ): [LoadingState, ContentTypeResponse[] | null] => {
 	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
 	const [contentTypes, setContentTypes] = useState<ContentTypeResponse[] | null>(null);
 
 	useEffect(() => {
-		getContentTypes(searchParams)
+		getContentTypes(siteId, searchParams)
 			.then(result => {
 				if (result) {
 					setContentTypes(result);
@@ -21,7 +22,7 @@ const useContentTypes = (
 			.catch(() => {
 				setLoadingState(LoadingState.Error);
 			});
-	}, [searchParams]);
+	}, [searchParams, siteId]);
 
 	return [loadingState, contentTypes];
 };

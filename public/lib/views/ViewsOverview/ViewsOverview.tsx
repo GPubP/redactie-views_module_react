@@ -43,7 +43,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const [t] = useCoreTranslation();
 
 	const breadcrumbs = useRoutesBreadcrumbs();
-	const [loadingState, views, viewsMeta] = useViews(searchParams);
+	const [loadingState, views, viewsMeta] = useViews(siteId, searchParams);
 
 	useEffect(() => {
 		if (

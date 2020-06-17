@@ -30,7 +30,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
 			}),
 		},
 	]);
-	const [viewLoadingState, view, updateView] = useView(viewUuid);
+	const [viewLoadingState, view, updateView] = useView(siteId || '', viewUuid);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 	const internalView = useViewFacade();
 
