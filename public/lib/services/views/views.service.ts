@@ -3,11 +3,12 @@ import { api, DEFAULT_SEARCH_PARAMS, parseSearchParams, SearchParams } from '../
 import { ViewsSchema } from './views.service.types';
 
 export const getViews = async (
+	siteId: string,
 	searchParams: SearchParams = DEFAULT_SEARCH_PARAMS
 ): Promise<ViewsSchema | null> => {
 	try {
 		const response: ViewsSchema = await api
-			.get(`views?${parseSearchParams(searchParams)}`)
+			.get(`${siteId}/views?${parseSearchParams(searchParams)}`)
 			.json();
 
 		if (!response.data) {

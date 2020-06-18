@@ -5,11 +5,12 @@ import { DEFAULT_CONTENT_TYPES_SEARCH_PARAMS } from './contentTypes.service.cons
 import { ContentTypeResponse, ContentTypesSchema } from './contentTypes.service.types';
 
 export const getContentTypes = async (
+	siteId: string,
 	searchParams: SearchParams = DEFAULT_CONTENT_TYPES_SEARCH_PARAMS
 ): Promise<ContentTypeResponse[] | null> => {
 	try {
 		const response: ContentTypesSchema = await api
-			.get(`content-types?${parseSearchParams(searchParams)}`)
+			.get(`${siteId}/content-types?${parseSearchParams(searchParams)}`)
 			.json();
 
 		if (!response.data) {
@@ -23,9 +24,14 @@ export const getContentTypes = async (
 	}
 };
 
-export const getContentType = async (uuid: string): Promise<ContentTypeResponse | null> => {
+export const getContentType = async (
+	siteId: string,
+	uuid: string
+): Promise<ContentTypeResponse | null> => {
 	try {
-		const response: ContentTypeResponse = await api.get(`content-types/${uuid}`).json();
+		const response: ContentTypeResponse = await api
+			.get(`${siteId}/content-types/${uuid}`)
+			.json();
 
 		return response;
 	} catch (err) {

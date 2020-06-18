@@ -28,7 +28,7 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 	 * Hooks
 	 */
 	const { siteId, viewUuid } = useParams();
-	const [, contentTypes] = useContentTypes(DEFAULT_CONTENT_TYPES_SEARCH_PARAMS);
+	const [, contentTypes] = useContentTypes(siteId || '', DEFAULT_CONTENT_TYPES_SEARCH_PARAMS);
 	const [t] = useCoreTranslation();
 
 	useEffect(() => {

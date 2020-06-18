@@ -6,7 +6,7 @@ import { LoadingState } from '../../views.types';
 
 type UseViewsReturn = [LoadingState, ViewSchema[], ResponseMeta | null];
 
-const useViews = (searchParams: SearchParams): UseViewsReturn => {
+const useViews = (siteId: string, searchParams: SearchParams): UseViewsReturn => {
 	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
 	const [views, setViews] = useState<ViewSchema[]>([]);
 	const [viewsMeta, setViewsMeta] = useState<ResponseMeta | null>(null);
@@ -14,7 +14,7 @@ const useViews = (searchParams: SearchParams): UseViewsReturn => {
 	useEffect(() => {
 		setLoadingState(LoadingState.Loading);
 
-		getViews(searchParams)
+		getViews(siteId, searchParams)
 			.then(result => {
 				if (result?.data && result.data.length >= 0) {
 					setViews(result.data);
@@ -27,7 +27,7 @@ const useViews = (searchParams: SearchParams): UseViewsReturn => {
 			.catch(() => {
 				setLoadingState(LoadingState.Error);
 			});
-	}, [searchParams]);
+	}, [searchParams, siteId]);
 
 	return [loadingState, views, viewsMeta];
 };

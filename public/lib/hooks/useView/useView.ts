@@ -4,6 +4,7 @@ import { createView, getView, updateView, ViewSchema } from '../../services/view
 import { LoadingState } from '../../views.types';
 
 const useView = (
+	siteId: string,
 	uuid: string | null = null
 ): [
 	LoadingState,
@@ -17,7 +18,7 @@ const useView = (
 	const localUpdateView = (view: ViewSchema): Promise<void> => {
 		setLoadingState(LoadingState.Loading);
 
-		return updateView(view)
+		return updateView(siteId, view)
 			.then(result => {
 				setLoadingState(LoadingState.Loaded);
 				setView(result);
@@ -30,7 +31,7 @@ const useView = (
 	const localCreateView = (view: ViewSchema): Promise<void> => {
 		setLoadingState(LoadingState.Loading);
 
-		return createView(view)
+		return createView(siteId, view)
 			.then(result => {
 				setLoadingState(LoadingState.Loaded);
 				setView(result);
@@ -46,7 +47,7 @@ const useView = (
 		}
 
 		setLoadingState(LoadingState.Loading);
-		getView(uuid as string)
+		getView(siteId, uuid)
 			.then(result => {
 				if (result) {
 					setView(result);
@@ -57,7 +58,7 @@ const useView = (
 			.catch(() => {
 				setLoadingState(LoadingState.Error);
 			});
-	}, [uuid]);
+	}, [siteId, uuid]);
 
 	return [loadingState, view, localUpdateView, localCreateView];
 };
