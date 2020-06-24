@@ -1,5 +1,4 @@
 import React, { FC, useMemo } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import { RenderChildRoutes } from './lib/components';
 import rolesRightsConnector from './lib/connectors/rolesRights';
@@ -18,7 +17,6 @@ import { MODULE_PATHS, urlSiteParam } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
 
 const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
-	const uuidRegex = '\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b';
 	const guardsMeta = useMemo(
 		() => ({
 			tenantId,
@@ -33,22 +31,6 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 		}),
 		[match.url, tenantId, route.routes]
 	);
-
-	// Redirect /views to /views/aanmaken
-	if (/\/views$/.test(location.pathname)) {
-		return <Redirect to={`${match.url}/beheer`} />;
-	}
-
-	// Redirect /views/aanmaken to /views/aanmaken/instellingen
-	if (/\/views\/aanmaken$/.test(location.pathname)) {
-		return <Redirect to={`${match.url}/aanmaken/instellingen`} />;
-	}
-
-	// Redirect /views/:viewUuid to /views/:viewUuid/instellingen
-	if (new RegExp(`/views/${uuidRegex}$`).test(location.pathname)) {
-		return <Redirect to={`${match.url}/instellingen`} />;
-	}
-
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
 			<RenderChildRoutes
@@ -64,7 +46,7 @@ if (rolesRightsConnector.api) {
 	registerRoutes({
 		path: MODULE_PATHS.root,
 		component: ViewsComponent,
-		exact: true,
+		redirect: MODULE_PATHS.overview,
 		guardOptions: {
 			guards: [
 				rolesRightsConnector.api.guards.securityRightsSiteGuard(urlSiteParam, [
@@ -90,6 +72,7 @@ if (rolesRightsConnector.api) {
 			{
 				path: MODULE_PATHS.create,
 				component: ViewCreate,
+				redirect: MODULE_PATHS.createSettings,
 				guardOptions: {
 					guards: [
 						rolesRightsConnector.api.guards.securityRightsSiteGuard(urlSiteParam, [
@@ -107,6 +90,7 @@ if (rolesRightsConnector.api) {
 			{
 				path: MODULE_PATHS.detail,
 				component: ViewUpdate,
+				redirect: MODULE_PATHS.detailSettings,
 				guardOptions: {
 					guards: [
 						rolesRightsConnector.api.guards.securityRightsSiteGuard(urlSiteParam, [

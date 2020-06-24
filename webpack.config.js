@@ -58,7 +58,7 @@ module.exports = env => {
 			moment: 'moment',
 			'react-dom': 'react-dom',
 			'react-router-dom': 'react-router-dom',
-			'react-router-guards': 'react-router-guards',
+			'@redactie/react-router-guards': '@redactie/react-router-guards',
 			'@redactie/redactie-core': '@redactie/redactie-core',
 			'@redactie/roles-rights-module': '@redactie/roles-rights-module',
 			'@acpaas-ui/react-components': '@acpaas-ui/react-components',
