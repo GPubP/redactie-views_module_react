@@ -22,7 +22,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 	onCancel,
 	onSubmit,
 }) => {
-	const isUpdate = !!view.meta.safeLabel;
+	const isUpdate = !!view.uuid;
 	const [t] = useCoreTranslation();
 	return (
 		<Container>
