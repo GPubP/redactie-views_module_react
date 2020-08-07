@@ -13,6 +13,7 @@ export interface ViewSchema {
 export interface ViewMetaSchema {
 	label: string;
 	description: string;
+	safeLabel?: string;
 }
 
 export interface ViewOptionsSchema {

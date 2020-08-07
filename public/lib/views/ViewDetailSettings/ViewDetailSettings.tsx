@@ -22,8 +22,8 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 	onCancel,
 	onSubmit,
 }) => {
+	const isUpdate = !!view.uuid;
 	const [t] = useCoreTranslation();
-
 	return (
 		<Container>
 			<Formik
@@ -61,7 +61,11 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 							<div className="col-xs-12 col-md-4 u-margin-top">
 								<div className="u-margin-top-xs">
 									{t(CORE_TRANSLATIONS['GENERAL_SYSTEM-NAME'])}:{' '}
-									<b>{kebabCase(values.meta.label)}</b>
+									<b>
+										{isUpdate
+											? view.meta.safeLabel
+											: kebabCase(values.meta.label)}
+									</b>
 								</div>
 							</div>
 						</div>
