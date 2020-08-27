@@ -67,6 +67,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 			tenantId,
 			routes: route.routes,
 			view: view || generateEmptyView(),
+			loading: viewLoadingState === LoadingState.Creating,
 			onCancel: navigateToOverview,
 			onSubmit: (sectionData: any, tab: Tab) => upsertView(sectionData, tab),
 		});

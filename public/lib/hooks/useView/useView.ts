@@ -16,7 +16,7 @@ const useView = (
 	const [view, setView] = useState<ViewSchema | null>(null);
 
 	const localUpdateView = (view: ViewSchema): Promise<void> => {
-		setLoadingState(LoadingState.Loading);
+		setLoadingState(LoadingState.Updating);
 
 		return updateView(siteId, view)
 			.then(result => {
@@ -29,7 +29,7 @@ const useView = (
 	};
 
 	const localCreateView = (view: ViewSchema): Promise<void> => {
-		setLoadingState(LoadingState.Loading);
+		setLoadingState(LoadingState.Creating);
 
 		return createView(siteId, view)
 			.then(result => {
