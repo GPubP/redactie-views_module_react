@@ -24,12 +24,10 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 		{
 			label: 'Auteur',
 			value: 'lastEditor',
-			disableSorting: true,
 		},
 		{
 			label: t(CORE_TRANSLATIONS['TABLE_LAST-MODIFIED']),
 			value: 'lastModified',
-			disableSorting: true,
 			format(data: string) {
 				return moment(data).format('DD/MM/YYYY');
 			},
