@@ -10,6 +10,8 @@ export interface ViewDetailConfigProps<
 > extends RouteConfigComponentProps<Params> {
 	view: ViewSchema;
 	tenantId: string;
+	loading: boolean;
+	onCancel: () => void;
 	onSubmit: (sectionData: any, tab: Tab) => void;
 }
 
