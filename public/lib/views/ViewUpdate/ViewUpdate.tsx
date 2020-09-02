@@ -90,6 +90,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
 					onSubmit: update,
 					routes: route.routes,
 					view: internalView,
+					loading: viewLoadingState === LoadingState.Updating,
 				}}
 			/>
 		);

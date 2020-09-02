@@ -19,11 +19,18 @@ import {
 import { ViewSchema } from '../../services/view';
 import { internalService } from '../../store/internal';
 import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
-import { ViewsDetailRouteProps } from '../../views.types';
 
 import { DUMMY_METHOD_OPTIONS, VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfig.const';
+import { ViewDetailConfigProps } from './ViewDetailConfig.types';
 
-const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel, onSubmit }) => {
+const ViewConfig: FC<ViewDetailConfigProps> = ({
+	view,
+	loading,
+	route,
+	tenantId,
+	onCancel,
+	onSubmit,
+}) => {
 	/**
 	 * Hooks
 	 */
@@ -141,17 +148,16 @@ const ViewConfig: FC<ViewsDetailRouteProps> = ({ view, route, tenantId, onCancel
 			</Container>
 			<ActionBar className="o-action-bar--fixed" isOpen>
 				<ActionBarContentSection>
-					<div className="u-wrapper">
+					<div className="u-wrapper row end-xs">
+						<Button className="u-margin-right-xs" onClick={onCancel} negative>
+							{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+						</Button>
 						<Button
+							iconLeft={loading ? 'circle-o-notch fa-spin' : null}
 							onClick={onConfigSave}
-							htmlType="submit"
-							className="u-margin-right-xs"
 							type="success"
 						>
 							{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
-						</Button>
-						<Button onClick={onCancel} outline>
-							{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 						</Button>
 					</div>
 				</ActionBarContentSection>
