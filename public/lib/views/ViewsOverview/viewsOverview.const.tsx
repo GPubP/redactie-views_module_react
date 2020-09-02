@@ -1,8 +1,10 @@
-import { Button } from '@acpaas-ui/react-components';
+import { Link as AUILink, Button } from '@acpaas-ui/react-components';
 import { TranslateFunc } from '@redactie/translations-module';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import moment from 'moment';
+import { propOr } from 'ramda';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import rolesRightsConnector from '../../connectors/rolesRights';
 
@@ -20,14 +22,28 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_NAME),
 			value: 'label',
+			component(value: any, rowData: ViewsOverviewTableRow) {
+				return (
+					<>
+						<AUILink to={`${rowData.id}/instellingen`} component={Link}>
+							{value}
+						</AUILink>
+						<p className="u-text-light u-margin-top-xs">
+							{propOr('Geen beschrijving.', 'description')(rowData)}
+						</p>
+					</>
+				);
+			},
 		},
 		{
 			label: 'Auteur',
 			value: 'lastEditor',
+			disableSorting: true,
 		},
 		{
 			label: t(CORE_TRANSLATIONS['TABLE_LAST-MODIFIED']),
 			value: 'lastModified',
+			disableSorting: true,
 			format(data: string) {
 				return moment(data).format('DD/MM/YYYY');
 			},
