@@ -13,8 +13,6 @@ export class ViewsApiService {
 				.get(`${siteId}/views?${parseSearchParams(searchParams)}`)
 				.json();
 
-			console.log('service response', response);
-
 			if (!response.data) {
 				throw new Error('Failed to get views');
 			}
