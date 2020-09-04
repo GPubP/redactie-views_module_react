@@ -12,7 +12,7 @@ import React, { FC, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { useCoreTranslation } from '../../connectors/translations';
-import { ViewSchema } from '../../services/view';
+import { ViewSchema } from '../../services/views';
 import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
 import { VIEW_SETTINGS_VALIDATION_SCHEMA } from './ViewDetailSettings.const';

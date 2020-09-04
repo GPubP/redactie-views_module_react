@@ -1,7 +1,7 @@
 import { RouteConfigComponentProps } from '@redactie/redactie-core';
 
 import { ContentTypeSchema } from '../../services/contentTypes';
-import { ViewSchema } from '../../services/view';
+import { ViewSchema } from '../../services/views';
 
 export interface ViewDetailConditionsProps extends RouteConfigComponentProps {
 	view: ViewSchema;

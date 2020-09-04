@@ -130,11 +130,11 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		}
 
 		const viewsRows: ViewsOverviewTableRow[] = views.map(view => ({
-			id: view.uuid,
+			id: view.uuid as string,
 			label: view.meta.label,
 			description: view.meta.description,
 			lastEditor: view.meta.lastEditor || 'Onbekend',
-			lastModified: view.meta.lastModified,
+			lastModified: view.meta.lastModified as string,
 			navigate: (viewUuid: string) =>
 				navigate(MODULE_PATHS.detailSettings, { siteId, viewUuid }),
 		}));

@@ -5,7 +5,7 @@ import { FormCreateCondition, FormViewConditions } from '../../components';
 import { DEFAULT_OPERATORS } from '../../components/forms/FormCreateCondition/FormCreateCondition.const';
 import { FormCreateConditionValue } from '../../components/forms/FormCreateCondition/FormCreateCondition.types';
 import { ContentTypeFieldSchema } from '../../services/contentTypes';
-import { ViewConditionSchema } from '../../services/view';
+import { ViewConditionSchema } from '../../services/views';
 import { SelectOptions } from '../../views.types';
 
 import { ViewDetailConditionsProps } from './ViewDetailConditions.types';

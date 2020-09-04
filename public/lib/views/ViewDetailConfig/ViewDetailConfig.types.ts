@@ -1,6 +1,6 @@
 import { RouteConfigComponentProps } from '@redactie/redactie-core';
 
-import { ViewSchema } from '../../services/view';
+import { ViewSchema } from '../../services/views';
 import { Tab } from '../../views.types';
 
 export interface ViewDetailConfigProps<

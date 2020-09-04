@@ -1,6 +1,7 @@
 import React, { FC, useMemo } from 'react';
 
 import { RenderChildRoutes } from './lib/components';
+import { registerCCFields } from './lib/components/Fields';
 import rolesRightsConnector from './lib/connectors/rolesRights';
 import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
@@ -16,12 +17,14 @@ import {
 import { MODULE_PATHS, urlSiteParam } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
 
-const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
+const ViewsComponent: FC<ViewsRouteProps<{ siteId: string }>> = ({ route, match, tenantId }) => {
+	const { siteId } = match.params;
 	const guardsMeta = useMemo(
 		() => ({
 			tenantId,
+			siteId,
 		}),
-		[tenantId]
+		[siteId, tenantId]
 	);
 	const extraOptions = useMemo(
 		() => ({
@@ -32,7 +35,7 @@ const ViewsComponent: FC<ViewsRouteProps> = ({ route, match, tenantId }) => {
 		[match.url, tenantId, route.routes]
 	);
 	return (
-		<TenantContext.Provider value={{ tenantId }}>
+		<TenantContext.Provider value={{ tenantId, siteId }}>
 			<RenderChildRoutes
 				routes={route.routes}
 				guardsMeta={guardsMeta}
@@ -126,3 +129,5 @@ if (rolesRightsConnector.api) {
 		`Views Module can't resolve the following dependency: ${rolesRightsConnector.apiName}, please add the module to the dependency list.`
 	);
 }
+
+registerCCFields();

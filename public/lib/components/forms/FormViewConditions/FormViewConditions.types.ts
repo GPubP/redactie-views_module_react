@@ -1,4 +1,4 @@
-import { ViewConditionSchema, ViewSchema } from '../../../services/view';
+import { ViewConditionSchema, ViewSchema } from '../../../services/views';
 import { SelectOptions } from '../../../views.types';
 import { FormCreateConditionValue } from '../FormCreateCondition/FormCreateCondition.types';
 
