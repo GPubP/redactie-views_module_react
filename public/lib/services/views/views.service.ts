@@ -8,7 +8,6 @@ export class ViewsApiService {
 		searchParams: SearchParams = DEFAULT_SEARCH_PARAMS
 	): Promise<ViewsSchema | null> {
 		try {
-			console.log('siteId', siteId);
 			const response: ViewsSchema = await api
 				.get(`${siteId}/views?${parseSearchParams(searchParams)}`)
 				.json();
