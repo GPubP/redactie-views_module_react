@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { createView, getView, updateView, ViewSchema } from '../../services/view';
+import { viewsApiService, ViewSchema } from '../../services/views';
 import { LoadingState } from '../../views.types';
 
 const useView = (
@@ -18,7 +18,8 @@ const useView = (
 	const localUpdateView = (view: ViewSchema): Promise<void> => {
 		setLoadingState(LoadingState.Updating);
 
-		return updateView(siteId, view)
+		return viewsApiService
+			.updateView(siteId, view)
 			.then(result => {
 				setLoadingState(LoadingState.Loaded);
 				setView(result);
@@ -31,7 +32,8 @@ const useView = (
 	const localCreateView = (view: ViewSchema): Promise<void> => {
 		setLoadingState(LoadingState.Creating);
 
-		return createView(siteId, view)
+		return viewsApiService
+			.createView(siteId, view)
 			.then(result => {
 				setLoadingState(LoadingState.Loaded);
 				setView(result);
@@ -47,7 +49,8 @@ const useView = (
 		}
 
 		setLoadingState(LoadingState.Loading);
-		getView(siteId, uuid)
+		viewsApiService
+			.getView(siteId, uuid)
 			.then(result => {
 				if (result) {
 					setView(result);

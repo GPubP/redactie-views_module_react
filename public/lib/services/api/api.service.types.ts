@@ -10,6 +10,7 @@ export interface SearchParams {
 	direction?: number;
 	search?: string[];
 	sort?: string;
+	contentTypes?: string;
 }
 
 export interface ResponseMeta {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { ResponseMeta, SearchParams } from '../../services/api';
-import { getViews, ViewSchema } from '../../services/views';
+import { viewsApiService, ViewSchema } from '../../services/views';
 import { LoadingState } from '../../views.types';
 
 type UseViewsReturn = [LoadingState, ViewSchema[], ResponseMeta | null];
@@ -14,7 +14,8 @@ const useViews = (siteId: string, searchParams: SearchParams): UseViewsReturn =>
 	useEffect(() => {
 		setLoadingState(LoadingState.Loading);
 
-		getViews(siteId, searchParams)
+		viewsApiService
+			.getViews(siteId, searchParams)
 			.then(result => {
 				if (result?.data && result.data.length >= 0) {
 					setViews(result.data);

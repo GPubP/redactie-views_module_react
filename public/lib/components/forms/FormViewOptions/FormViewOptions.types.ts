@@ -1,4 +1,4 @@
-import { ViewSchema } from '../../../services/view';
+import { ViewSchema } from '../../../services/views';
 
 export interface FormViewOptionsProps {
 	sortOptions: any[];

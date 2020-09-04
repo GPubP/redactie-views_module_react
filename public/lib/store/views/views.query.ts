@@ -1,7 +1,7 @@
 import { Query } from '@datorama/akita';
 
-import { InternalState } from './internal.model';
-import { internalStore, InternalStore } from './internal.store';
+import { InternalState } from './views.model';
+import { internalStore, InternalStore } from './views.store';
 
 export class InternalQuery extends Query<InternalState> {
 	constructor(protected store: InternalStore) {

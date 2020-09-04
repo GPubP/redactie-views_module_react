@@ -1,7 +1,7 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
-import { ViewSchema } from './services/view';
-import { InternalState } from './store/internal';
+import { ViewSchema } from './services/views';
+import { InternalState } from './store/views';
 
 export interface ViewsRouteProps<
 	Params extends {

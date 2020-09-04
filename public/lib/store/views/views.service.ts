@@ -1,6 +1,6 @@
-import { ViewSchema } from '../../services/view';
+import { ViewSchema } from '../../services/views';
 
-import { internalStore, InternalStore } from './internal.store';
+import { internalStore, InternalStore } from './views.store';
 
 export class InternalService {
 	constructor(private store: InternalStore) {}

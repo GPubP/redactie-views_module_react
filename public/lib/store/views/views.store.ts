@@ -1,6 +1,6 @@
 import { Store, StoreConfig } from '@datorama/akita';
 
-import { InternalState } from './internal.model';
+import { InternalState } from './views.model';
 
 export const createInitialInternalState = (): InternalState => ({
 	view: null,

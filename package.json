@@ -95,6 +95,8 @@
     "yup": "^0.28.3"
   },
   "dependencies": {
+    "@redactie/content-module": "^0.13.2",
+    "@redactie/form-renderer-module": "^0.10.0",
     "lodash.debounce": "^4.0.8",
     "lodash.kebabcase": "4.1.1",
     "query-string": "^6.12.1",

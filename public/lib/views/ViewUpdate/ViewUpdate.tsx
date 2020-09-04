@@ -4,8 +4,8 @@ import { Link, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, RenderChildRoutes } from '../../components';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
-import { ViewSchema } from '../../services/view';
-import { internalService, useViewFacade } from '../../store/internal';
+import { ViewSchema } from '../../services/views';
+import { internalService, useViewFacade } from '../../store/views';
 import { MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
 import { LoadingState, ViewsRouteProps } from '../../views.types';
 

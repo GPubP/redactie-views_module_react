@@ -16,8 +16,8 @@ import {
 	ContentTypeSchema,
 	DEFAULT_CONTENT_TYPES_SEARCH_PARAMS,
 } from '../../services/contentTypes';
-import { ViewSchema } from '../../services/view';
-import { internalService } from '../../store/internal';
+import { ViewSchema } from '../../services/views';
+import { internalService } from '../../store/views';
 import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
 import { DUMMY_METHOD_OPTIONS, VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfig.const';

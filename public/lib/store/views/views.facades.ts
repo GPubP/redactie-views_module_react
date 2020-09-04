@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ViewSchema } from '../../services/view';
+import { ViewSchema } from '../../services/views';
 
-import { internalQuery } from './internal.query';
+import { internalQuery } from './views.query';
 
 export const useViewFacade = (): ViewSchema | null => {
 	const [view, setView] = useState<ViewSchema | null>(null);
