@@ -62,6 +62,11 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 					});
 				}}
 			></Autocomplete>
+			{config.description ? (
+				<div className="u-margin-top--sm u-margin-bottom--sm">
+					<small>{config.description}</small>
+				</div>
+			) : null}
 			<ErrorMessage name={field.name} />
 		</>
 	);
