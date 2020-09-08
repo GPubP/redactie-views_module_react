@@ -1,57 +1,76 @@
+import { first } from 'rxjs/operators';
+
 import { SearchParams } from '../../services/api';
 import { ViewsApiService, viewsApiService } from '../../services/views';
-import { BaseEntityFacade } from '../shared';
+import { BaseMultiEntityFacade } from '../shared';
 
 import { ccViewsQuery, CcViewsQuery } from './ccViews.query';
 import { ccViewsStore, CcViewsStore } from './ccViews.store';
 
-export class CcViewsFacade extends BaseEntityFacade<CcViewsStore, ViewsApiService, CcViewsQuery> {
+export class CcViewsFacade extends BaseMultiEntityFacade<
+	CcViewsStore,
+	ViewsApiService,
+	CcViewsQuery
+> {
 	public readonly views$ = this.query.views$;
-	public readonly viewItem$ = this.query.viewItem$;
 
 	/**
 	 * API integration
 	 */
-	public getViews(siteId: string, searchParams: SearchParams): Promise<void> {
-		this.store.setIsFetching(true);
+	public async getViews(
+		key: string,
+		siteId: string,
+		searchParams: SearchParams,
+		reload = false
+	): Promise<void> {
+		const oldValue = await new Promise(resolve =>
+			this.query
+				.getItem(key)
+				.pipe(first())
+				.subscribe(resolve, () => resolve(null))
+		);
+
+		if (!reload && oldValue) {
+			return;
+		}
+
+		reload && oldValue ? this.store.setItemIsFetching(key, true) : this.store.addItem(key);
 
 		return this.service
 			.getViews(siteId, searchParams)
 			.then(response => {
 				if (response) {
-					this.store.set(response.data);
-					this.store.update({
-						meta: response.paging,
-						isFetching: false,
-					});
+					this.store.setItemValue(key, response.data);
 				}
 			})
 			.catch(error => {
-				this.store.update({
-					error,
-					isFetching: false,
-				});
+				this.store.setItemError(key, error);
 			});
 	}
 
-	public getView(siteId: string, uuid: string): Promise<void> {
-		this.store.setIsFetchingOne(true);
+	public async getView(siteId: string, uuid: string, reload = false): Promise<void> {
+		const oldValue = await new Promise(resolve =>
+			this.query
+				.getItem(uuid)
+				.pipe(first())
+				.subscribe(resolve, () => resolve(null))
+		);
+
+		if (!reload && oldValue) {
+			return;
+		}
+
+		reload && oldValue ? this.store.setItemIsFetching(uuid, true) : this.store.addItem(uuid);
 
 		return this.service
 			.getView(siteId, uuid)
 			.then(response => {
 				if (response) {
-					this.store.update({
-						viewItem: response,
-						isFetchingOne: false,
-					});
+					this.store.setItemValue(uuid, response);
 				}
 			})
 			.catch(error => {
-				this.store.update({
-					error,
-					isFetchingOne: false,
-				});
+				this.store.setItemError(uuid, error);
 			});
 	}
 }

@@ -9,6 +9,7 @@ import './ViewSelect.scss';
 import contentConnector from '../../../connectors/content';
 import { ErrorMessage } from '../../../connectors/formRenderer';
 import useCcViews from '../../../hooks/useCcViews/useCcViews';
+import { ViewSchema } from '../../../services/views';
 import { ccViewsFacade } from '../../../store/ccViews';
 import { LoadingState } from '../../../views.types';
 
@@ -27,7 +28,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 	// This will be rendered on the content page so this context its needed.
 	const { siteId } = useContext((contentConnector.api as any).contentTenantContext);
 
-	const [viewLoadingState] = useCcViews();
+	const [viewLoadingState] = useCcViews(field.value);
 
 	return (
 		<>
@@ -43,7 +44,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 					fieldHelperProps.setValue(selected);
 				}}
 				asyncItems={async (query: string, cb: (options: any[]) => void) => {
-					await ccViewsFacade.getViews(siteId, {
+					await ccViewsFacade.getViews(fieldSchema.name, siteId, {
 						skip: 0,
 						limit: 10,
 						search: [query],
@@ -52,14 +53,17 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 							: {}),
 					});
 
-					ccViewsFacade.views$.pipe(first()).subscribe(views => {
-						const newItems = views.map(c => ({
-							label: c.meta.label,
-							value: c.uuid,
-						}));
+					ccViewsFacade
+						.getItemValue(fieldSchema.name)
+						.pipe(first())
+						.subscribe(views => {
+							const newItems = (views as ViewSchema[]).map(c => ({
+								label: c.meta.label,
+								value: c.uuid,
+							}));
 
-						cb(newItems);
-					});
+							cb(newItems);
+						});
 				}}
 			></Autocomplete>
 			{config.description ? (

@@ -14,7 +14,7 @@ const ViewSelectView: React.FC<ViewFieldProps> = ({ value, fieldSchema }: ViewFi
 	// This will be rendered on the content page so this context its needed.
 	const { siteId, tenantId } = useContext((contentConnector.api as any).contentTenantContext);
 	const { generatePath } = useNavigate();
-	const [contentItemLoadingState, ccViewItem] = useCcViewItem();
+	const [contentItemLoadingState, ccViewItem] = useCcViewItem(value);
 
 	useEffect(() => {
 		if (!value) {

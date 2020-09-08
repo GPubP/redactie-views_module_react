@@ -1,10 +1,6 @@
-import { ResponseMeta } from '../../services/api';
 import { ViewSchema } from '../../services/views';
-import { BaseEntityState } from '../shared';
+import { BaseMultiEntityState } from '../shared';
 
-export type CcViewsModel = ViewSchema;
+export type CcViewsModel = ViewSchema | ViewSchema[];
 
-export interface CcViewsState extends BaseEntityState<CcViewsModel, string> {
-	meta?: ResponseMeta;
-	viewItem?: CcViewsModel;
-}
+export type CcViewsState = BaseMultiEntityState<CcViewsModel, string>;
