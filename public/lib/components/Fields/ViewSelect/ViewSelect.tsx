@@ -44,14 +44,19 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 					fieldHelperProps.setValue(selected);
 				}}
 				asyncItems={async (query: string, cb: (options: any[]) => void) => {
-					await ccViewsFacade.getViews(fieldSchema.name, siteId, {
-						skip: 0,
-						limit: 10,
-						search: [query],
-						...(config.contentTypes?.length
-							? { contentTypes: config.contentTypes.join(',') }
-							: {}),
-					});
+					await ccViewsFacade.getViews(
+						fieldSchema.name,
+						siteId,
+						{
+							skip: 0,
+							limit: 10,
+							search: [query],
+							...(config.contentTypes?.length
+								? { contentTypes: config.contentTypes.join(',') }
+								: {}),
+						},
+						true
+					);
 
 					ccViewsFacade
 						.getItemValue(fieldSchema.name)
