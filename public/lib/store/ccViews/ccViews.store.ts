@@ -1,6 +1,5 @@
 import { StoreConfig } from '@datorama/akita';
-
-import { BaseMultiEntityStore } from '../shared';
+import { BaseMultiEntityStore } from '@redactie/utils';
 
 import { CcViewsState } from './ccViews.model';
 

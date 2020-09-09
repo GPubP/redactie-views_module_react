@@ -1,4 +1,4 @@
-import { BaseMultiEntityQuery } from '../shared';
+import { BaseMultiEntityQuery } from '@redactie/utils';
 
 import { CcViewsState } from './ccViews.model';
 import { ccViewsStore } from './ccViews.store';

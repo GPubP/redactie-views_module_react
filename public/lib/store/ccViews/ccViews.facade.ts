@@ -1,8 +1,8 @@
+import { BaseMultiEntityFacade } from '@redactie/utils';
 import { first } from 'rxjs/operators';
 
 import { SearchParams } from '../../services/api';
 import { ViewsApiService, viewsApiService } from '../../services/views';
-import { BaseMultiEntityFacade } from '../shared';
 
 import { ccViewsQuery, CcViewsQuery } from './ccViews.query';
 import { ccViewsStore, CcViewsStore } from './ccViews.store';

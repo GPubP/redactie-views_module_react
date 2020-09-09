@@ -1,5 +1,6 @@
+import { BaseMultiEntityState } from '@redactie/utils';
+
 import { ViewSchema } from '../../services/views';
-import { BaseMultiEntityState } from '../shared';
 
 export type CcViewsModel = ViewSchema | ViewSchema[];
 
