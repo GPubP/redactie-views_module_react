@@ -3,7 +3,7 @@ import { BaseMultiEntityStore } from '@redactie/utils';
 
 import { CcViewsState } from './ccViews.model';
 
-@StoreConfig({ name: 'views', idKey: 'id', resettable: true })
+@StoreConfig({ name: 'ccViews', idKey: 'id', resettable: true })
 export class CcViewsStore extends BaseMultiEntityStore<CcViewsState> {
 	constructor(initialState: Partial<CcViewsState>) {
 		super(initialState);
