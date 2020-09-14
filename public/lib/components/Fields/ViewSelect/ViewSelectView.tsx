@@ -52,11 +52,7 @@ const ViewSelectView: React.FC<ViewFieldProps> = ({ value, fieldSchema }: ViewFi
 	};
 
 	return (
-		<DataLoader
-			loadingState={contentItemLoadingState}
-			render={renderView}
-			notFoundMessage=""
-		></DataLoader>
+		<DataLoader loadingState={contentItemLoadingState} render={renderView} notFoundMessage="" />
 	);
 };
 
