@@ -1,11 +1,10 @@
 import { StoreConfig } from '@datorama/akita';
+import { BaseMultiEntityStore } from '@redactie/utils';
 
-import { BaseEntityStore } from '../shared';
+import { CcViewsState } from './ccViews.model';
 
-import { CcViewsModel, CcViewsState } from './ccViews.model';
-
-@StoreConfig({ name: 'views', idKey: 'uuid', resettable: true })
-export class CcViewsStore extends BaseEntityStore<CcViewsState, CcViewsModel> {
+@StoreConfig({ name: 'ccViews', idKey: 'id', resettable: true })
+export class CcViewsStore extends BaseMultiEntityStore<CcViewsState> {
 	constructor(initialState: Partial<CcViewsState>) {
 		super(initialState);
 	}
