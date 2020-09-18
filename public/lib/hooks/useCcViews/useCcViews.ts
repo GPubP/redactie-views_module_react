@@ -6,9 +6,9 @@ import { ccViewsFacade } from '../../store/ccViews';
 import { LoadingState } from '../../views.types';
 
 const useCcViews = (key: string): [LoadingState, ViewSchema[]] => {
-	const isFetching$ = useMemo(() => ccViewsFacade.getIsFetching(key), [key]);
-	const views$ = useMemo(() => ccViewsFacade.getItemValue(key), [key]);
-	const error$ = useMemo(() => ccViewsFacade.getItemError(key), [key]);
+	const isFetching$ = useMemo(() => ccViewsFacade.selectItemIsFetching(key), [key]);
+	const views$ = useMemo(() => ccViewsFacade.selectItemValue(key), [key]);
+	const error$ = useMemo(() => ccViewsFacade.selectItemError(key), [key]);
 
 	const [loading] = useObservable(isFetching$, LoadingState.Loading);
 	const [views] = useObservable(views$, []);
