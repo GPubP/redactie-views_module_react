@@ -60,7 +60,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 					);
 
 					ccViewsFacade
-						.getItemValue(fieldSchema.name)
+						.selectItemValue(fieldSchema.name)
 						.pipe(first())
 						.subscribe(views => {
 							const newItems = (views as ViewSchema[]).map(c => ({
