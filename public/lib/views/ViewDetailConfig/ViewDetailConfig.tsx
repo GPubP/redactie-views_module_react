@@ -34,7 +34,7 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 	/**
 	 * Hooks
 	 */
-	const { siteId, viewUuid } = useParams();
+	const { siteId, viewUuid } = useParams<Record<string, string>>();
 	const [, contentTypes] = useContentTypes(siteId || '', DEFAULT_CONTENT_TYPES_SEARCH_PARAMS);
 	const [t] = useCoreTranslation();
 
@@ -129,7 +129,11 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 											query: {
 												...view.query,
 												contentType: (contentTypes?.find(
-													ct => ct.uuid === view?.query?.contentType?.uuid
+													ct =>
+														ct.uuid ===
+														(view?.query
+															?.contentType as ContentTypeSchema)
+															?.uuid
 												) as unknown) as ContentTypeSchema,
 												conditions: [],
 												options: {

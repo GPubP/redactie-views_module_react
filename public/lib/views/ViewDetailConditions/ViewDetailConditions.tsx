@@ -4,8 +4,7 @@ import React, { FC, useState } from 'react';
 import { FormCreateCondition, FormViewConditions } from '../../components';
 import { DEFAULT_OPERATORS } from '../../components/forms/FormCreateCondition/FormCreateCondition.const';
 import { FormCreateConditionValue } from '../../components/forms/FormCreateCondition/FormCreateCondition.types';
-import { ContentTypeFieldSchema } from '../../services/contentTypes';
-import { ViewConditionSchema } from '../../services/views';
+import { ViewQueryCondition } from '../../services/views';
 import { SelectOptions } from '../../views.types';
 
 import { ViewDetailConditionsProps } from './ViewDetailConditions.types';
@@ -19,11 +18,11 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 	/**
 	 * Methods
 	 */
-	const parseCondition = (rawCondition: FormCreateConditionValue): ViewConditionSchema => {
+	const parseCondition = (rawCondition: FormCreateConditionValue): ViewQueryCondition => {
 		return {
-			field: contentType.fields.find(
+			field: (contentType.fields.find(
 				field => field.uuid === rawCondition.field
-			) as ContentTypeFieldSchema,
+			) as unknown) as ViewQueryCondition['field'],
 			value: rawCondition.value,
 			operator:
 				DEFAULT_OPERATORS.find(operator => operator.value === rawCondition.operator) ||

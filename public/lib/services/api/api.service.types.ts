@@ -19,3 +19,10 @@ export interface ResponseMeta {
 	total: number;
 	moreResults: boolean;
 }
+
+export interface ResponsePaging {
+	size: number;
+	totalElements: number;
+	totalPages: number;
+	number: number;
+}

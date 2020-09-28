@@ -1,5 +1,4 @@
-import api, { parseSearchParams } from '../api/api.service';
-import { SearchParams } from '../api/api.service.types';
+import { parseSearchParams, proxyApi, SearchParams } from '../api';
 
 import { DEFAULT_CONTENT_TYPES_SEARCH_PARAMS } from './contentTypes.service.const';
 import { ContentTypeResponse, ContentTypesSchema } from './contentTypes.service.types';
@@ -9,7 +8,7 @@ export const getContentTypes = async (
 	searchParams: SearchParams = DEFAULT_CONTENT_TYPES_SEARCH_PARAMS
 ): Promise<ContentTypeResponse[] | null> => {
 	try {
-		const response: ContentTypesSchema = await api
+		const response: ContentTypesSchema = await proxyApi
 			.get(`${siteId}/content-types?${parseSearchParams(searchParams)}`)
 			.json();
 
@@ -29,7 +28,7 @@ export const getContentType = async (
 	uuid: string
 ): Promise<ContentTypeResponse | null> => {
 	try {
-		const response: ContentTypeResponse = await api
+		const response: ContentTypeResponse = await proxyApi
 			.get(`${siteId}/content-types/${uuid}`)
 			.json();
 

@@ -34,7 +34,7 @@ export class CcViewsFacade extends BaseMultiEntityFacade<
 			.getViews(siteId, searchParams)
 			.then(response => {
 				if (response) {
-					this.store.setItemValue(key, response.data);
+					this.store.setItemValue(key, response._embedded);
 				}
 			})
 			.catch(error => {

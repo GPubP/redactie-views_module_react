@@ -2,7 +2,7 @@ import { Button } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
 import React, { FC, useState } from 'react';
 
-import { ViewConditionSchema } from '../../../services/views';
+import { ViewQueryCondition } from '../../../services/views';
 import FormCreateCondition from '../FormCreateCondition/FormCreateCondition';
 
 import { FIELD_COLUMNS } from './FormViewConditions.const';
@@ -18,7 +18,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 	 * Hooks
 	 */
 	const [showEditCondition, setShowEditCondition] = useState(false);
-	const [activeCondition, setActiveCondition] = useState<ViewConditionSchema | null>(null);
+	const [activeCondition, setActiveCondition] = useState<ViewQueryCondition | null>(null);
 	const [activeConditionIndex, setActiveConditionIndex] = useState<number | null>(null);
 
 	/**
