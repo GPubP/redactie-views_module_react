@@ -16,7 +16,7 @@ export const proxyApi: KyInstance = ky.create({
 	},
 });
 
-export const api: KyInstance = proxyApi.extend({
+export const api: KyInstance = ky.create({
 	prefixUrl: '/v1/proxy/content/v1',
 	headers: {
 		'x-tenant-id': CoreConfig.tenantId,
