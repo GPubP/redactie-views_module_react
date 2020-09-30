@@ -10,14 +10,14 @@ const CoreConfig = Core.config.getValue('core') || {};
 
 // Create ky instance with defaults
 export const proxyApi: KyInstance = ky.create({
-	prefixUrl: '/v1/proxy/content/v1/proxy/sites',
+	prefixUrl: '/v1/proxy/admin/content/v1/proxy/sites',
 	headers: {
 		'x-tenant-id': CoreConfig.tenantId,
 	},
 });
 
 export const api: KyInstance = ky.create({
-	prefixUrl: '/v1/proxy/content/v1',
+	prefixUrl: '/v1/proxy/admin/content/v1',
 	headers: {
 		'x-tenant-id': CoreConfig.tenantId,
 	},
