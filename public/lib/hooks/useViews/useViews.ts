@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 
-import { ResponseMeta, SearchParams } from '../../services/api';
+import { ResponsePaging, SearchParams } from '../../services/api';
 import { viewsApiService, ViewSchema } from '../../services/views';
 import { LoadingState } from '../../views.types';
 
-type UseViewsReturn = [LoadingState, ViewSchema[], ResponseMeta | null];
+type UseViewsReturn = [LoadingState, ViewSchema[], ResponsePaging | null];
 
 const useViews = (siteId: string, searchParams: SearchParams): UseViewsReturn => {
 	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
 	const [views, setViews] = useState<ViewSchema[]>([]);
-	const [viewsMeta, setViewsMeta] = useState<ResponseMeta | null>(null);
+	const [viewsMeta, setViewsMeta] = useState<ResponsePaging | null>(null);
 
 	useEffect(() => {
 		setLoadingState(LoadingState.Loading);
@@ -17,11 +17,11 @@ const useViews = (siteId: string, searchParams: SearchParams): UseViewsReturn =>
 		viewsApiService
 			.getViews(siteId, searchParams)
 			.then(result => {
-				if (result?.data && result.data.length >= 0) {
-					setViews(result.data);
+				if (result?._embedded && result._embedded.length >= 0) {
+					setViews(result._embedded);
 				}
-				if (result?.paging) {
-					setViewsMeta(result.paging);
+				if (result?._page) {
+					setViewsMeta(result._page);
 				}
 				setLoadingState(LoadingState.Loaded);
 			})

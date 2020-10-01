@@ -9,10 +9,10 @@ export class ViewsApiService {
 	): Promise<ViewsSchema | null> {
 		try {
 			const response: ViewsSchema = await api
-				.get(`${siteId}/views?${parseSearchParams(searchParams)}`)
+				.get(`sites/${siteId}/views?${parseSearchParams(searchParams)}`)
 				.json();
 
-			if (!response.data) {
+			if (!response._embedded) {
 				throw new Error('Failed to get views');
 			}
 
@@ -25,7 +25,7 @@ export class ViewsApiService {
 
 	public async getView(siteId: string, uuid: string): Promise<ViewSchema | null> {
 		try {
-			const response: ViewSchema = await api.get(`${siteId}/views/${uuid}`).json();
+			const response: ViewSchema = await api.get(`sites/${siteId}/views/${uuid}`).json();
 
 			return response;
 		} catch (err) {
@@ -36,7 +36,7 @@ export class ViewsApiService {
 
 	public async updateView(siteId: string, view: ViewSchema): Promise<ViewSchema | null> {
 		const response: ViewSchema = await api
-			.put(`${siteId}/views/${view.uuid}`, {
+			.put(`sites/${siteId}/views/${view.uuid}`, {
 				json: view,
 			})
 			.json();
@@ -46,7 +46,7 @@ export class ViewsApiService {
 
 	public async createView(siteId: string, view: ViewSchema): Promise<ViewSchema | null> {
 		const response: ViewSchema = await api
-			.post(`${siteId}/views`, {
+			.post(`sites/${siteId}/views`, {
 				json: view,
 			})
 			.json();

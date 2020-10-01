@@ -1,7 +1,7 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
-import { ResponseMeta } from '../api';
-import { ContentTypeSchema } from '../contentTypes';
+import { ResponsePaging } from '../api';
+import { ContentTypeSchema, FieldTypeSchema } from '../contentTypes';
 
 export interface ViewsRouteProps extends RouteConfigComponentProps {
 	basePath: string;
@@ -10,51 +10,79 @@ export interface ViewsRouteProps extends RouteConfigComponentProps {
 }
 
 export interface ViewsSchema {
-	data: ViewSchema[];
-	paging: ResponseMeta;
+	_embedded: ViewSchema[];
+	_page: ResponsePaging;
+	_links: Record<string, any>;
 }
 
-export interface ViewMetaSchema {
+export interface ViewQueryConditionField {
+	fieldType: string | FieldTypeSchema;
+	dataType: string;
+	group: string;
+	label: string;
+	type: string;
+	_id: string;
+}
+
+export interface ViewQueryOperator {
+	label: string;
+	value: any;
+}
+
+export interface ViewQueryCondition {
+	field: ViewQueryConditionField;
+	operator: ViewQueryOperator;
+	value: string;
+	uuid?: string;
+}
+
+export interface ViewQueryOptionsOrderByValidation {
+	required: boolean;
+}
+
+export interface ViewQueryOptionsOrderBy {
+	dataType: string;
+	group: string;
+	indexed: boolean;
+	label: string;
+	max: number;
+	min: number;
+	multiLanguage: boolean;
+	operators: ViewQueryOperator[];
+	type: string;
+	uuid: string;
+	validation: ViewQueryOptionsOrderByValidation;
+	_id: string;
+}
+
+export interface ViewQueryOptions {
+	limit: number;
+	offset: number;
+	order?: string;
+	orderBy?: ViewQueryOptionsOrderBy;
+}
+
+export interface ViewQuery {
+	conditions: ViewQueryCondition[];
+	contentType?: string | ContentTypeSchema;
+	options: ViewQueryOptions;
+	page?: string;
+	viewType: 'static' | 'dynamic';
+}
+
+export interface ViewMeta {
 	label: string;
 	safeLabel?: string;
 	description: string;
 	created?: string;
 	lastModified?: string;
-	deleted?: false;
 	lastEditor?: string;
+	deleted?: boolean;
+	site?: string;
 }
 
 export interface ViewSchema {
-	meta: ViewMetaSchema;
-	query: {
-		options?: ViewOptionsSchema;
-		conditions: ViewConditionSchema[];
-		contentType?: ContentTypeSchema;
-	};
+	query: ViewQuery;
+	meta: ViewMeta;
 	uuid?: string;
-	_id?: string;
-}
-
-export interface ViewOptionsSchema {
-	offset: number;
-	limit: number;
-	orderBy?: any;
-	order?: string;
-}
-
-export interface ViewConditionSchema {
-	field: ConditionFieldSchema;
-	value: string;
-	uuid?: string;
-	operator: OperatorSchema;
-}
-
-export interface OperatorSchema {
-	label: string;
-	value: string;
-}
-
-export interface ConditionFieldSchema {
-	label: string;
-	[key: string]: any;
 }

@@ -157,7 +157,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
-					totalValues={viewsMeta?.total || 0}
+					totalValues={viewsMeta?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
 				/>
 			</>

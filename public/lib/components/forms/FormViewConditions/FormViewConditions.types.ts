@@ -1,4 +1,4 @@
-import { ViewConditionSchema, ViewSchema } from '../../../services/views';
+import { ViewQueryCondition, ViewSchema } from '../../../services/views';
 import { SelectOptions } from '../../../views.types';
 import { FormCreateConditionValue } from '../FormCreateCondition/FormCreateCondition.types';
 
@@ -9,6 +9,6 @@ export interface FormViewConditionsProps {
 	onSubmit: (updatedCondition: FormCreateConditionValue, conditionIndex: number) => void;
 }
 
-export interface FormViewConditionsRow extends ViewConditionSchema {
+export interface FormViewConditionsRow extends ViewQueryCondition {
 	onShowEdit: (rowData: FormViewConditionsRow, rowindex: number) => void;
 }

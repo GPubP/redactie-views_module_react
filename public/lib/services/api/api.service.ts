@@ -9,8 +9,15 @@ export type KyInstance = typeof ky;
 const CoreConfig = Core.config.getValue('core') || {};
 
 // Create ky instance with defaults
-const api: KyInstance = ky.create({
-	prefixUrl: '/v1/proxy/content/v1/proxy/sites',
+export const proxyApi: KyInstance = ky.create({
+	prefixUrl: '/v1/proxy/admin/content/v1/proxy/sites',
+	headers: {
+		'x-tenant-id': CoreConfig.tenantId,
+	},
+});
+
+export const api: KyInstance = ky.create({
+	prefixUrl: '/v1/proxy/admin/content/v1',
 	headers: {
 		'x-tenant-id': CoreConfig.tenantId,
 	},
@@ -26,5 +33,3 @@ export const parseOrderBy = (orderBy: OrderBy): { sort: string; direction: numbe
 export const parseSearchParams = (searchParams: SearchParams): string => {
 	return stringify(searchParams, { arrayFormat: 'comma' });
 };
-
-export default api;
