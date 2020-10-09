@@ -135,7 +135,8 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 			description: view.meta.description,
 			lastEditor:
 				view.meta.lastEditor?.firstname || view.meta.lastEditor?.lastname
-					? `${view.meta.lastEditor?.firstname} ${view.meta.lastEditor?.lastname}`
+					? `${view.meta.lastEditor?.firstname || ''} ${view.meta.lastEditor?.lastname ||
+							''}`
 					: 'Onbekend',
 			lastModified: view.meta.lastModified as string,
 			navigate: (viewUuid: string) =>
