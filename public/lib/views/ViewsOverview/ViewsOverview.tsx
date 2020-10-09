@@ -133,7 +133,10 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 			id: view.uuid as string,
 			label: view.meta.label,
 			description: view.meta.description,
-			lastEditor: view.meta.lastEditor || 'Onbekend',
+			lastEditor:
+				view.meta.lastEditor?.firstname || view.meta.lastEditor?.lastname
+					? `${view.meta.lastEditor?.firstname} ${view.meta.lastEditor?.lastname}`
+					: 'Onbekend',
 			lastModified: view.meta.lastModified as string,
 			navigate: (viewUuid: string) =>
 				navigate(MODULE_PATHS.detailSettings, { siteId, viewUuid }),

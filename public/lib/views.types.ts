@@ -47,3 +47,16 @@ export interface Tab {
 	active: boolean;
 	disabled?: boolean;
 }
+
+export interface Editor {
+	address: string | null;
+	domain: string;
+	email: string;
+	externalMutableReference: string;
+	firstname: string;
+	id: string;
+	lastname: string;
+	nickname: string | null;
+	type: string;
+	username: string;
+}
