@@ -1,5 +1,6 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
+import { Editor } from '../../views.types';
 import { ResponsePaging } from '../api';
 import { ContentTypeSchema, FieldTypeSchema } from '../contentTypes';
 
@@ -76,7 +77,7 @@ export interface ViewMeta {
 	description: string;
 	created?: string;
 	lastModified?: string;
-	lastEditor?: string;
+	lastEditor?: Editor;
 	deleted?: boolean;
 	site?: string;
 }
