@@ -125,7 +125,11 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 											onClick={onCancel}
 											negative
 										>
-											{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+											{view?.uuid
+												? t(CORE_TRANSLATIONS.BUTTON_CANCEL)
+												: t('BUTTON_BACK') // TODO: use CORE_TRANSLATIONS object when translations
+											}
+											PR has gone through
 										</Button>
 										<Button
 											iconLeft={loading ? 'circle-o-notch fa-spin' : null}
@@ -133,7 +137,9 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 											onClick={submitForm}
 											type="success"
 										>
-											{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
+											{view?.uuid
+												? t(CORE_TRANSLATIONS['BUTTON_SAVE'])
+												: t(CORE_TRANSLATIONS['BUTTON_SAVE-NEXT'])}
 										</Button>
 									</div>
 								</ActionBarContentSection>
