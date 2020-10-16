@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { DataLoader } from '../../components';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
 import { ViewSchema } from '../../services/views';
+import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, VIEW_DETAIL_TAB_MAP, VIEW_DETAIL_TABS } from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
 import { LoadingState, Tab, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
@@ -26,12 +27,13 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 		},
 	]);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
-	const [viewLoadingState, view, , createView] = useView(siteId);
+	const [viewLoadingState, view] = useView();
 
 	useEffect(() => {
 		if (view) {
 			navigate(`${MODULE_PATHS.detailConfig}`, { siteId, viewUuid: view.uuid });
 		}
+
 		if (viewLoadingState !== LoadingState.Loading) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
@@ -49,7 +51,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	const upsertView = (sectionData: any, tab: Tab): void => {
 		switch (tab.name) {
 			case VIEW_DETAIL_TAB_MAP.settings.name:
-				createView({
+				viewsFacade.createView(siteId, {
 					...generateEmptyView(),
 					meta: {
 						...sectionData?.meta,

@@ -6,12 +6,15 @@ export interface BaseContentTypeField {
 	config: any;
 	validators: string[];
 	operators: Operator[];
+	defaultValue: any;
 	generalConfig: {
 		multiLanguage?: boolean;
 		required?: boolean;
 		hidden?: boolean;
+		disabled: boolean;
 		min?: number;
 		max?: number;
+		guideline?: string;
 	};
 }
 
@@ -36,6 +39,7 @@ export interface ContentTypeFieldResponse extends BaseContentTypeField {
 		uuid: string;
 	};
 	fieldType: FieldTypeSchema;
+	preset: Preset;
 }
 
 export interface ContentTypeMetaSchema {
@@ -57,7 +61,7 @@ export interface ContentTypeMetaSchema {
 export interface ContentTypeSchema {
 	_id: string;
 	uuid: string;
-	fields: ContentTypeFieldSchema[];
+	fields: ContentTypeFieldResponse[];
 	meta: ContentTypeMetaSchema;
 }
 export interface ContentTypesDataSchema {
@@ -71,8 +75,24 @@ export interface ContentTypeResponse {
 	meta: ContentTypeMetaSchema;
 }
 
+export interface SparseContentTypeResponse extends ContentTypeResponse {
+	fields: never;
+}
+
+export interface ContentTypePaging {
+	total: number;
+	moreResults: boolean;
+	limit: number;
+	skip: number;
+}
+
 export interface ContentTypesSchema {
 	data: ContentTypeResponse[];
+	paging: ContentTypePaging;
+}
+
+export interface SparseContentTypesSchema extends ContentTypesSchema {
+	data: SparseContentTypeResponse[];
 }
 
 export interface ContentTypeCreate {
@@ -106,6 +126,8 @@ export interface FieldTypeSchemaData {
 		isQueryable: boolean;
 		isTranslate: boolean;
 		isMultiple: boolean;
+		defaultGuideline?: string;
+		defaultLabel?: string;
 	};
 	operators: Operator[];
 	module: string;
@@ -128,3 +150,34 @@ export interface FieldTypeSchema {
 export type FieldTypesSchema = {
 	data: FieldTypeSchema[];
 };
+
+export interface BasePreset<T, F> {
+	_id: string;
+	uuid: string;
+	data: {
+		name: string;
+		label: string;
+		defaultConfig: Record<string, any>;
+		fieldType: F;
+		generalConfig: {
+			isQueryable: boolean;
+			isTranslate: boolean;
+			isMultiple: boolean;
+		};
+		fields: {
+			field: any;
+			formSchema: {
+				fields: ContentTypeFieldSchema[];
+			};
+			validators: T[];
+		}[];
+		validators: T[];
+		meta: {
+			created: string;
+			lastModified: string;
+			deleted: boolean;
+		};
+	};
+}
+
+export type Preset = BasePreset<string, string>;

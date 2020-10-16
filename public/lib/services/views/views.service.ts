@@ -34,7 +34,7 @@ export class ViewsApiService {
 		}
 	}
 
-	public async updateView(siteId: string, view: ViewSchema): Promise<ViewSchema | null> {
+	public async updateView(siteId: string, view: ViewSchema): Promise<ViewSchema> {
 		const response: ViewSchema = await api
 			.put(`sites/${siteId}/views/${view.uuid}`, {
 				json: view,
@@ -44,7 +44,7 @@ export class ViewsApiService {
 		return response;
 	}
 
-	public async createView(siteId: string, view: ViewSchema): Promise<ViewSchema | null> {
+	public async createView(siteId: string, view: ViewSchema): Promise<ViewSchema> {
 		const response: ViewSchema = await api
 			.post(`sites/${siteId}/views`, {
 				json: view,

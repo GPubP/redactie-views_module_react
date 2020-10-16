@@ -17,6 +17,7 @@ import { useNavigate, useRoutesBreadcrumbs, useViews } from '../../hooks';
 import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING, OrderBy } from '../../services/api';
 import { parseOrderBy } from '../../services/api/api.service';
 import { FilterItemSchema } from '../../services/filterItems/filterItems.service.types';
+import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS } from '../../views.const';
 import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
@@ -43,7 +44,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const [t] = useCoreTranslation();
 
 	const breadcrumbs = useRoutesBreadcrumbs();
-	const [loadingState, views, viewsMeta] = useViews(siteId, searchParams);
+	const [loadingState, views, viewsPaging] = useViews();
 
 	useEffect(() => {
 		if (
@@ -53,6 +54,8 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 			setInitialLoading(LoadingState.Loaded);
 		}
 	}, [loadingState, mySecurityRightsLoadingState]);
+
+	useEffect(() => viewsFacade.getViews(siteId, searchParams), [searchParams, siteId]);
 
 	/**
 	 * Functions
@@ -161,7 +164,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
-					totalValues={viewsMeta?.totalElements || 0}
+					totalValues={viewsPaging?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
 				/>
 			</>

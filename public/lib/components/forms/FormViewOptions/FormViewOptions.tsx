@@ -20,8 +20,8 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 					<div className="row u-margin-top u-margin-bottom">
 						<div className="col-xs-6">
 							<Field
-								id="query.options.orderBy"
-								name="query.options.orderBy"
+								id="orderBy"
+								name="orderBy"
 								label="Sorteer op"
 								options={sortOptions}
 								as={Select}
@@ -29,8 +29,8 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 						</div>
 						<div className="col-xs-6">
 							<Field
-								id="query.options.order"
-								name="query.options.order"
+								id="order"
+								name="order"
 								label="Volgorde"
 								options={orderOptions}
 								as={Select}
@@ -42,8 +42,8 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 							<Field
 								as={TextField}
 								type="number"
-								id="query.options.offset"
-								name="query.options.offset"
+								id="offset"
+								name="offset"
 								label="Aantal items overslaan"
 							/>
 						</div>
@@ -51,8 +51,8 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 							<Field
 								as={TextField}
 								type="number"
-								id="query.options.limit"
-								name="query.options.limit"
+								id="limit"
+								name="limit"
 								label="Beperkt tot"
 							/>
 						</div>

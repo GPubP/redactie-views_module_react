@@ -1,9 +1,24 @@
 import { Select, TextField } from '@acpaas-ui/react-components';
-import { Field, Formik, FormikProps } from 'formik';
-import React, { FC, useMemo } from 'react';
+import { FormSchema } from '@redactie/form-renderer-module';
+import { Field, FieldInputProps, Formik, FormikProps } from 'formik';
+import React, { FC, ReactElement, useContext, useMemo } from 'react';
+
+import contentConnector from '../../../connectors/content';
+import { getForm } from '../../../connectors/formRenderer';
+import TenantContext from '../../../context/TenantContext/TenantContext';
+import { parseFields } from '../../../helpers/parseFields';
+import { ContentTypeFieldResponse } from '../../../services/contentTypes';
+import { SelectOptions } from '../../../views.types';
 
 import { DEFAULT_OPERATORS } from './FormCreateCondition.const';
 import { FormCreateConditionProps, FormCreateConditionValue } from './FormCreateCondition.types';
+
+export const DEFAULT_VALIDATION_SCHEMA = {
+	$schema: 'http://json-schema.org/draft-07/schema#',
+	type: 'object',
+	required: ['value'],
+	properties: {},
+};
 
 const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	children,
@@ -11,17 +26,116 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	fields,
 	initialValues,
 }) => {
-	const formValues = useMemo(
+	/**
+	 * HOOKS
+	 */
+	const fieldOptions: SelectOptions[] = useMemo(
+		() =>
+			fields.reduce((acc, field) => {
+				if (!field.fieldType.data.generalConfig.isQueryable) {
+					return acc;
+				}
+
+				return acc.concat([
+					{
+						key: field.name as string,
+						label: field.label,
+						value: field.name as string,
+					},
+				]);
+			}, [] as SelectOptions[]),
+		[fields]
+	);
+	const formValues: FormCreateConditionValue = useMemo(
 		() => ({
-			field: initialValues?.field || (fields && fields.length > 0) ? fields[0].key : '',
+			field: initialValues?.field || '',
 			operator: initialValues?.operator || DEFAULT_OPERATORS[0].value,
 			value: initialValues?.value || '',
+			uuid: initialValues?.uuid || '',
 		}),
-		[fields, initialValues]
+		[initialValues]
 	);
+	const { siteId, tenantId } = useContext(TenantContext);
+	const ContentTenantContext = contentConnector.api.contentTenantContext;
+
+	/**
+	 * METHODS
+	 */
+	const parseFieldToForm = (
+		selectedField: ContentTypeFieldResponse,
+		{ label }: { label: string }
+	): FormSchema => {
+		return {
+			fields: parseFields([
+				{
+					...(selectedField || {}),
+					generalConfig: {
+						...selectedField.generalConfig,
+						hidden: false,
+						disabled: false,
+						required: true,
+					},
+					name: 'value',
+					label,
+				},
+			]),
+		};
+	};
+
+	/**
+	 * RENDER
+	 */
+	const RenderValueField: FC<FieldInputProps<any> & {
+		selectedField: string;
+		setFieldValue: (value: any) => void;
+		label: string;
+		placeholder: string;
+	}> = ({
+		value,
+		name,
+		label,
+		placeholder,
+		selectedField: field,
+		setFieldValue,
+	}): ReactElement | null => {
+		const FormRenderer = getForm();
+		const selectedField = field ? fields.find(f => f.name === field) : fields[0];
+
+		if (!selectedField) {
+			return null;
+		}
+
+		const formSchema = parseFieldToForm(selectedField, { label });
+
+		if (!FormRenderer || !formSchema?.fields.length || !selectedField) {
+			return (
+				<Field
+					id={name}
+					name={name}
+					label={label}
+					placeholder={placeholder}
+					as={TextField}
+				/>
+			);
+		}
+		const { defaultValue } = selectedField;
+		const initialValues = value ? { value } : defaultValue ? { value: defaultValue } : {};
+
+		return (
+			<ContentTenantContext.Provider value={{ siteId, tenantId }}>
+				<FormRenderer
+					schema={formSchema}
+					initialValues={initialValues}
+					validationSchema={DEFAULT_VALIDATION_SCHEMA}
+					errorMessages={{}}
+					onChange={input => setFieldValue(input?.value)}
+				/>
+			</ContentTenantContext.Provider>
+		);
+	};
 
 	return (
-		<Formik enableReinitialize={true} initialValues={formValues} onSubmit={onSubmit}>
+		<Formik initialValues={formValues} onSubmit={onSubmit}>
 			{props => (
 				<div className="u-margin-top">
 					<div className="row">
@@ -30,8 +144,8 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 								id="field"
 								name="field"
 								label="Veld"
-								loading={fields.length === 0}
-								options={fields}
+								loading={fieldOptions.length === 0}
+								options={fieldOptions}
 								as={Select}
 							/>
 						</div>
@@ -52,7 +166,9 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 								name="value"
 								label="Waarde"
 								placeholder="Geef een waarde op"
-								as={TextField}
+								selectedField={props.values.field}
+								setFieldValue={(value: any) => props.setFieldValue('value', value)}
+								as={RenderValueField}
 							/>
 						</div>
 					</div>

@@ -11,6 +11,7 @@ export interface SearchParams {
 	search?: string[];
 	sort?: string;
 	contentTypes?: string;
+	sparse?: boolean;
 }
 
 export interface ResponseMeta {

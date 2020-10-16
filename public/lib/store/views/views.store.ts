@@ -1,16 +1,9 @@
-import { Store, StoreConfig } from '@datorama/akita';
+import { StoreConfig } from '@datorama/akita';
+import { BaseEntityStore } from '@redactie/utils';
 
-import { InternalState } from './views.model';
+import { ViewModel, ViewsState } from './views.model';
 
-export const createInitialInternalState = (): InternalState => ({
-	view: null,
-});
+@StoreConfig({ name: 'views', idKey: 'uuid' })
+export class ViewsStore extends BaseEntityStore<ViewsState, ViewModel> {}
 
-@StoreConfig({ name: 'views' })
-export class InternalStore extends Store<InternalState> {
-	constructor() {
-		super(createInitialInternalState());
-	}
-}
-
-export const internalStore = new InternalStore();
+export const viewsStore = new ViewsStore();

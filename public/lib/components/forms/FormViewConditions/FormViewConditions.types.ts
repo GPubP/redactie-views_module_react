@@ -1,14 +1,15 @@
+import { ContentTypeFieldResponse } from '../../../services/contentTypes';
 import { ViewQueryCondition, ViewSchema } from '../../../services/views';
-import { SelectOptions } from '../../../views.types';
 import { FormCreateConditionValue } from '../FormCreateCondition/FormCreateCondition.types';
 
 export interface FormViewConditionsProps {
-	fields: SelectOptions[];
+	fields: ContentTypeFieldResponse[];
 	formState: ViewSchema;
 	onDelete: (conditionIndex: number) => void;
-	onSubmit: (updatedCondition: FormCreateConditionValue, conditionIndex: number) => void;
+	onSubmit: (updatedCondition: FormCreateConditionValue, conditionIndex?: number) => void;
 }
 
 export interface FormViewConditionsRow extends ViewQueryCondition {
+	index: number;
 	onShowEdit: (rowData: FormViewConditionsRow, rowindex: number) => void;
 }

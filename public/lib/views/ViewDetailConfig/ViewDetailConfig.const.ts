@@ -3,12 +3,15 @@ export const VIEW_CC_NAV_LIST_ITEMS = [
 	{ key: 'sort-options', label: 'Sorteer-opties', to: 'sorteer-opties' },
 ];
 
-export const DUMMY_CONTENTTYPE_OPTIONS = [{ key: 'ct1', label: 'Nieuws' }];
-
-export const DUMMY_METHOD_OPTIONS = [
+export const METHOD_OPTIONS = [
 	{
 		key: 'm1',
 		label: 'Content ophalen op basis van parameters',
-		value: 'fetch-content-by-params',
+		value: 'dynamic',
+	},
+	{
+		key: 'm2',
+		label: 'Content manueel selecteren',
+		value: 'static',
 	},
 ];

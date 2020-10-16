@@ -10,16 +10,20 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	formState,
 	onSubmit,
 }) => {
+	if (!formState) {
+		return null;
+	}
+
 	return (
 		<Formik initialValues={formState} onSubmit={onSubmit}>
-			{({ submitForm }) => (
+			{({ submitForm, values }) => (
 				<>
 					<div className="row u-margin-top u-margin-bottom">
 						<div className="col-xs-6">
 							<Field
 								aria-describedby="descMethod"
 								id="method"
-								name="method"
+								name="query.viewType"
 								label="Methode"
 								options={methodOptions}
 								as={Select}
@@ -28,20 +32,22 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 								Selecteer hoe je de lijst wil opbouwen.
 							</div>
 						</div>
-						<div className="col-xs-6">
-							<Field
-								aria-describedby="descContentType"
-								id="contentType"
-								name="query.contentType.uuid"
-								loading={contentTypeOptions?.length === 0}
-								label="Content type"
-								options={contentTypeOptions}
-								as={Select}
-							/>
-							<div id="descContentType" className="u-text-light u-margin-top-xs">
-								Selecteer van welk content type je een lijst wil maken.
+						{values?.query?.viewType === 'dynamic' ? (
+							<div className="col-xs-6">
+								<Field
+									aria-describedby="descContentType"
+									id="contentType"
+									name="query.contentType.uuid"
+									loading={contentTypeOptions?.length === 0}
+									label="Content type"
+									options={contentTypeOptions}
+									as={Select}
+								/>
+								<div id="descContentType" className="u-text-light u-margin-top-xs">
+									Selecteer van welk content type je een lijst wil maken.
+								</div>
 							</div>
-						</div>
+						) : null}
 					</div>
 
 					<Button onClick={submitForm} outline>

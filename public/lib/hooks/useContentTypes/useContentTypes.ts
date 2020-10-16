@@ -1,28 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useObservable } from '@mindspace-io/react';
 
-import { SearchParams } from '../../services/api';
-import { ContentTypeResponse, getContentTypes } from '../../services/contentTypes';
+import { SparseContentTypeResponse } from '../../services/contentTypes';
+import { contentTypesFacade } from '../../store/contentTypes';
 import { LoadingState } from '../../views.types';
 
-const useContentTypes = (
-	siteId: string,
-	searchParams: SearchParams
-): [LoadingState, ContentTypeResponse[] | null] => {
-	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
-	const [contentTypes, setContentTypes] = useState<ContentTypeResponse[] | null>(null);
+const useContentTypes = (): [LoadingState, SparseContentTypeResponse[]] => {
+	const [loading] = useObservable(contentTypesFacade.isFetching$, LoadingState.Loading);
+	const [contentTypes] = useObservable(contentTypesFacade.contentTypes$, []);
+	const [error] = useObservable(contentTypesFacade.error$, null);
 
-	useEffect(() => {
-		getContentTypes(siteId, searchParams)
-			.then(result => {
-				if (result) {
-					setContentTypes(result);
-				}
-				setLoadingState(LoadingState.Loaded);
-			})
-			.catch(() => {
-				setLoadingState(LoadingState.Error);
-			});
-	}, [searchParams, siteId]);
+	const loadingState = error ? LoadingState.Error : loading;
 
 	return [loadingState, contentTypes];
 };

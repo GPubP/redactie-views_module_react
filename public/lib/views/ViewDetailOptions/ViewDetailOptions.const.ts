@@ -1,20 +1,40 @@
-export const DUMMY_SORT_OPTIONS = [
+export const BASE_SORT_OPTIONS = [
 	{
-		key: 's1',
-		value: 's1',
+		key: 'meta.firstPublished',
+		value: 'meta.label',
+		label: 'Naam',
+	},
+	{
+		key: 'meta.firstPublished',
+		value: 'meta.slug',
+		label: 'Slug',
+	},
+	{
+		key: 'meta.firstPublished',
+		value: 'meta.created',
 		label: 'Aanmaakdatum',
+	},
+	{
+		key: 'meta.firstPublished',
+		value: 'meta.lastModified',
+		label: 'Laatst aangepast',
+	},
+	{
+		key: 'meta.firstPublished',
+		value: 'meta.firstPublished',
+		label: 'Eerste publicatedatum',
 	},
 ];
 
-export const DUMMY_ORDER_OPTIONS = [
+export const ORDER_OPTIONS = [
 	{
-		key: 'o1',
-		value: 'o1',
+		key: 'desc',
+		value: 'desc',
 		label: 'Aflopend',
 	},
 	{
-		key: 'o2',
-		value: 'o2',
+		key: 'asc',
+		value: 'asc',
 		label: 'Oplopend',
 	},
 ];
