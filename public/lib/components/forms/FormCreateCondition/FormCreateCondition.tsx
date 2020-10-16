@@ -10,15 +10,8 @@ import { parseFields } from '../../../helpers/parseFields';
 import { ContentTypeFieldResponse } from '../../../services/contentTypes';
 import { SelectOptions } from '../../../views.types';
 
-import { DEFAULT_OPERATORS } from './FormCreateCondition.const';
+import { DEFAULT_OPERATORS, DEFAULT_VALIDATION_SCHEMA } from './FormCreateCondition.const';
 import { FormCreateConditionProps, FormCreateConditionValue } from './FormCreateCondition.types';
-
-export const DEFAULT_VALIDATION_SCHEMA = {
-	$schema: 'http://json-schema.org/draft-07/schema#',
-	type: 'object',
-	required: ['value'],
-	properties: {},
-};
 
 const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	children,
