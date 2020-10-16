@@ -127,9 +127,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 										>
 											{view?.uuid
 												? t(CORE_TRANSLATIONS.BUTTON_CANCEL)
-												: t('BUTTON_BACK') // TODO: use CORE_TRANSLATIONS object when translations
-											}
-											PR has gone through
+												: t(CORE_TRANSLATIONS.BUTTON_BACK)}
 										</Button>
 										<Button
 											iconLeft={loading ? 'circle-o-notch fa-spin' : null}
