@@ -1,15 +1,17 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import { ContextHeaderBadge } from '@redactie/content-module/dist/lib/content.types';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, RenderChildRoutes } from '../../components';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
+import { ContentTypeSchema } from '../../services/contentTypes/contentTypes.service.types';
 import { ViewSchema } from '../../services/views';
 import { internalService, useViewFacade } from '../../store/views';
 import { MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
 import { LoadingState, ViewsRouteProps } from '../../views.types';
 
-const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
+const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = ({
 	location,
 	route,
 	match,
@@ -20,7 +22,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 
-	const { siteId, viewUuid } = useParams();
+	const { siteId, viewUuid } = useParams<{ viewUuid?: string; siteId: string }>();
 	const { navigate, generatePath } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
@@ -33,6 +35,18 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
 	const [viewLoadingState, view, updateView] = useView(siteId || '', viewUuid);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 	const internalView = useViewFacade();
+	const badges: ContextHeaderBadge[] = useMemo(() => {
+		if ((view?.query?.contentType as ContentTypeSchema)?.meta?.label) {
+			return [
+				{
+					type: 'primary',
+					name: (view?.query?.contentType as ContentTypeSchema)?.meta?.label,
+				},
+			];
+		}
+
+		return [];
+	}, [view]);
 
 	useEffect(() => {
 		if (viewLoadingState !== LoadingState.Loading) {
@@ -106,6 +120,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string }>> = ({
 					component: Link,
 				})}
 				title="View bewerken"
+				badges={badges}
 			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>

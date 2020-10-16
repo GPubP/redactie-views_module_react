@@ -60,3 +60,8 @@ export interface Editor {
 	type: string;
 	username: string;
 }
+
+export interface ContextHeaderBadge {
+	name: string;
+	type: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+}
