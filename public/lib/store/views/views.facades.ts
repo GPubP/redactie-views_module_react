@@ -1,8 +1,9 @@
-import { BaseEntityFacade } from '@redactie/utils';
+import { alertService, BaseEntityFacade } from '@redactie/utils';
 
 import { SearchParams } from '../../services/api';
 import { viewsApiService, ViewsApiService, ViewSchema } from '../../services/views';
 
+import { getAlertMessages } from './views.messages';
 import { ViewsQuery, viewsQuery } from './views.query';
 import { viewsStore, ViewsStore } from './views.store';
 
@@ -65,7 +66,7 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 			});
 	}
 
-	public updateView(siteId: string, body: ViewSchema): void {
+	public updateView(siteId: string, body: ViewSchema, alertId: string): void {
 		const { isUpdating } = this.query.getValue();
 
 		if (isUpdating) {
@@ -83,6 +84,9 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 						viewDraft: response,
 						isUpdating: false,
 					});
+					alertService.success(getAlertMessages(response).update.success, {
+						containerId: alertId,
+					});
 				}
 			})
 			.catch(error => {
@@ -90,10 +94,14 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 					error,
 					isUpdating: false,
 				});
+
+				alertService.success(getAlertMessages(body).update.error, {
+					containerId: alertId,
+				});
 			});
 	}
 
-	public createView(siteId: string, body: ViewSchema): void {
+	public createView(siteId: string, body: ViewSchema, alertId: string): void {
 		const { isCreating } = this.query.getValue();
 
 		if (isCreating) {
@@ -111,12 +119,19 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 						viewDraft: response,
 						isCreating: false,
 					});
+					alertService.success(getAlertMessages(response).create.success, {
+						containerId: alertId,
+					});
 				}
 			})
 			.catch(error => {
 				this.store.update({
 					error,
 					isCreating: false,
+				});
+
+				alertService.success(getAlertMessages(body).create.error, {
+					containerId: alertId,
 				});
 			});
 	}

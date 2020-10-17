@@ -6,20 +6,27 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
+import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import { FormViewNewList, NavList } from '../../components';
-import DataLoader from '../../components/DataLoader/DataLoader';
+import { FormViewNewList } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useContentType, useContentTypes, useViewDraft } from '../../hooks';
+import { useContentTypes, useViewDraft } from '../../hooks';
+import useNavigate from '../../hooks/useNavigate/useNavigate';
 import { DEFAULT_CONTENT_TYPES_SEARCH_PARAMS } from '../../services/contentTypes';
 import { ViewSchema } from '../../services/views';
 import { contentTypesFacade } from '../../store/contentTypes';
 import { viewsFacade } from '../../store/views';
-import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
+import {
+	ALERT_CONTAINER_IDS,
+	MODULE_PATHS,
+	TENANT_ROOT,
+	VIEW_DETAIL_TAB_MAP,
+} from '../../views.const';
+import { SelectOptions } from '../../views.types';
 
-import { METHOD_OPTIONS, VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfig.const';
+import { METHOD_OPTIONS } from './ViewDetailConfig.const';
 import { ViewDetailConfigProps } from './ViewDetailConfig.types';
 
 const ViewConfig: FC<ViewDetailConfigProps> = ({
@@ -34,15 +41,11 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 	 */
 	const { siteId, viewUuid } = useParams<Record<string, string>>();
 	const [, contentTypes] = useContentTypes();
-	const [contentTypeLoading, activeContentType] = useContentType();
 	const [view] = useViewDraft();
 	const [t] = useCoreTranslation();
-
-	useEffect(() => {
-		contentTypesFacade.getContentTypes(siteId, DEFAULT_CONTENT_TYPES_SEARCH_PARAMS);
-	}, [siteId]);
-
-	const contentTypeOptions = useMemo(() => {
+	const [isChanged, resetIsChanged] = useDetectValueChanges(!!view, view);
+	const { navigate } = useNavigate();
+	const contentTypeOptions: SelectOptions[] = useMemo(() => {
 		if (Array.isArray(contentTypes)) {
 			const cts = contentTypes.map(ct => ({
 				key: ct.uuid,
@@ -53,7 +56,7 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 			return [
 				{
 					key: 'none',
-					value: null,
+					value: '',
 					label: 'Kies een content-type',
 					disabled: true,
 				},
@@ -64,39 +67,79 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 		return [];
 	}, [contentTypes]);
 
+	useEffect(() => {
+		contentTypesFacade.getContentTypes(siteId, DEFAULT_CONTENT_TYPES_SEARCH_PARAMS);
+	}, [siteId]);
+
 	/**
 	 * Functions
 	 */
 	const onConfigSave = (): void => {
 		onSubmit(view, VIEW_DETAIL_TAB_MAP.config);
+		resetIsChanged();
 	};
 
 	const onConfigChange = (updatedView: ViewSchema): void => {
 		viewsFacade.setViewDraft(updatedView);
 	};
 
-	const onContentTypeChanged = (updatedView: ViewSchema): void => {
+	const onDynamicChanged = (updatedView: ViewSchema): void => {
 		if (
-			updatedView?.query?.contentType?.uuid &&
-			view?.query?.contentType?.uuid !== updatedView.query.contentType.uuid
+			!updatedView?.query?.contentType?.uuid ||
+			(view?.query?.contentType?.uuid === updatedView.query.contentType.uuid &&
+				view?.query.viewType === updatedView.query.viewType)
 		) {
-			contentTypesFacade.getContentType(siteId, updatedView.query.contentType.uuid);
-			viewsFacade.setViewDraft({
-				...updatedView,
-				query: {
-					...updatedView.query,
-					// Only uuid is updated but not the contentType as a whole. This fixes it.
-					contentType:
-						contentTypes.find(ct => ct.uuid === updatedView.query.contentType?.uuid) ||
-						updatedView.query.contentType,
-					conditions: [],
-					options: {
-						offset: 0,
-						limit: 10,
-					},
-				},
-			});
+			return;
 		}
+
+		contentTypesFacade.getContentType(siteId, updatedView.query.contentType.uuid);
+		viewsFacade.setViewDraft({
+			...updatedView,
+			query: {
+				...updatedView.query,
+				// Only uuid is updated but not the contentType as a whole. This fixes it.
+				contentType:
+					contentTypes.find(ct => ct.uuid === updatedView.query.contentType?.uuid) ||
+					updatedView.query.contentType,
+				conditions: [],
+				options: {
+					offset: 0,
+					limit: 10,
+				},
+			},
+		});
+	};
+
+	const onStaticChanged = (updatedView: ViewSchema): void => {
+		if (view?.query.viewType === updatedView.query.viewType) {
+			return;
+		}
+
+		viewsFacade.setViewDraft({
+			...updatedView,
+			query: {
+				...updatedView.query,
+				// Only uuid is updated but not the contentType as a whole. This fixes it.
+				contentType: undefined,
+				conditions: [],
+				options: {
+					offset: 0,
+					limit: 10,
+				},
+			},
+		});
+	};
+
+	const onTypeFormChanged = (updatedView: ViewSchema): void => {
+		updatedView?.query?.viewType === 'dynamic'
+			? onDynamicChanged(updatedView)
+			: onStaticChanged(updatedView);
+
+		const path =
+			updatedView.query.viewType === 'dynamic'
+				? MODULE_PATHS.detailConfigDynamic
+				: MODULE_PATHS.detailConfigStatic;
+		navigate(path, { siteId, viewUuid });
 	};
 
 	/**
@@ -106,39 +149,16 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {
 			tenantId,
 			view,
-			contentType: activeContentType,
 			onSubmit: onConfigChange,
 		});
-	};
-
-	const renderConfigSection = (): ReactElement | null => {
-		if (!view?.query?.contentType || !activeContentType) {
-			return null;
-		}
-
-		return (
-			<>
-				<div className="col-xs-3">
-					<Card>
-						<NavList
-							items={VIEW_CC_NAV_LIST_ITEMS.map(listItem => ({
-								...listItem,
-								to: generatePath(`${route.path}/${listItem.to}`, {
-									siteId,
-									viewUuid,
-								}),
-							}))}
-						/>
-					</Card>
-				</div>
-				<div className="col-xs-9">{renderChildRoutes()}</div>
-			</>
-		);
 	};
 
 	return (
 		<>
 			<Container>
+				<div className="u-margin-bottom">
+					<AlertContainer containerId={ALERT_CONTAINER_IDS.config} />
+				</div>
 				<div className="row between-xs top-xs u-margin-bottom-lg">
 					<div className="col-xs-12 u-margin-bottom">
 						<Card>
@@ -147,12 +167,12 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 									contentTypeOptions={contentTypeOptions}
 									methodOptions={METHOD_OPTIONS}
 									formState={view}
-									onSubmit={onContentTypeChanged}
+									onSubmit={onTypeFormChanged}
 								/>
 							</div>
 						</Card>
 					</div>
-					<DataLoader loadingState={contentTypeLoading} render={renderConfigSection} />
+					<div className="col-xs-12">{renderChildRoutes()}</div>
 				</div>
 			</Container>
 			<ActionBar className="o-action-bar--fixed" isOpen>
@@ -163,7 +183,7 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 						</Button>
 						<Button
 							iconLeft={loading ? 'circle-o-notch fa-spin' : null}
-							disabled={loading}
+							disabled={loading || !isChanged}
 							onClick={onConfigSave}
 							type="success"
 						>
@@ -172,6 +192,19 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 					</div>
 				</ActionBarContentSection>
 			</ActionBar>
+			{view && (
+				<LeavePrompt
+					allowedPaths={[
+						`${TENANT_ROOT}${MODULE_PATHS.detailConfigStatic}`,
+						`${TENANT_ROOT}${MODULE_PATHS.detailConfigDynamic}`,
+						`${TENANT_ROOT}${MODULE_PATHS.detailDynamicConditions}`,
+						`${TENANT_ROOT}${MODULE_PATHS.detailDynamicOptions}`,
+					]}
+					when={isChanged}
+					shouldBlockNavigationOnConfirm
+					onConfirm={() => onConfigSave()}
+				/>
+			)}
 		</>
 	);
 };

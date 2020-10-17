@@ -1,10 +1,12 @@
 import { Button, Card } from '@acpaas-ui/react-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { FormCreateCondition, FormViewConditions } from '../../components';
 import { DEFAULT_OPERATORS } from '../../components/forms/FormCreateCondition/FormCreateCondition.const';
 import { FormCreateConditionValue } from '../../components/forms/FormCreateCondition/FormCreateCondition.types';
+import { useCoreTranslation } from '../../connectors/translations';
 import { ViewQueryCondition } from '../../services/views';
 
 import { ViewDetailConditionsProps } from './ViewDetailConditions.types';
@@ -14,6 +16,7 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 	 * Hooks
 	 */
 	const [showCreateConditionForm, setshowCreateConditionForm] = useState(false);
+	const [t] = useCoreTranslation();
 
 	/**
 	 * Methods
@@ -104,11 +107,19 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 					<FormCreateCondition onSubmit={addCondition} fields={contentType.fields}>
 						{({ submitForm }) => (
 							<>
-								<Button className="u-margin-right-xs" onClick={submitForm}>
-									Voeg toe
+								<Button
+									className="u-margin-right-xs u-margin-bottom"
+									type="success"
+									onClick={submitForm}
+								>
+									{t(CORE_TRANSLATIONS.BUTTON_ADD)}
 								</Button>
-								<Button onClick={() => setshowCreateConditionForm(false)} outline>
-									Annuleer
+								<Button
+									className="u-margin-bottom"
+									onClick={() => setshowCreateConditionForm(false)}
+									outline
+								>
+									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 								</Button>
 							</>
 						)}

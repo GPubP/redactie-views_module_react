@@ -5,7 +5,7 @@ import {
 	Container,
 } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import { useDetectValueChanges } from '@redactie/utils';
+import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { ErrorMessage, Field, Formik } from 'formik';
 import kebabCase from 'lodash.kebabcase';
 import React, { FC, useState } from 'react';
@@ -13,7 +13,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { useCoreTranslation } from '../../connectors/translations';
 import { ViewSchema } from '../../services/views';
-import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
+import { ALERT_CONTAINER_IDS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
 import { VIEW_SETTINGS_VALIDATION_SCHEMA } from './ViewDetailSettings.const';
 import { ViewDetailSettingsMatchProps, ViewDetailSettingsProps } from './ViewDetailSettings.types';
@@ -27,18 +27,31 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 	const isUpdate = !!view.uuid;
 	const [t] = useCoreTranslation();
 	const [formValue, setFormValue] = useState<any | null>(null);
-	const [isChanged] = useDetectValueChanges(!loading, formValue);
+	const [isChanged, resetIsChanged] = useDetectValueChanges(!loading, formValue);
 
+	/**
+	 * Methods
+	 */
+
+	const onSave = (newViewValue: ViewSchema): void => {
+		onSubmit(
+			{ ...view, meta: { ...view.meta, ...newViewValue.meta } },
+			VIEW_DETAIL_TAB_MAP.settings
+		);
+		resetIsChanged();
+	};
+
+	/**
+	 * Render
+	 */
 	return (
 		<Container>
+			<div className="u-margin-bottom">
+				<AlertContainer containerId={ALERT_CONTAINER_IDS.settings} />
+			</div>
 			<Formik
 				initialValues={view}
-				onSubmit={(value: ViewSchema) =>
-					onSubmit(
-						{ ...view, meta: { ...view.meta, ...value.meta } },
-						VIEW_DETAIL_TAB_MAP.settings
-					)
-				}
+				onSubmit={onSave}
 				validationSchema={VIEW_SETTINGS_VALIDATION_SCHEMA}
 			>
 				{({ errors, submitForm, values }) => {
@@ -142,6 +155,11 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 									</div>
 								</ActionBarContentSection>
 							</ActionBar>
+							<LeavePrompt
+								when={isChanged}
+								shouldBlockNavigationOnConfirm
+								onConfirm={() => submitForm()}
+							/>
 						</>
 					);
 				}}

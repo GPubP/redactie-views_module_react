@@ -132,7 +132,7 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 			{props => (
 				<div className="u-margin-top">
 					<div className="row">
-						<div className="col-xs-12 col-sm-6">
+						<div className="col-xs-12 col-sm-6 u-margin-bottom">
 							<Field
 								id="field"
 								name="field"
@@ -142,7 +142,7 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 								as={Select}
 							/>
 						</div>
-						<div className="col-xs-12 col-sm-6">
+						<div className="col-xs-12 col-sm-6 u-margin-bottom">
 							<Field
 								id="operator"
 								name="operator"
@@ -152,7 +152,7 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 							/>
 						</div>
 					</div>
-					<div className="row u-margin-top u-margin-bottom">
+					<div className="row">
 						<div className="col-xs-12">
 							<Field
 								id="value"

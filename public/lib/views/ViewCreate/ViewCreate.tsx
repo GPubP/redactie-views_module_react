@@ -7,7 +7,12 @@ import { DataLoader } from '../../components';
 import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
-import { MODULE_PATHS, VIEW_DETAIL_TAB_MAP, VIEW_DETAIL_TABS } from '../../views.const';
+import {
+	ALERT_CONTAINER_IDS,
+	MODULE_PATHS,
+	VIEW_DETAIL_TAB_MAP,
+	VIEW_DETAIL_TABS,
+} from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
 import { LoadingState, Tab, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
@@ -48,15 +53,23 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 		navigate(`${MODULE_PATHS.root}`, { siteId });
 	};
 
-	const upsertView = (sectionData: any, tab: Tab): void => {
+	const upsertView = (
+		sectionData: any,
+		tab: Tab,
+		alertId = ALERT_CONTAINER_IDS.settings
+	): void => {
 		switch (tab.name) {
 			case VIEW_DETAIL_TAB_MAP.settings.name:
-				viewsFacade.createView(siteId, {
-					...generateEmptyView(),
-					meta: {
-						...sectionData?.meta,
-					},
-				} as ViewSchema);
+				viewsFacade.createView(
+					siteId,
+					{
+						...generateEmptyView(),
+						meta: {
+							...sectionData?.meta,
+						},
+					} as ViewSchema,
+					alertId
+				);
 				break;
 		}
 	};

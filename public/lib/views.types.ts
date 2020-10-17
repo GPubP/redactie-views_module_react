@@ -31,6 +31,7 @@ export interface SelectOptions {
 	key: string;
 	value: string;
 	label: string;
+	disabled?: boolean;
 }
 
 export enum LoadingState {

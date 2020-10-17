@@ -9,6 +9,8 @@ import {
 	ViewCreate,
 	ViewDetailConditions,
 	ViewDetailConfig,
+	ViewDetailConfigDynamic,
+	ViewDetailConfigStatic,
 	ViewDetailOptions,
 	ViewDetailSettings,
 	ViewsOverview,
@@ -109,14 +111,26 @@ if (rolesRightsConnector.api) {
 					{
 						path: MODULE_PATHS.detailConfig,
 						component: ViewDetailConfig,
+						redirect: MODULE_PATHS.detailConfigDynamic,
 						routes: [
 							{
-								path: MODULE_PATHS.detailConditions,
-								component: ViewDetailConditions,
+								path: MODULE_PATHS.detailConfigDynamic,
+								component: ViewDetailConfigDynamic,
+								redirect: MODULE_PATHS.detailDynamicConditions,
+								routes: [
+									{
+										path: MODULE_PATHS.detailDynamicConditions,
+										component: ViewDetailConditions,
+									},
+									{
+										path: MODULE_PATHS.detailDynamicOptions,
+										component: ViewDetailOptions,
+									},
+								],
 							},
 							{
-								path: MODULE_PATHS.detailOptions,
-								component: ViewDetailOptions,
+								path: MODULE_PATHS.detailConfigStatic,
+								component: ViewDetailConfigStatic,
 							},
 						],
 					},
