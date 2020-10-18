@@ -49,7 +49,7 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	);
 	const formValues: FormCreateConditionValue = useMemo(
 		() => ({
-			field: initialValues?.field || fieldOptions[0].value,
+			field: initialValues?.field || fieldOptions[0]?.value,
 			operator: initialValues?.operator || fieldOptions[0]?.operators[0]?.value || '',
 			value: initialValues?.value || '',
 			uuid: initialValues?.uuid || '',
