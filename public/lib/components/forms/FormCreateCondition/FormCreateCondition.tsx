@@ -8,6 +8,7 @@ import { getForm } from '../../../connectors/formRenderer';
 import TenantContext from '../../../context/TenantContext/TenantContext';
 import { parseFields } from '../../../helpers/parseFields';
 import { ContentTypeFieldResponse } from '../../../services/contentTypes';
+import { Operator } from '../../../services/contentTypes/contentTypes.service.types';
 import { SelectOptions } from '../../../views.types';
 
 import { DEFAULT_OPERATORS, DEFAULT_VALIDATION_SCHEMA } from './FormCreateCondition.const';
@@ -22,10 +23,16 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	/**
 	 * HOOKS
 	 */
-	const fieldOptions: SelectOptions[] = useMemo(
+	interface FieldOption extends SelectOptions {
+		operators: Operator[];
+	}
+	const fieldOptions: FieldOption[] = useMemo(
 		() =>
 			fields.reduce((acc, field) => {
-				if (!field.fieldType.data.generalConfig.isQueryable) {
+				if (
+					!field.fieldType.data.generalConfig.isQueryable ||
+					!field.fieldType.data.operators.length
+				) {
 					return acc;
 				}
 
@@ -34,19 +41,20 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 						key: field.name as string,
 						label: field.label,
 						value: field.name as string,
+						operators: field.fieldType.data.operators,
 					},
 				]);
-			}, [] as SelectOptions[]),
+			}, [] as FieldOption[]),
 		[fields]
 	);
 	const formValues: FormCreateConditionValue = useMemo(
 		() => ({
-			field: initialValues?.field || '',
-			operator: initialValues?.operator || DEFAULT_OPERATORS[0].value,
+			field: initialValues?.field || fieldOptions[0].value,
+			operator: initialValues?.operator || fieldOptions[0]?.operators[0]?.value || '',
 			value: initialValues?.value || '',
 			uuid: initialValues?.uuid || '',
 		}),
-		[initialValues]
+		[fieldOptions, initialValues]
 	);
 	const { siteId, tenantId } = useContext(TenantContext);
 	const ContentTenantContext = contentConnector.api.contentTenantContext;
@@ -147,7 +155,10 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 								id="operator"
 								name="operator"
 								label="Operator"
-								options={DEFAULT_OPERATORS}
+								options={
+									fieldOptions.find(option => option.value === props.values.field)
+										?.operators || DEFAULT_OPERATORS
+								}
 								as={Select}
 							/>
 						</div>

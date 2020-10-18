@@ -72,7 +72,17 @@ const ViewConfigDynamic: FC<ViewDetailConfigDynamicProps> = ({ route }) => {
 		);
 	};
 
-	return <DataLoader loadingState={contentTypeLoading} render={renderConfigSection} />;
+	return (
+		<DataLoader
+			loadingState={contentTypeLoading}
+			notFoundMessage={
+				((
+					<div className="u-text-center">Selecteer een content-type</div>
+				) as unknown) as string
+			}
+			render={renderConfigSection}
+		/>
+	);
 };
 
 export default ViewConfigDynamic;

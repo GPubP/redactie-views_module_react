@@ -36,8 +36,9 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 			},
 			value: rawCondition.value,
 			operator:
-				DEFAULT_OPERATORS.find(operator => operator.value === rawCondition.operator) ||
-				DEFAULT_OPERATORS[0],
+				(ctField?.fieldType?.data.operators || []).find(
+					operator => operator.value === rawCondition.operator
+				) || DEFAULT_OPERATORS[0],
 			uuid: rawCondition.uuid,
 		};
 	};

@@ -13,7 +13,12 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { useCoreTranslation } from '../../connectors/translations';
 import { ViewSchema } from '../../services/views';
-import { ALERT_CONTAINER_IDS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
+import {
+	ALERT_CONTAINER_IDS,
+	MODULE_PATHS,
+	TENANT_ROOT,
+	VIEW_DETAIL_TAB_MAP,
+} from '../../views.const';
 
 import { VIEW_SETTINGS_VALIDATION_SCHEMA } from './ViewDetailSettings.const';
 import { ViewDetailSettingsMatchProps, ViewDetailSettingsProps } from './ViewDetailSettings.types';
@@ -32,7 +37,6 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 	/**
 	 * Methods
 	 */
-
 	const onSave = (newViewValue: ViewSchema): void => {
 		onSubmit(
 			{ ...view, meta: { ...view.meta, ...newViewValue.meta } },
@@ -56,6 +60,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 			>
 				{({ errors, submitForm, values }) => {
 					setFormValue(values);
+
 					return (
 						<>
 							<div className="row top-xs u-margin-bottom">
@@ -156,6 +161,10 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 								</ActionBarContentSection>
 							</ActionBar>
 							<LeavePrompt
+								allowedPaths={[
+									`${TENANT_ROOT}${MODULE_PATHS.detailConfigDynamic}`,
+									`${TENANT_ROOT}${MODULE_PATHS.detailDynamicConditions}`,
+								]}
 								when={isChanged}
 								shouldBlockNavigationOnConfirm
 								onConfirm={() => submitForm()}

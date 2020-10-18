@@ -141,6 +141,18 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 			viewDraft,
 		});
 	}
+
+	public unsetViewDraft(): void {
+		this.store.update({
+			viewDraft: undefined,
+		});
+	}
+
+	public unsetView(): void {
+		this.store.update({
+			view: undefined,
+		});
+	}
 }
 
 export const viewsFacade = new ViewsFacade(viewsStore, viewsApiService, viewsQuery);

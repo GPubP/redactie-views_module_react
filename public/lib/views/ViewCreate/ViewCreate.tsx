@@ -36,7 +36,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 
 	useEffect(() => {
 		if (view) {
-			navigate(`${MODULE_PATHS.detailConfig}`, { siteId, viewUuid: view.uuid });
+			navigate(`${MODULE_PATHS.detailConfigDynamic}`, { siteId, viewUuid: view.uuid });
 		}
 
 		if (viewLoadingState !== LoadingState.Loading) {

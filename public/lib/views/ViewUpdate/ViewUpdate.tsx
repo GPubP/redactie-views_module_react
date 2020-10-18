@@ -84,12 +84,14 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		if (viewUuid) {
 			viewsFacade.getView(siteId, viewUuid);
 		}
+
+		return () => viewsFacade.unsetView();
 	}, [siteId, viewUuid]);
 
 	/**
 	 * Methods
 	 */
-	const OnCancel = (): void => {
+	const onCancel = (): void => {
 		if (!view) {
 			return;
 		}
@@ -125,7 +127,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 					tenantId,
 				}}
 				extraOptions={{
-					onCancel: OnCancel,
+					onCancel,
 					onSubmit: update,
 					routes: route.routes,
 					view,
