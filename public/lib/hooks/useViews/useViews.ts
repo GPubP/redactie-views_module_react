@@ -10,7 +10,7 @@ const useView = (): [
 	ViewSchema[] | null | undefined,
 	ResponsePaging | null | undefined
 ] => {
-	const [loading] = useObservable(viewsFacade.isFetchingOne$, LoadingState.Loading);
+	const [loading] = useObservable(viewsFacade.isFetching$, LoadingState.Loading);
 	const [views] = useObservable(viewsFacade.views$, null);
 	const [viewsPaging] = useObservable(viewsFacade.meta$, null);
 	const [error] = useObservable(viewsFacade.error$, null);
