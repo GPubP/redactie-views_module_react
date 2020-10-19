@@ -97,6 +97,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 				expandedRows={expandedRows}
 				columns={FIELD_COLUMNS}
 				rows={conditionRows}
+				responsive={false}
 				rowExpansionTemplate={(rowData: FormViewConditionsRow) =>
 					renderConditionForm(rowData)
 				}

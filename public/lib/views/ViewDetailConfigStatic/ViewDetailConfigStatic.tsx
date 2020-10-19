@@ -168,6 +168,7 @@ const ViewConfigStatic: FC<ViewDetailConfigStaticProps> = () => {
 							expandedRows={expandedRows}
 							columns={FIELD_COLUMNS}
 							rows={conditionRows}
+							responsive={false}
 							rowExpansionTemplate={(rowData: FormViewConditionsRow) =>
 								renderConditionForm(rowData)
 							}
