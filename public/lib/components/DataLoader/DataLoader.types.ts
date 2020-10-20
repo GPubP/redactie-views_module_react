@@ -5,6 +5,6 @@ import { LoadingState } from '../../views.types';
 export interface DataLoaderProps {
 	errorMessage?: string;
 	loadingState: LoadingState;
-	notFoundMessage?: ReactElement;
+	notFoundMessage?: ReactElement | string;
 	render: () => ReactElement | null;
 }
