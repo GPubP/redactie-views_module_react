@@ -1,21 +1,29 @@
+export const CT_DEFAULT_DISABLED_OPTION = {
+	key: 'none',
+	value: '',
+	label: 'Kies een veld om op te sorteren',
+	disabled: true,
+};
+
 export const BASE_SORT_OPTIONS = [
+	CT_DEFAULT_DISABLED_OPTION,
 	{
-		key: 'meta.firstPublished',
-		value: 'meta.label',
-		label: 'Naam',
-	},
-	{
-		key: 'meta.firstPublished',
-		value: 'meta.slug',
-		label: 'Slug',
-	},
-	{
-		key: 'meta.firstPublished',
+		key: 'meta.created',
 		value: 'meta.created',
 		label: 'Aanmaakdatum',
 	},
 	{
-		key: 'meta.firstPublished',
+		key: 'meta.label',
+		value: 'meta.label',
+		label: 'Naam',
+	},
+	{
+		key: 'meta.slug',
+		value: 'meta.slug',
+		label: 'Slug',
+	},
+	{
+		key: 'meta.lastModified',
 		value: 'meta.lastModified',
 		label: 'Laatst aangepast',
 	},

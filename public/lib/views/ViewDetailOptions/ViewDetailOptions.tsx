@@ -15,15 +15,6 @@ const ViewDetailOptions: FC<ViewDetailOptionsProps> = ({ onSubmit }) => {
 	 */
 	const [, contentType] = useContentType();
 	const [view] = useViewDraft();
-	const optionsValue: FormViewOptionsFormState = useMemo(
-		() => ({
-			offset: view?.query.options.offset || 0,
-			limit: view?.query.options.limit || 10,
-			order: view?.query.options.order || 'asc',
-			orderBy: `${view?.query.options.orderBy?.group}.${view?.query.options.orderBy?._id}`,
-		}),
-		[view]
-	);
 	const sortOptions = useMemo(
 		() =>
 			contentType?.fields.reduce((acc, field) => {
@@ -40,6 +31,19 @@ const ViewDetailOptions: FC<ViewDetailOptionsProps> = ({ onSubmit }) => {
 				]);
 			}, BASE_SORT_OPTIONS),
 		[contentType]
+	);
+	const optionsValue: FormViewOptionsFormState = useMemo(
+		() => ({
+			offset: view?.query.options.offset || 0,
+			limit: view?.query.options.limit || 10,
+			order: view?.query.options.order || 'desc',
+			orderBy: view?.query.options.orderBy?.group
+				? `${view.query.options.orderBy.group}.${view.query.options.orderBy._id}`
+				: sortOptions
+				? `${sortOptions[1].value}`
+				: '',
+		}),
+		[sortOptions, view]
 	);
 
 	/**
@@ -85,15 +89,14 @@ const ViewDetailOptions: FC<ViewDetailOptionsProps> = ({ onSubmit }) => {
 	const onOptionsChanged = (value: FormViewOptionsFormState): void => {
 		const orderByValue = value.orderBy;
 		const valueToPathTest = /^(meta|fields)\.(.*)$/.exec(orderByValue);
+		let orderBy: ViewQueryOptionsOrderBy | null = null;
 
-		if (!valueToPathTest) {
-			return;
+		if (valueToPathTest) {
+			orderBy =
+				valueToPathTest[1] === 'meta'
+					? parseOrderByAsMeta(valueToPathTest)
+					: parseOrderByAsField(valueToPathTest);
 		}
-
-		const orderBy =
-			valueToPathTest && valueToPathTest[1] === 'meta'
-				? parseOrderByAsMeta(valueToPathTest)
-				: parseOrderByAsField(valueToPathTest);
 
 		const updatedView = {
 			...view,
@@ -102,7 +105,7 @@ const ViewDetailOptions: FC<ViewDetailOptionsProps> = ({ onSubmit }) => {
 				options: {
 					...(view?.query.options || {}),
 					...value,
-					orderBy,
+					...(orderBy ? { orderBy } : {}),
 				},
 			},
 		};

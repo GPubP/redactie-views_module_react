@@ -1,6 +1,6 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
@@ -32,7 +32,13 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 		},
 	]);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
-	const [viewLoadingState, view] = useView();
+	const [viewLoadingState, view, upsertViewLoadingState] = useView();
+	const isLoading = useMemo(() => {
+		return (
+			viewLoadingState === LoadingState.Loading ||
+			upsertViewLoadingState === LoadingState.Loading
+		);
+	}, [upsertViewLoadingState, viewLoadingState]);
 
 	useEffect(() => {
 		if (view) {
@@ -82,7 +88,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 			tenantId,
 			routes: route.routes,
 			view: view || generateEmptyView(),
-			loading: viewLoadingState === LoadingState.Creating,
+			loading: isLoading,
 			onCancel: navigateToOverview,
 			onSubmit: (sectionData: any, tab: Tab) => upsertView(sectionData, tab),
 		});
