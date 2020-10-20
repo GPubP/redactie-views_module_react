@@ -4,7 +4,13 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
-import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
+import {
+	useActiveTabs,
+	useNavigate,
+	useRoutesBreadcrumbs,
+	useView,
+	useViewDraft,
+} from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import {
@@ -33,6 +39,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	]);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 	const [viewLoadingState, view, upsertViewLoadingState] = useView();
+	const [viewDraft] = useViewDraft();
 	const isLoading = useMemo(() => {
 		return (
 			viewLoadingState === LoadingState.Loading ||
@@ -41,16 +48,25 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	}, [upsertViewLoadingState, viewLoadingState]);
 
 	useEffect(() => {
-		if (view) {
-			navigate(`${MODULE_PATHS.detailConfigDynamic}`, { siteId, viewUuid: view.uuid });
-		}
-
 		if (viewLoadingState !== LoadingState.Loading) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [navigate, siteId, view, viewLoadingState]);
+	}, [viewLoadingState]);
+
+	useEffect(() => {
+		if (view?.uuid) {
+			navigate(`${MODULE_PATHS.detailConfigDynamic}`, { siteId, viewUuid: view.uuid });
+		}
+	}, [navigate, siteId, view]);
+
+	useEffect(() => {
+		if (!viewDraft) {
+			viewsFacade.setView(generateEmptyView());
+			viewsFacade.setViewDraft(generateEmptyView());
+		}
+	}, [viewDraft]);
 
 	/**
 	 * Methods

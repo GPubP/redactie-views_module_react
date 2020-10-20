@@ -91,7 +91,10 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			viewsFacade.getView(siteId, viewUuid);
 		}
 
-		return () => viewsFacade.unsetView();
+		return () => {
+			viewsFacade.unsetView();
+			viewsFacade.unsetViewDraft();
+		};
 	}, [siteId, viewUuid]);
 
 	/**
@@ -136,7 +139,6 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 					onCancel,
 					onSubmit: update,
 					routes: route.routes,
-					view,
 					loading: isLoading,
 				}}
 			/>

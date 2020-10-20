@@ -8,11 +8,13 @@ import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18n
 import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { ErrorMessage, Field, Formik } from 'formik';
 import kebabCase from 'lodash.kebabcase';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { useCoreTranslation } from '../../connectors/translations';
+import { useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
+import { viewsFacade } from '../../store/views';
 import { ALERT_CONTAINER_IDS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
 import {
@@ -22,42 +24,49 @@ import {
 import { ViewDetailSettingsMatchProps, ViewDetailSettingsProps } from './ViewDetailSettings.types';
 
 const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = ({
-	view,
 	loading,
-	onCancel,
 	onSubmit,
 }) => {
-	const isUpdate = !!view.uuid;
+	const [view] = useViewDraft();
+	const [, initialValues] = useView();
 	const [t] = useCoreTranslation();
-	const [formValue, setFormValue] = useState<any | null>(null);
-	const [isChanged, resetIsChanged] = useDetectValueChanges(!loading, formValue);
+	const [isChanged, resetIsChanged] = useDetectValueChanges(!loading, view);
+	const isUpdate = !!view?.uuid;
 
 	/**
 	 * Methods
 	 */
 	const onSave = (newViewValue: ViewSchema): void => {
 		onSubmit(
-			{ ...view, meta: { ...view.meta, ...newViewValue.meta } },
+			{ ...(view || {}), meta: { ...view?.meta, ...newViewValue.meta } },
 			VIEW_DETAIL_TAB_MAP.settings
 		);
 		resetIsChanged();
 	};
 
+	const onChange = (newViewValue: ViewSchema): void => {
+		viewsFacade.setViewDraft(newViewValue);
+	};
+
 	/**
 	 * Render
 	 */
+	if (!view || !initialValues) {
+		return null;
+	}
+
 	return (
 		<Container>
 			<div className="u-margin-bottom">
 				<AlertContainer containerId={ALERT_CONTAINER_IDS.settings} />
 			</div>
 			<Formik
-				initialValues={view}
+				initialValues={initialValues}
 				onSubmit={onSave}
 				validationSchema={VIEW_SETTINGS_VALIDATION_SCHEMA}
 			>
-				{({ errors, submitForm, values }) => {
-					setFormValue(values);
+				{({ errors, submitForm, values, resetForm }) => {
+					onChange(values);
 
 					return (
 						<>
@@ -138,7 +147,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 									<div className="u-wrapper row end-xs">
 										<Button
 											className="u-margin-right-xs"
-											onClick={onCancel}
+											onClick={resetForm}
 											negative
 										>
 											{view?.uuid

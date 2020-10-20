@@ -144,6 +144,12 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 			});
 	}
 
+	public setView(view: ViewSchema): void {
+		this.store.update({
+			view,
+		});
+	}
+
 	public setViewDraft(viewDraft: ViewSchema): void {
 		this.store.update({
 			viewDraft,
