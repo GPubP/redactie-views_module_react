@@ -1,6 +1,7 @@
 import { FormikProps, FormikValues } from 'formik';
 
-import { ContentTypeFieldResponse } from '../../../services/contentTypes';
+import { ContentTypeFieldResponse, Operator } from '../../../services/contentTypes';
+import { SelectOptions } from '../../../views.types';
 
 export interface FormCreateConditionValue {
 	field: string;
@@ -14,4 +15,8 @@ export interface FormCreateConditionProps<Values = FormikValues> {
 	fields: ContentTypeFieldResponse[];
 	initialValues?: FormCreateConditionValue;
 	onSubmit: (formValues: FormCreateConditionValue) => void;
+}
+
+export interface FieldOption extends SelectOptions {
+	operators: Operator[];
 }

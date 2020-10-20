@@ -17,7 +17,7 @@ import { ViewQueryCondition } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS } from '../../views.const';
 
-import { ViewDetailConfigStaticProps } from './viewDetailConfigStatic.types';
+import { ViewDetailConfigStaticProps } from './ViewDetailConfigStatic.types';
 
 const ViewConfigStatic: FC<ViewDetailConfigStaticProps> = () => {
 	/**

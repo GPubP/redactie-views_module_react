@@ -11,8 +11,8 @@ import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS } from '../../views.const';
 
-import { VIEW_CC_NAV_LIST_ITEMS } from './viewDetailConfigDynamic.const';
-import { ViewDetailConfigDynamicProps } from './viewDetailConfigDynamic.types';
+import { VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfigDynamic.const';
+import { ViewDetailConfigDynamicProps } from './ViewDetailConfigDynamic.types';
 
 const ViewConfigDynamic: FC<ViewDetailConfigDynamicProps> = ({ route }) => {
 	/**

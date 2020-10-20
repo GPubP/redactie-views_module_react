@@ -13,14 +13,12 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { useCoreTranslation } from '../../connectors/translations';
 import { ViewSchema } from '../../services/views';
-import {
-	ALERT_CONTAINER_IDS,
-	MODULE_PATHS,
-	TENANT_ROOT,
-	VIEW_DETAIL_TAB_MAP,
-} from '../../views.const';
+import { ALERT_CONTAINER_IDS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
-import { VIEW_SETTINGS_VALIDATION_SCHEMA } from './ViewDetailSettings.const';
+import {
+	SETTNGS_ALLOWED_LEAVE_PATHS,
+	VIEW_SETTINGS_VALIDATION_SCHEMA,
+} from './ViewDetailSettings.const';
 import { ViewDetailSettingsMatchProps, ViewDetailSettingsProps } from './ViewDetailSettings.types';
 
 const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = ({
@@ -161,13 +159,10 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 								</ActionBarContentSection>
 							</ActionBar>
 							<LeavePrompt
-								allowedPaths={[
-									`${TENANT_ROOT}${MODULE_PATHS.detailConfigDynamic}`,
-									`${TENANT_ROOT}${MODULE_PATHS.detailDynamicConditions}`,
-								]}
+								allowedPaths={SETTNGS_ALLOWED_LEAVE_PATHS}
 								when={isChanged}
 								shouldBlockNavigationOnConfirm
-								onConfirm={() => submitForm()}
+								onConfirm={submitForm}
 							/>
 						</>
 					);

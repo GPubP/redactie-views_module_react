@@ -25,13 +25,15 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 		this.service
 			.getViews(siteId, searchParams)
 			.then(response => {
-				if (response) {
-					this.store.set(response._embedded);
-					this.store.update({
-						meta: response._page,
-						isFetching: false,
-					});
+				if (!response) {
+					throw new Error('Getting views failed!');
 				}
+
+				this.store.set(response._embedded);
+				this.store.update({
+					meta: response._page,
+					isFetching: false,
+				});
 			})
 			.catch(error => {
 				this.store.update({
@@ -51,12 +53,14 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 		this.service
 			.getView(siteId, uuid)
 			.then(response => {
-				if (response) {
-					this.store.update({
-						view: response,
-						isFetchingOne: false,
-					});
+				if (!response) {
+					throw new Error(`Getting view '${uuid}' failed!`);
 				}
+
+				this.store.update({
+					view: response,
+					isFetchingOne: false,
+				});
 			})
 			.catch(error => {
 				this.store.update({
@@ -78,16 +82,18 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 		this.service
 			.updateView(siteId, body)
 			.then(response => {
-				if (response) {
-					this.store.update({
-						view: response,
-						viewDraft: response,
-						isUpdating: false,
-					});
-					alertService.success(getAlertMessages(response).update.success, {
-						containerId: alertId,
-					});
+				if (!response) {
+					throw new Error(`Updateing view '${body.uuid}' failed!`);
 				}
+
+				this.store.update({
+					view: response,
+					viewDraft: response,
+					isUpdating: false,
+				});
+				alertService.success(getAlertMessages(response).update.success, {
+					containerId: alertId,
+				});
 			})
 			.catch(error => {
 				this.store.update({
@@ -95,7 +101,7 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 					isUpdating: false,
 				});
 
-				alertService.success(getAlertMessages(body).update.error, {
+				alertService.danger(getAlertMessages(body).update.error, {
 					containerId: alertId,
 				});
 			});
@@ -113,16 +119,18 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 		this.service
 			.createView(siteId, body)
 			.then(response => {
-				if (response) {
-					this.store.update({
-						view: response,
-						viewDraft: response,
-						isCreating: false,
-					});
-					alertService.success(getAlertMessages(response).create.success, {
-						containerId: alertId,
-					});
+				if (!response) {
+					throw new Error(`Creating view '${body?.meta?.label}' failed!`);
 				}
+
+				this.store.update({
+					view: response,
+					viewDraft: response,
+					isCreating: false,
+				});
+				alertService.success(getAlertMessages(response).create.success, {
+					containerId: alertId,
+				});
 			})
 			.catch(error => {
 				this.store.update({
@@ -130,7 +138,7 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 					isCreating: false,
 				});
 
-				alertService.success(getAlertMessages(body).create.error, {
+				alertService.danger(getAlertMessages(body).create.error, {
 					containerId: alertId,
 				});
 			});

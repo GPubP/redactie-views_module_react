@@ -18,15 +18,10 @@ import { DEFAULT_CONTENT_TYPES_SEARCH_PARAMS } from '../../services/contentTypes
 import { ViewSchema } from '../../services/views';
 import { contentTypesFacade } from '../../store/contentTypes';
 import { viewsFacade } from '../../store/views';
-import {
-	ALERT_CONTAINER_IDS,
-	MODULE_PATHS,
-	TENANT_ROOT,
-	VIEW_DETAIL_TAB_MAP,
-} from '../../views.const';
+import { ALERT_CONTAINER_IDS, MODULE_PATHS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
 import { SelectOptions } from '../../views.types';
 
-import { METHOD_OPTIONS } from './ViewDetailConfig.const';
+import { CONFIG_ALLOWED_LEAVE_PATHS, METHOD_OPTIONS } from './ViewDetailConfig.const';
 import { ViewDetailConfigProps } from './ViewDetailConfig.types';
 
 const ViewConfig: FC<ViewDetailConfigProps> = ({
@@ -194,15 +189,10 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 			</ActionBar>
 			{view && (
 				<LeavePrompt
-					allowedPaths={[
-						`${TENANT_ROOT}${MODULE_PATHS.detailConfigStatic}`,
-						`${TENANT_ROOT}${MODULE_PATHS.detailConfigDynamic}`,
-						`${TENANT_ROOT}${MODULE_PATHS.detailDynamicConditions}`,
-						`${TENANT_ROOT}${MODULE_PATHS.detailDynamicOptions}`,
-					]}
+					allowedPaths={CONFIG_ALLOWED_LEAVE_PATHS}
 					when={isChanged}
 					shouldBlockNavigationOnConfirm
-					onConfirm={() => onConfigSave()}
+					onConfirm={onConfigSave}
 				/>
 			)}
 		</>

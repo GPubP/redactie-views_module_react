@@ -8,11 +8,13 @@ import { getForm } from '../../../connectors/formRenderer';
 import TenantContext from '../../../context/TenantContext/TenantContext';
 import { parseFields } from '../../../helpers/parseFields';
 import { ContentTypeFieldResponse } from '../../../services/contentTypes';
-import { Operator } from '../../../services/contentTypes/contentTypes.service.types';
-import { SelectOptions } from '../../../views.types';
 
 import { DEFAULT_OPERATORS, DEFAULT_VALIDATION_SCHEMA } from './FormCreateCondition.const';
-import { FormCreateConditionProps, FormCreateConditionValue } from './FormCreateCondition.types';
+import {
+	FieldOption,
+	FormCreateConditionProps,
+	FormCreateConditionValue,
+} from './FormCreateCondition.types';
 
 const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	children,
@@ -23,9 +25,6 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	/**
 	 * HOOKS
 	 */
-	interface FieldOption extends SelectOptions {
-		operators: Operator[];
-	}
 	const fieldOptions: FieldOption[] = useMemo(
 		() =>
 			fields.reduce((acc, field) => {
