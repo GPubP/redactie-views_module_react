@@ -4,10 +4,17 @@ import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, RenderChildRoutes } from '../../components';
-import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
-import { ContentTypeSchema } from '../../services/contentTypes/contentTypes.service.types';
+import {
+	useActiveTabs,
+	useContentType,
+	useNavigate,
+	useRoutesBreadcrumbs,
+	useView,
+	useViewDraft,
+} from '../../hooks';
 import { ViewSchema } from '../../services/views';
-import { internalService, useViewFacade } from '../../store/views';
+import { contentTypesFacade } from '../../store/contentTypes';
+import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
 import { LoadingState, ViewsRouteProps } from '../../views.types';
 
@@ -32,21 +39,22 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			}),
 		},
 	]);
-	const [viewLoadingState, view, updateView] = useView(siteId || '', viewUuid);
+	const [viewLoadingState, view, upsertViewLoadingState] = useView();
+	const [viewDraft] = useViewDraft();
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
-	const internalView = useViewFacade();
+	const [, contentType] = useContentType();
 	const badges: ContextHeaderBadge[] = useMemo(() => {
-		if ((view?.query?.contentType as ContentTypeSchema)?.meta?.label) {
+		if (contentType?.meta?.label) {
 			return [
 				{
 					type: 'primary',
-					name: (view?.query?.contentType as ContentTypeSchema)?.meta?.label,
+					name: contentType?.meta?.label,
 				},
 			];
 		}
 
 		return [];
-	}, [view]);
+	}, [contentType]);
 
 	useEffect(() => {
 		if (viewLoadingState !== LoadingState.Loading) {
@@ -58,9 +66,18 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 
 	useEffect(() => {
 		if (viewLoadingState !== LoadingState.Loading && view) {
-			internalService.updateView(view);
+			viewsFacade.setViewDraft(view);
+			view.query.contentType
+				? contentTypesFacade.getContentType(siteId, view.query.contentType.uuid)
+				: null;
 		}
-	}, [view, viewLoadingState]);
+	}, [siteId, view, viewLoadingState]);
+
+	useEffect(() => {
+		if (viewUuid) {
+			viewsFacade.getView(siteId, viewUuid);
+		}
+	}, [siteId, viewUuid]);
 
 	/**
 	 * Methods
@@ -74,14 +91,13 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			return;
 		}
 
-		// TODO: fix with store integration
-		updateView(updatedView);
+		viewsFacade.updateView(siteId, updatedView);
 	};
 	/**
 	 * Render
 	 */
 	const renderChildRoutes = (): ReactElement | null => {
-		if (!internalView) {
+		if (!viewDraft) {
 			return null;
 		}
 
@@ -103,8 +119,8 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 					onCancel: navigateToOverview,
 					onSubmit: update,
 					routes: route.routes,
-					view: internalView,
-					loading: viewLoadingState === LoadingState.Updating,
+					view,
+					loading: upsertViewLoadingState === LoadingState.Loading,
 				}}
 			/>
 		);

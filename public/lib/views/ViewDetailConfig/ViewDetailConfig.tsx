@@ -10,21 +10,19 @@ import React, { FC, ReactElement, useEffect, useMemo } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
 import { FormViewNewList, NavList } from '../../components';
+import DataLoader from '../../components/DataLoader/DataLoader';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useContentTypes } from '../../hooks';
-import {
-	ContentTypeSchema,
-	DEFAULT_CONTENT_TYPES_SEARCH_PARAMS,
-} from '../../services/contentTypes';
+import { useContentType, useContentTypes, useViewDraft } from '../../hooks';
+import { DEFAULT_CONTENT_TYPES_SEARCH_PARAMS } from '../../services/contentTypes';
 import { ViewSchema } from '../../services/views';
-import { internalService } from '../../store/views';
+import { contentTypesFacade } from '../../store/contentTypes';
+import { viewsFacade } from '../../store/views';
 import { VIEW_DETAIL_TAB_MAP } from '../../views.const';
 
-import { DUMMY_METHOD_OPTIONS, VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfig.const';
+import { METHOD_OPTIONS, VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfig.const';
 import { ViewDetailConfigProps } from './ViewDetailConfig.types';
 
 const ViewConfig: FC<ViewDetailConfigProps> = ({
-	view,
 	loading,
 	route,
 	tenantId,
@@ -35,12 +33,14 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 	 * Hooks
 	 */
 	const { siteId, viewUuid } = useParams<Record<string, string>>();
-	const [, contentTypes] = useContentTypes(siteId || '', DEFAULT_CONTENT_TYPES_SEARCH_PARAMS);
+	const [, contentTypes] = useContentTypes();
+	const [contentTypeLoading, activeContentType] = useContentType();
+	const [view] = useViewDraft();
 	const [t] = useCoreTranslation();
 
 	useEffect(() => {
-		internalService.updateView(view);
-	}, [view]);
+		contentTypesFacade.getContentTypes(siteId, DEFAULT_CONTENT_TYPES_SEARCH_PARAMS);
+	}, [siteId]);
 
 	const contentTypeOptions = useMemo(() => {
 		if (Array.isArray(contentTypes)) {
@@ -71,8 +71,32 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 		onSubmit(view, VIEW_DETAIL_TAB_MAP.config);
 	};
 
-	const onConfigChange = (updatedView: any): void => {
-		internalService.updateView(updatedView);
+	const onConfigChange = (updatedView: ViewSchema): void => {
+		viewsFacade.setViewDraft(updatedView);
+	};
+
+	const onContentTypeChanged = (updatedView: ViewSchema): void => {
+		if (
+			updatedView?.query?.contentType?.uuid &&
+			view?.query?.contentType?.uuid !== updatedView.query.contentType.uuid
+		) {
+			contentTypesFacade.getContentType(siteId, updatedView.query.contentType.uuid);
+			viewsFacade.setViewDraft({
+				...updatedView,
+				query: {
+					...updatedView.query,
+					// Only uuid is updated but not the contentType as a whole. This fixes it.
+					contentType:
+						contentTypes.find(ct => ct.uuid === updatedView.query.contentType?.uuid) ||
+						updatedView.query.contentType,
+					conditions: [],
+					options: {
+						offset: 0,
+						limit: 10,
+					},
+				},
+			});
+		}
 	};
 
 	/**
@@ -82,13 +106,13 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {
 			tenantId,
 			view,
-			contentType: view?.query?.contentType,
+			contentType: activeContentType,
 			onSubmit: onConfigChange,
 		});
 	};
 
 	const renderConfigSection = (): ReactElement | null => {
-		if (!view?.query?.contentType) {
+		if (!view?.query?.contentType || !activeContentType) {
 			return null;
 		}
 
@@ -121,33 +145,14 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 							<div className="u-margin">
 								<FormViewNewList
 									contentTypeOptions={contentTypeOptions}
-									methodOptions={DUMMY_METHOD_OPTIONS}
+									methodOptions={METHOD_OPTIONS}
 									formState={view}
-									onSubmit={(view: ViewSchema) =>
-										internalService.updateView({
-											...view,
-											query: {
-												...view.query,
-												contentType: (contentTypes?.find(
-													ct =>
-														ct.uuid ===
-														(view?.query
-															?.contentType as ContentTypeSchema)
-															?.uuid
-												) as unknown) as ContentTypeSchema,
-												conditions: [],
-												options: {
-													offset: 0,
-													limit: 10,
-												},
-											},
-										})
-									}
+									onSubmit={onContentTypeChanged}
 								/>
 							</div>
 						</Card>
 					</div>
-					{renderConfigSection()}
+					<DataLoader loadingState={contentTypeLoading} render={renderConfigSection} />
 				</div>
 			</Container>
 			<ActionBar className="o-action-bar--fixed" isOpen>
@@ -158,6 +163,7 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 						</Button>
 						<Button
 							iconLeft={loading ? 'circle-o-notch fa-spin' : null}
+							disabled={loading}
 							onClick={onConfigSave}
 							type="success"
 						>

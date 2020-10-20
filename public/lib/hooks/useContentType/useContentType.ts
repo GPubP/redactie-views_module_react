@@ -1,33 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useObservable } from '@mindspace-io/react';
 
-import { ContentTypeResponse, getContentType } from '../../services/contentTypes';
+import { ContentTypeResponse } from '../../services/contentTypes';
+import { contentTypesFacade } from '../../store/contentTypes';
 import { LoadingState } from '../../views.types';
 
-const useContentType = (
-	siteId: string,
-	uuid: string | null = null
-): [LoadingState, ContentTypeResponse | null] => {
-	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
-	const [contentType, setContentType] = useState<ContentTypeResponse | null>(null);
+const useContentType = (): [LoadingState, ContentTypeResponse | undefined] => {
+	const [loading] = useObservable(contentTypesFacade.isFetchingOne$, LoadingState.Loading);
+	const [contentType] = useObservable(contentTypesFacade.contentType$);
+	const [error] = useObservable(contentTypesFacade.error$);
 
-	useEffect(() => {
-		if (!uuid) {
-			return setLoadingState(LoadingState.Error);
-		}
-
-		setLoadingState(LoadingState.Loading);
-		getContentType(siteId, uuid)
-			.then(result => {
-				if (result) {
-					setContentType(result);
-				}
-
-				setLoadingState(LoadingState.Loaded);
-			})
-			.catch(() => {
-				setLoadingState(LoadingState.Error);
-			});
-	}, [siteId, uuid]);
+	const loadingState = error ? LoadingState.Error : loading;
 
 	return [loadingState, contentType];
 };

@@ -1,8 +1,6 @@
 import { Button } from '@acpaas-ui/react-components';
 import React from 'react';
 
-import { ContentTypeFieldSchema, FieldTypeSchema } from '../../../services/contentTypes';
-
 import { FormViewConditionsRow } from './FormViewConditions.types';
 
 export const FIELD_COLUMNS = [
@@ -27,7 +25,7 @@ export const FIELD_COLUMNS = [
 		value: 'type',
 		disableSorting: true,
 		format: (cellValue: any, col: any, rowData: FormViewConditionsRow) => {
-			return (rowData?.field?.fieldType as FieldTypeSchema)?.data?.label || '';
+			return rowData.field.type;
 		},
 	},
 	{

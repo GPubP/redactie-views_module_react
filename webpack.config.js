@@ -1,7 +1,9 @@
 const path = require('path');
 
 const RedactionWebpackPlugin = require('@redactie/module-webpack-plugin');
+const kebabCase = require('lodash.kebabcase');
 const postcssPresetEnv = require('postcss-preset-env');
+const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const packageJSON = require('./package.json');
@@ -9,7 +11,6 @@ const packageJSON = require('./package.json');
 module.exports = env => {
 	const defaultConfig = {
 		mode: 'production',
-		devtool: 'source-map',
 		entry: './public/index.tsx',
 		performance: {
 			hints: false,
@@ -65,7 +66,7 @@ module.exports = env => {
 			'@acpaas-ui/react-editorial-components': '@acpaas-ui/react-editorial-components',
 		},
 		output: {
-			filename: 'redactie-views-module.umd.js',
+			filename: `${kebabCase(packageJSON.name)}.umd.js`,
 			path: path.resolve(__dirname, 'dist'),
 			libraryTarget: 'umd',
 		},
@@ -74,7 +75,14 @@ module.exports = env => {
 	if (env.analyse) {
 		return {
 			...defaultConfig,
-			plugins: [...defaultConfig.plugins, new BundleAnalyzerPlugin()],
+			plugins: [
+				...defaultConfig.plugins,
+				new BundleAnalyzerPlugin(),
+				new webpack.SourceMapDevToolPlugin({
+					filename: `${kebabCase(packageJSON.name)}.umd.js.map`,
+					publicPath: `${kebabCase(packageJSON.name + packageJSON.version)}/dist/`,
+				}),
+			],
 		};
 	}
 
@@ -85,6 +93,10 @@ module.exports = env => {
 				...defaultConfig.plugins,
 				new RedactionWebpackPlugin({
 					moduleName: packageJSON.name,
+				}),
+				new webpack.SourceMapDevToolPlugin({
+					filename: `${kebabCase(packageJSON.name)}.umd.js.map`,
+					publicPath: `${kebabCase(packageJSON.name + packageJSON.version)}/dist/`,
 				}),
 			],
 		};

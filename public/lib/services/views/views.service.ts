@@ -35,23 +35,33 @@ export class ViewsApiService {
 	}
 
 	public async updateView(siteId: string, view: ViewSchema): Promise<ViewSchema | null> {
-		const response: ViewSchema = await api
-			.put(`sites/${siteId}/views/${view.uuid}`, {
-				json: view,
-			})
-			.json();
+		try {
+			const response: ViewSchema = await api
+				.put(`sites/${siteId}/views/${view.uuid}`, {
+					json: view,
+				})
+				.json();
 
-		return response;
+			return response;
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
 	}
 
 	public async createView(siteId: string, view: ViewSchema): Promise<ViewSchema | null> {
-		const response: ViewSchema = await api
-			.post(`sites/${siteId}/views`, {
-				json: view,
-			})
-			.json();
+		try {
+			const response: ViewSchema = await api
+				.post(`sites/${siteId}/views`, {
+					json: view,
+				})
+				.json();
 
-		return response;
+			return response;
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
 	}
 }
 

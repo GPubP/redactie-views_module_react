@@ -1,11 +1,11 @@
 import { Button, Card } from '@acpaas-ui/react-components';
 import React, { FC, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 import { FormCreateCondition, FormViewConditions } from '../../components';
 import { DEFAULT_OPERATORS } from '../../components/forms/FormCreateCondition/FormCreateCondition.const';
 import { FormCreateConditionValue } from '../../components/forms/FormCreateCondition/FormCreateCondition.types';
 import { ViewQueryCondition } from '../../services/views';
-import { SelectOptions } from '../../views.types';
 
 import { ViewDetailConditionsProps } from './ViewDetailConditions.types';
 
@@ -19,14 +19,23 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 	 * Methods
 	 */
 	const parseCondition = (rawCondition: FormCreateConditionValue): ViewQueryCondition => {
+		const ctField = contentType.fields.find(field => field.name === rawCondition.field);
+
 		return {
-			field: (contentType.fields.find(
-				field => field.uuid === rawCondition.field
-			) as unknown) as ViewQueryCondition['field'],
+			field: {
+				fieldType: ctField?.fieldType?.uuid || '',
+				dataType: ctField?.dataType?.uuid || '',
+				preset: ctField?.preset?.uuid || null,
+				group: 'fields',
+				label: ctField?.label || '',
+				type: ctField?.dataType.data.type || 'string',
+				_id: ctField?.name || '',
+			},
 			value: rawCondition.value,
 			operator:
 				DEFAULT_OPERATORS.find(operator => operator.value === rawCondition.operator) ||
 				DEFAULT_OPERATORS[0],
+			uuid: rawCondition.uuid,
 		};
 	};
 
@@ -35,7 +44,13 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 			...view,
 			query: {
 				...view.query,
-				conditions: [...view.query.conditions, parseCondition(newCondition)],
+				conditions: [
+					...view.query.conditions,
+					parseCondition({
+						...newCondition,
+						uuid: uuid(),
+					}),
+				],
 			},
 		});
 		setshowCreateConditionForm(false);
@@ -53,7 +68,7 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 
 	const updateCondition = (
 		updatedCondition: FormCreateConditionValue,
-		updatedConditionIndex: number
+		updatedConditionIndex?: number
 	): void => {
 		onSubmit({
 			...view,
@@ -70,15 +85,6 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 		setshowCreateConditionForm(!showCreateConditionForm);
 	};
 
-	const conditionFields =
-		contentType?.fields.map(
-			(field): SelectOptions => ({
-				key: field.uuid as string,
-				label: field.label,
-				value: field.uuid as string,
-			})
-		) || [];
-
 	/**
 	 * Render
 	 */
@@ -89,13 +95,13 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 
 				<FormViewConditions
 					formState={view}
-					fields={conditionFields}
+					fields={contentType.fields}
 					onDelete={deleteCondition}
 					onSubmit={updateCondition}
 				/>
 
 				{showCreateConditionForm && (
-					<FormCreateCondition onSubmit={addCondition} fields={conditionFields}>
+					<FormCreateCondition onSubmit={addCondition} fields={contentType.fields}>
 						{({ submitForm }) => (
 							<>
 								<Button className="u-margin-right-xs" onClick={submitForm}>

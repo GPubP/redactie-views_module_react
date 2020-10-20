@@ -20,3 +20,10 @@ export const DEFAULT_OPERATORS = [
 		label: 'Ends with',
 	},
 ];
+
+export const DEFAULT_VALIDATION_SCHEMA = {
+	$schema: 'http://json-schema.org/draft-07/schema#',
+	type: 'object',
+	required: ['value'],
+	properties: {},
+};
