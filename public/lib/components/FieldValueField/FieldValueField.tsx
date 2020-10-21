@@ -1,7 +1,7 @@
 import { TextField } from '@acpaas-ui/react-components';
 import { FormSchema } from '@redactie/form-renderer-module';
 import { Field, FieldInputProps } from 'formik';
-import React, { FC, ReactElement, useContext, useMemo } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 
 import contentConnector from '../../connectors/content';
 import { getForm } from '../../connectors/formRenderer';
@@ -37,14 +37,7 @@ export const FieldValueField: FC<FieldInputProps<any> & {
 	setFieldValue: (value: any) => void;
 	label: string;
 	placeholder: string;
-}> = ({
-	fields,
-	value,
-	label,
-	placeholder,
-	selectedField: field,
-	setFieldValue,
-}): ReactElement | null => {
+}> = ({ fields, value, label, placeholder, selectedField: field, setFieldValue }) => {
 	/**
 	 * Hooks
 	 */

@@ -1,5 +1,5 @@
 import { FieldInputProps, FormikValues, useField, useFormikContext } from 'formik';
-import React, { FC, ReactElement, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { getFieldRegistery } from '../../connectors/formRenderer';
 import { META_FILTER_OPTIONS } from '../forms/FormCreateCondition/FormCreateCondition.const';
@@ -9,7 +9,7 @@ export const MetaValueField: FC<FieldInputProps<string> & {
 	setFieldValue: (value: any) => void;
 	label: string;
 	placeholder: string;
-}> = (props): ReactElement | null => {
+}> = props => {
 	/**
 	 * Hooks
 	 */
