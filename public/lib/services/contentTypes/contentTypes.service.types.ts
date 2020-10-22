@@ -109,6 +109,7 @@ export interface ContentTypeCreate {
 export interface Operator {
 	label: string;
 	value: string;
+	key: string;
 }
 
 export interface FieldTypeSchemaData {

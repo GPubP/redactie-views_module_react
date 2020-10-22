@@ -42,7 +42,6 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	});
 	const { navigate } = useNavigate();
 	const [t] = useCoreTranslation();
-
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [loadingState, views, viewsPaging] = useViews();
 
@@ -128,7 +127,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!views) {
+		if (!Array.isArray(views)) {
 			return null;
 		}
 
@@ -182,7 +181,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 					>
 						<Button
 							iconLeft="plus"
-							onClick={() => navigate(`${MODULE_PATHS.create}`, { siteId })}
+							onClick={() => navigate(`${MODULE_PATHS.createSettings}`, { siteId })}
 						>
 							{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
 						</Button>

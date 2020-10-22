@@ -1,8 +1,9 @@
-import { BaseEntityFacade } from '@redactie/utils';
+import { alertService, BaseEntityFacade } from '@redactie/utils';
 
 import { SearchParams } from '../../services/api';
 import { viewsApiService, ViewsApiService, ViewSchema } from '../../services/views';
 
+import { getAlertMessages } from './views.messages';
 import { ViewsQuery, viewsQuery } from './views.query';
 import { viewsStore, ViewsStore } from './views.store';
 
@@ -24,13 +25,15 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 		this.service
 			.getViews(siteId, searchParams)
 			.then(response => {
-				if (response) {
-					this.store.set(response._embedded);
-					this.store.update({
-						meta: response._page,
-						isFetching: false,
-					});
+				if (!response) {
+					throw new Error('Getting views failed!');
 				}
+
+				this.store.set(response._embedded);
+				this.store.update({
+					meta: response._page,
+					isFetching: false,
+				});
 			})
 			.catch(error => {
 				this.store.update({
@@ -50,12 +53,14 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 		this.service
 			.getView(siteId, uuid)
 			.then(response => {
-				if (response) {
-					this.store.update({
-						view: response,
-						isFetchingOne: false,
-					});
+				if (!response) {
+					throw new Error(`Getting view '${uuid}' failed!`);
 				}
+
+				this.store.update({
+					view: response,
+					isFetchingOne: false,
+				});
 			})
 			.catch(error => {
 				this.store.update({
@@ -65,7 +70,7 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 			});
 	}
 
-	public updateView(siteId: string, body: ViewSchema): void {
+	public updateView(siteId: string, body: ViewSchema, alertId: string): void {
 		const { isUpdating } = this.query.getValue();
 
 		if (isUpdating) {
@@ -77,23 +82,32 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 		this.service
 			.updateView(siteId, body)
 			.then(response => {
-				if (response) {
-					this.store.update({
-						view: response,
-						viewDraft: response,
-						isUpdating: false,
-					});
+				if (!response) {
+					throw new Error(`Updateing view '${body.uuid}' failed!`);
 				}
+
+				this.store.update({
+					view: response,
+					viewDraft: response,
+					isUpdating: false,
+				});
+				alertService.success(getAlertMessages(response).update.success, {
+					containerId: alertId,
+				});
 			})
 			.catch(error => {
 				this.store.update({
 					error,
 					isUpdating: false,
 				});
+
+				alertService.danger(getAlertMessages(body).update.error, {
+					containerId: alertId,
+				});
 			});
 	}
 
-	public createView(siteId: string, body: ViewSchema): void {
+	public createView(siteId: string, body: ViewSchema, alertId: string): void {
 		const { isCreating } = this.query.getValue();
 
 		if (isCreating) {
@@ -105,25 +119,52 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 		this.service
 			.createView(siteId, body)
 			.then(response => {
-				if (response) {
-					this.store.update({
-						view: response,
-						viewDraft: response,
-						isCreating: false,
-					});
+				if (!response) {
+					throw new Error(`Creating view '${body?.meta?.label}' failed!`);
 				}
+
+				this.store.update({
+					view: response,
+					viewDraft: response,
+					isCreating: false,
+				});
+				alertService.success(getAlertMessages(response).create.success, {
+					containerId: alertId,
+				});
 			})
 			.catch(error => {
 				this.store.update({
 					error,
 					isCreating: false,
 				});
+
+				alertService.danger(getAlertMessages(body).create.error, {
+					containerId: alertId,
+				});
 			});
+	}
+
+	public setView(view: ViewSchema): void {
+		this.store.update({
+			view,
+		});
 	}
 
 	public setViewDraft(viewDraft: ViewSchema): void {
 		this.store.update({
 			viewDraft,
+		});
+	}
+
+	public unsetViewDraft(): void {
+		this.store.update({
+			viewDraft: undefined,
+		});
+	}
+
+	public unsetView(): void {
+		this.store.update({
+			view: undefined,
 		});
 	}
 }

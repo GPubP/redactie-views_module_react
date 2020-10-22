@@ -1,7 +1,9 @@
 import { Button } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useState } from 'react';
 
+import { useCoreTranslation } from '../../../connectors/translations';
 import FormCreateCondition from '../FormCreateCondition/FormCreateCondition';
 
 import { FIELD_COLUMNS } from './FormViewConditions.const';
@@ -18,13 +20,13 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 	 */
 	const [showEditCondition, setShowEditCondition] = useState(false);
 	const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
-
+	const [t] = useCoreTranslation();
 	/**
 	 * Methods
 	 */
 	const onDeleteCondition = (index: number): void => {
 		onDelete(index);
-		setShowEditCondition(false);
+		setExpandedRows({});
 	};
 
 	const onShowEdit = (rowData: FormViewConditionsRow, rowIndex: number): void => {
@@ -46,7 +48,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 			<FormCreateCondition
 				initialValues={{
 					...rowData,
-					field: rowData.field._id,
+					field: `${rowData.field.group}.${rowData.field._id}`,
 					operator: rowData.operator.value,
 					uuid: rowData.uuid,
 				}}
@@ -69,9 +71,10 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 							onClick={() => setExpandedRows({})}
 							outline
 						>
-							Annuleer
+							{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 						</Button>
 						<Button
+							className="u-margin-right-xs"
 							icon="trash"
 							onClick={() => onDeleteCondition(rowData.index)}
 							type="danger"
@@ -94,6 +97,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 				expandedRows={expandedRows}
 				columns={FIELD_COLUMNS}
 				rows={conditionRows}
+				responsive={false}
 				rowExpansionTemplate={(rowData: FormViewConditionsRow) =>
 					renderConditionForm(rowData)
 				}

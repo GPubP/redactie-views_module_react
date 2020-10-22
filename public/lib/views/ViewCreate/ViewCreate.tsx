@@ -1,13 +1,24 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
-import { useActiveTabs, useNavigate, useRoutesBreadcrumbs, useView } from '../../hooks';
+import {
+	useActiveTabs,
+	useNavigate,
+	useRoutesBreadcrumbs,
+	useView,
+	useViewDraft,
+} from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
-import { MODULE_PATHS, VIEW_DETAIL_TAB_MAP, VIEW_DETAIL_TABS } from '../../views.const';
+import {
+	ALERT_CONTAINER_IDS,
+	MODULE_PATHS,
+	VIEW_DETAIL_TAB_MAP,
+	VIEW_DETAIL_TABS,
+} from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
 import { LoadingState, Tab, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
@@ -27,19 +38,35 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 		},
 	]);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
-	const [viewLoadingState, view] = useView();
+	const [viewLoadingState, view, upsertViewLoadingState] = useView();
+	const [viewDraft] = useViewDraft();
+	const isLoading = useMemo(() => {
+		return (
+			viewLoadingState === LoadingState.Loading ||
+			upsertViewLoadingState === LoadingState.Loading
+		);
+	}, [upsertViewLoadingState, viewLoadingState]);
 
 	useEffect(() => {
-		if (view) {
-			navigate(`${MODULE_PATHS.detailConfig}`, { siteId, viewUuid: view.uuid });
-		}
-
 		if (viewLoadingState !== LoadingState.Loading) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [navigate, siteId, view, viewLoadingState]);
+	}, [viewLoadingState]);
+
+	useEffect(() => {
+		if (view?.uuid) {
+			navigate(`${MODULE_PATHS.detailConfigDynamic}`, { siteId, viewUuid: view.uuid });
+		}
+	}, [navigate, siteId, view]);
+
+	useEffect(() => {
+		if (!viewDraft) {
+			viewsFacade.setView(generateEmptyView());
+			viewsFacade.setViewDraft(generateEmptyView());
+		}
+	}, [viewDraft]);
 
 	/**
 	 * Methods
@@ -48,15 +75,23 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 		navigate(`${MODULE_PATHS.root}`, { siteId });
 	};
 
-	const upsertView = (sectionData: any, tab: Tab): void => {
+	const upsertView = (
+		sectionData: any,
+		tab: Tab,
+		alertId = ALERT_CONTAINER_IDS.settings
+	): void => {
 		switch (tab.name) {
 			case VIEW_DETAIL_TAB_MAP.settings.name:
-				viewsFacade.createView(siteId, {
-					...generateEmptyView(),
-					meta: {
-						...sectionData?.meta,
-					},
-				} as ViewSchema);
+				viewsFacade.createView(
+					siteId,
+					{
+						...generateEmptyView(),
+						meta: {
+							...sectionData?.meta,
+						},
+					} as ViewSchema,
+					alertId
+				);
 				break;
 		}
 	};
@@ -69,7 +104,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 			tenantId,
 			routes: route.routes,
 			view: view || generateEmptyView(),
-			loading: viewLoadingState === LoadingState.Creating,
+			loading: isLoading,
 			onCancel: navigateToOverview,
 			onSubmit: (sectionData: any, tab: Tab) => upsertView(sectionData, tab),
 		});

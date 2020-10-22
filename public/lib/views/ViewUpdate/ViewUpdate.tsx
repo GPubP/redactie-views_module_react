@@ -1,7 +1,7 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import { ContextHeaderBadge } from '@redactie/content-module/dist/lib/content.types';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
-import { Link, Redirect, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { DataLoader, RenderChildRoutes } from '../../components';
 import {
@@ -15,22 +15,20 @@ import {
 import { ViewSchema } from '../../services/views';
 import { contentTypesFacade } from '../../store/contentTypes';
 import { viewsFacade } from '../../store/views';
-import { MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
-import { LoadingState, ViewsRouteProps } from '../../views.types';
+import { ALERT_CONTAINER_IDS, MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
+import { LoadingState, Tab, ViewsRouteProps } from '../../views.types';
 
 const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = ({
 	location,
 	route,
-	match,
 	tenantId,
 }) => {
 	/**
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-
 	const { siteId, viewUuid } = useParams<{ viewUuid?: string; siteId: string }>();
-	const { navigate, generatePath } = useNavigate();
+	const { generatePath } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
 			name: 'Views',
@@ -40,11 +38,17 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		},
 	]);
 	const [viewLoadingState, view, upsertViewLoadingState] = useView();
+	const isLoading = useMemo(() => {
+		return (
+			viewLoadingState === LoadingState.Loading ||
+			upsertViewLoadingState === LoadingState.Loading
+		);
+	}, [upsertViewLoadingState, viewLoadingState]);
 	const [viewDraft] = useViewDraft();
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 	const [, contentType] = useContentType();
 	const badges: ContextHeaderBadge[] = useMemo(() => {
-		if (contentType?.meta?.label) {
+		if (viewDraft?.query?.viewType === 'dynamic' && contentType?.meta?.label) {
 			return [
 				{
 					type: 'primary',
@@ -53,8 +57,17 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			];
 		}
 
+		if (viewDraft?.query?.viewType === 'static') {
+			return [
+				{
+					type: 'primary',
+					name: 'Manueel geselecteerd',
+				},
+			];
+		}
+
 		return [];
-	}, [contentType]);
+	}, [contentType, viewDraft]);
 
 	useEffect(() => {
 		if (viewLoadingState !== LoadingState.Loading) {
@@ -77,21 +90,36 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		if (viewUuid) {
 			viewsFacade.getView(siteId, viewUuid);
 		}
+
+		return () => {
+			viewsFacade.unsetView();
+			viewsFacade.unsetViewDraft();
+		};
 	}, [siteId, viewUuid]);
 
 	/**
 	 * Methods
 	 */
-	const navigateToOverview = (): void => {
-		navigate(`${MODULE_PATHS.root}`, { siteId });
+	const onCancel = (): void => {
+		if (!view) {
+			return;
+		}
+
+		viewsFacade.setViewDraft(view);
 	};
 
-	const update = (updatedView: ViewSchema): void => {
+	const update = (updatedView: ViewSchema, tab: Tab): void => {
 		if (!updatedView) {
 			return;
 		}
 
-		viewsFacade.updateView(siteId, updatedView);
+		viewsFacade.updateView(
+			siteId,
+			updatedView,
+			tab.target === 'instellingen'
+				? ALERT_CONTAINER_IDS.settings
+				: ALERT_CONTAINER_IDS.config
+		);
 	};
 	/**
 	 * Render
@@ -101,14 +129,6 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			return null;
 		}
 
-		const uuidRegex =
-			'\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b';
-
-		// Redirect /views/:viewUuid/configuratie to /views/:viewUuid/instellingen/configuratie/voorwaarden
-		if (new RegExp(`/views/${uuidRegex}/configuratie$`).test(location.pathname)) {
-			return <Redirect to={`${match.url}/configuratie/voorwaarden`} />;
-		}
-
 		return (
 			<RenderChildRoutes
 				routes={route.routes}
@@ -116,11 +136,10 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 					tenantId,
 				}}
 				extraOptions={{
-					onCancel: navigateToOverview,
+					onCancel,
 					onSubmit: update,
 					routes: route.routes,
-					view,
-					loading: upsertViewLoadingState === LoadingState.Loading,
+					loading: isLoading,
 				}}
 			/>
 		);
@@ -140,9 +159,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
-			<div className="u-margin-top">
-				<DataLoader loadingState={initialLoading} render={renderChildRoutes} />
-			</div>
+			<DataLoader loadingState={initialLoading} render={renderChildRoutes} />
 		</>
 	);
 };

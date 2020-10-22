@@ -17,8 +17,8 @@ export interface ViewsSchema {
 }
 
 export interface ViewQueryConditionField {
-	fieldType: string;
-	dataType: string;
+	fieldType?: string;
+	dataType?: string;
 	preset?: string | null;
 	group: string;
 	label: string;
