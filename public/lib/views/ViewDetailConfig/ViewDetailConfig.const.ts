@@ -18,6 +18,13 @@ export const METHOD_OPTIONS = [
 	},
 ];
 
+export const CT_DEFAULT_DISABLED_OPTION = {
+	key: 'none',
+	value: '',
+	label: 'Kies een content-type',
+	disabled: true,
+};
+
 export const CONFIG_ALLOWED_LEAVE_PATHS = [
 	`${TENANT_ROOT}${MODULE_PATHS.detailConfigStatic}`,
 	`${TENANT_ROOT}${MODULE_PATHS.detailConfigDynamic}`,

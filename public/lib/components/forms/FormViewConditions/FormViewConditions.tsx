@@ -48,7 +48,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 			<FormCreateCondition
 				initialValues={{
 					...rowData,
-					field: rowData.field._id,
+					field: `${rowData.field.group}.${rowData.field._id}`,
 					operator: rowData.operator.value,
 					uuid: rowData.uuid,
 				}}

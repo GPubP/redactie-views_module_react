@@ -1,15 +1,11 @@
-import { Select, TextField } from '@acpaas-ui/react-components';
-import { FormSchema } from '@redactie/form-renderer-module';
+import { Select } from '@acpaas-ui/react-components';
 import { Field, FieldInputProps, Formik, FormikProps } from 'formik';
-import React, { FC, ReactElement, useContext, useMemo } from 'react';
+import React, { FC, ReactElement, useMemo } from 'react';
 
-import contentConnector from '../../../connectors/content';
-import { getForm } from '../../../connectors/formRenderer';
-import TenantContext from '../../../context/TenantContext/TenantContext';
-import { parseFields } from '../../../helpers/parseFields';
-import { ContentTypeFieldResponse } from '../../../services/contentTypes';
+import { FieldValueField } from '../../FieldValueField/FieldValueField';
+import { MetaValueField } from '../../MetaValueField/MetaValueField';
 
-import { DEFAULT_OPERATORS, DEFAULT_VALIDATION_SCHEMA } from './FormCreateCondition.const';
+import { DEFAULT_OPERATORS, META_FILTER_OPTIONS } from './FormCreateCondition.const';
 import {
 	FieldOption,
 	FormCreateConditionProps,
@@ -37,13 +33,13 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 
 				return acc.concat([
 					{
-						key: field.name as string,
+						key: `fields.${field.name}`,
 						label: field.label,
-						value: field.name as string,
+						value: `fields.${field.name}`,
 						operators: field.fieldType.data.operators,
 					},
 				]);
-			}, [] as FieldOption[]),
+			}, META_FILTER_OPTIONS as FieldOption[]),
 		[fields]
 	);
 	const formValues: FormCreateConditionValue = useMemo(
@@ -55,83 +51,30 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 		}),
 		[fieldOptions, initialValues]
 	);
-	const { siteId, tenantId } = useContext(TenantContext);
-	const ContentTenantContext = contentConnector.api.contentTenantContext;
-
-	/**
-	 * METHODS
-	 */
-	const parseFieldToForm = (
-		selectedField: ContentTypeFieldResponse,
-		{ label }: { label: string }
-	): FormSchema => {
-		return {
-			fields: parseFields([
-				{
-					...(selectedField || {}),
-					generalConfig: {
-						...selectedField.generalConfig,
-						hidden: false,
-						disabled: false,
-						required: true,
-					},
-					name: 'value',
-					label,
-				},
-			]),
-		};
-	};
 
 	/**
 	 * RENDER
 	 */
-	const RenderValueField: FC<FieldInputProps<any> & {
+
+	const RenderValue: FC<FieldInputProps<any> & {
 		selectedField: string;
 		setFieldValue: (value: any) => void;
 		label: string;
 		placeholder: string;
-	}> = ({
-		value,
-		name,
-		label,
-		placeholder,
-		selectedField: field,
-		setFieldValue,
-	}): ReactElement | null => {
-		const FormRenderer = getForm();
-		const selectedField = field ? fields.find(f => f.name === field) : fields[0];
+	}> = (props): ReactElement | null => {
+		const valueToPathTest = /^(meta|fields)\.(.*)$/.exec(props.selectedField);
 
-		if (!selectedField) {
-			return null;
+		if (valueToPathTest && valueToPathTest[1] === 'meta') {
+			return <MetaValueField {...props} />;
 		}
 
-		const formSchema = parseFieldToForm(selectedField, { label });
-
-		if (!FormRenderer || !formSchema?.fields.length || !selectedField) {
+		if (valueToPathTest && valueToPathTest[1] === 'fields') {
 			return (
-				<Field
-					id={name}
-					name={name}
-					label={label}
-					placeholder={placeholder}
-					as={TextField}
-				/>
+				<FieldValueField {...props} fields={fields} selectedField={valueToPathTest[2]} />
 			);
 		}
-		const { defaultValue } = selectedField;
-		const initialValues = value ? { value } : defaultValue ? { value: defaultValue } : {};
 
-		return (
-			<ContentTenantContext.Provider value={{ siteId, tenantId }}>
-				<FormRenderer
-					schema={formSchema}
-					initialValues={initialValues}
-					validationSchema={DEFAULT_VALIDATION_SCHEMA}
-					errorMessages={{}}
-					onChange={input => setFieldValue(input?.value)}
-				/>
-			</ContentTenantContext.Provider>
-		);
+		return null;
 	};
 
 	return (
@@ -171,7 +114,7 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 								placeholder="Geef een waarde op"
 								selectedField={props.values.field}
 								setFieldValue={(value: any) => props.setFieldValue('value', value)}
-								as={RenderValueField}
+								as={RenderValue}
 							/>
 						</div>
 					</div>

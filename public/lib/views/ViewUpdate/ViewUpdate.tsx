@@ -38,6 +38,12 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		},
 	]);
 	const [viewLoadingState, view, upsertViewLoadingState] = useView();
+	const isLoading = useMemo(() => {
+		return (
+			viewLoadingState === LoadingState.Loading ||
+			upsertViewLoadingState === LoadingState.Loading
+		);
+	}, [upsertViewLoadingState, viewLoadingState]);
 	const [viewDraft] = useViewDraft();
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 	const [, contentType] = useContentType();
@@ -85,7 +91,10 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			viewsFacade.getView(siteId, viewUuid);
 		}
 
-		return () => viewsFacade.unsetView();
+		return () => {
+			viewsFacade.unsetView();
+			viewsFacade.unsetViewDraft();
+		};
 	}, [siteId, viewUuid]);
 
 	/**
@@ -130,8 +139,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 					onCancel,
 					onSubmit: update,
 					routes: route.routes,
-					view,
-					loading: upsertViewLoadingState === LoadingState.Loading,
+					loading: isLoading,
 				}}
 			/>
 		);

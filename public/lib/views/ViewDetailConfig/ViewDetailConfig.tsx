@@ -21,7 +21,11 @@ import { viewsFacade } from '../../store/views';
 import { ALERT_CONTAINER_IDS, MODULE_PATHS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
 import { SelectOptions } from '../../views.types';
 
-import { CONFIG_ALLOWED_LEAVE_PATHS, METHOD_OPTIONS } from './ViewDetailConfig.const';
+import {
+	CONFIG_ALLOWED_LEAVE_PATHS,
+	CT_DEFAULT_DISABLED_OPTION,
+	METHOD_OPTIONS,
+} from './ViewDetailConfig.const';
 import { ViewDetailConfigProps } from './ViewDetailConfig.types';
 
 const ViewConfig: FC<ViewDetailConfigProps> = ({
@@ -48,15 +52,7 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 				label: ct.meta?.label,
 			}));
 
-			return [
-				{
-					key: 'none',
-					value: '',
-					label: 'Kies een content-type',
-					disabled: true,
-				},
-				...cts,
-			];
+			return [CT_DEFAULT_DISABLED_OPTION, ...cts];
 		}
 
 		return [];
