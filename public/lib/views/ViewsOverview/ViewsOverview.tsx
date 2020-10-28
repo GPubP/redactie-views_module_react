@@ -38,6 +38,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		mySecurityRightsLoadingState,
 		mySecurityrights,
 	] = rolesRightsConnector.api.hooks.useMySecurityRightsForSite({
+		siteUuid: siteId,
 		onlyKeys: true,
 	});
 	const { navigate } = useNavigate();
