@@ -1,6 +1,6 @@
 {
   "name": "@redactie/views-module",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "redactie views module",
   "main": "dist/redactie-views-module.umd.js",
   "types": "dist/index.d.ts",
