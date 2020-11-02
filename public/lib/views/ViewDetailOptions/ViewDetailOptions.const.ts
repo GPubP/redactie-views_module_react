@@ -1,20 +1,48 @@
-export const DUMMY_SORT_OPTIONS = [
+export const CT_DEFAULT_DISABLED_OPTION = {
+	key: 'none',
+	value: '',
+	label: 'Kies een veld om op te sorteren',
+	disabled: true,
+};
+
+export const BASE_SORT_OPTIONS = [
+	CT_DEFAULT_DISABLED_OPTION,
 	{
-		key: 's1',
-		value: 's1',
+		key: 'meta.created',
+		value: 'meta.created',
 		label: 'Aanmaakdatum',
+	},
+	{
+		key: 'meta.label',
+		value: 'meta.label',
+		label: 'Naam',
+	},
+	{
+		key: 'meta.slug',
+		value: 'meta.slug',
+		label: 'Slug',
+	},
+	{
+		key: 'meta.lastModified',
+		value: 'meta.lastModified',
+		label: 'Laatst aangepast',
+	},
+	{
+		key: 'meta.firstPublished',
+		value: 'meta.firstPublished',
+		label: 'Eerste publicatedatum',
 	},
 ];
 
-export const DUMMY_ORDER_OPTIONS = [
+export const ORDER_OPTIONS = [
 	{
-		key: 'o1',
-		value: 'o1',
+		key: 'desc',
+		value: 'desc',
 		label: 'Aflopend',
 	},
 	{
-		key: 'o2',
-		value: 'o2',
+		key: 'asc',
+		value: 'asc',
 		label: 'Oplopend',
 	},
 ];

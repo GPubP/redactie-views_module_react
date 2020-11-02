@@ -2,7 +2,7 @@ import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie
 
 import { Editor } from '../../views.types';
 import { ResponsePaging } from '../api';
-import { ContentTypeSchema, FieldTypeSchema } from '../contentTypes';
+import { ContentTypeSchema } from '../contentTypes';
 
 export interface ViewsRouteProps extends RouteConfigComponentProps {
 	basePath: string;
@@ -17,8 +17,9 @@ export interface ViewsSchema {
 }
 
 export interface ViewQueryConditionField {
-	fieldType: string | FieldTypeSchema;
-	dataType: string;
+	fieldType?: string;
+	dataType?: string;
+	preset?: string | null;
 	group: string;
 	label: string;
 	type: string;
@@ -44,15 +45,15 @@ export interface ViewQueryOptionsOrderByValidation {
 export interface ViewQueryOptionsOrderBy {
 	dataType: string;
 	group: string;
-	indexed: boolean;
+	indexed?: boolean;
 	label: string;
-	max: number;
-	min: number;
-	multiLanguage: boolean;
+	max?: number;
+	min?: number;
+	multiLanguage?: boolean;
 	operators: ViewQueryOperator[];
-	type: string;
-	uuid: string;
-	validation: ViewQueryOptionsOrderByValidation;
+	type?: string;
+	uuid?: string;
+	validation?: ViewQueryOptionsOrderByValidation;
 	_id: string;
 }
 
@@ -65,7 +66,7 @@ export interface ViewQueryOptions {
 
 export interface ViewQuery {
 	conditions: ViewQueryCondition[];
-	contentType?: string | ContentTypeSchema;
+	contentType?: ContentTypeSchema;
 	options: ViewQueryOptions;
 	page?: string;
 	viewType: 'static' | 'dynamic';

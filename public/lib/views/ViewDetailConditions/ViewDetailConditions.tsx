@@ -1,11 +1,16 @@
 import { Button, Card } from '@acpaas-ui/react-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 import { FormCreateCondition, FormViewConditions } from '../../components';
-import { DEFAULT_OPERATORS } from '../../components/forms/FormCreateCondition/FormCreateCondition.const';
+import {
+	DEFAULT_OPERATORS,
+	META_FILTER_OPTIONS,
+} from '../../components/forms/FormCreateCondition/FormCreateCondition.const';
 import { FormCreateConditionValue } from '../../components/forms/FormCreateCondition/FormCreateCondition.types';
+import { useCoreTranslation } from '../../connectors/translations';
 import { ViewQueryCondition } from '../../services/views';
-import { SelectOptions } from '../../views.types';
 
 import { ViewDetailConditionsProps } from './ViewDetailConditions.types';
 
@@ -14,28 +19,87 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 	 * Hooks
 	 */
 	const [showCreateConditionForm, setshowCreateConditionForm] = useState(false);
+	const [t] = useCoreTranslation();
 
 	/**
 	 * Methods
 	 */
-	const parseCondition = (rawCondition: FormCreateConditionValue): ViewQueryCondition => {
+	const getField = (fieldName: string, operator: string): Omit<ViewQueryCondition, 'value'> => {
+		const ctField = contentType.fields.find(field => field.name === fieldName);
+
 		return {
-			field: (contentType.fields.find(
-				field => field.uuid === rawCondition.field
-			) as unknown) as ViewQueryCondition['field'],
-			value: rawCondition.value,
+			field: {
+				fieldType: ctField?.fieldType?.uuid || '',
+				dataType: ctField?.dataType?.uuid || '',
+				preset: ctField?.preset?.uuid || null,
+				group: 'fields',
+				label: ctField?.label || '',
+				type: ctField?.fieldType.data.label || 'string',
+				_id: ctField?.name || '',
+			},
 			operator:
-				DEFAULT_OPERATORS.find(operator => operator.value === rawCondition.operator) ||
+				(ctField?.fieldType?.data.operators || []).find(op => op.value === operator) ||
 				DEFAULT_OPERATORS[0],
 		};
 	};
 
+	const getMetaField = (
+		fieldName: string,
+		_id: string,
+		operator: string
+	): Omit<ViewQueryCondition, 'value'> => {
+		const metaField = META_FILTER_OPTIONS.find(opt => opt.value === fieldName);
+
+		return {
+			field: {
+				_id,
+				fieldType: '',
+				dataType: '',
+				preset: null,
+				group: 'meta',
+				label: metaField?.label || '',
+				type: metaField?.typeLabel || 'string',
+			},
+			operator:
+				metaField?.operators.find(op => op.value === operator) || DEFAULT_OPERATORS[0],
+		};
+	};
+
+	const parseCondition = (rawCondition: FormCreateConditionValue): ViewQueryCondition | null => {
+		const valueToPathTest = /^(meta|fields)\.(.*)$/.exec(rawCondition.field);
+
+		if (!valueToPathTest) {
+			return null;
+		}
+
+		const { field, operator } =
+			valueToPathTest[1] === 'fields'
+				? getField(valueToPathTest[2], rawCondition.operator)
+				: getMetaField(rawCondition.field, valueToPathTest[2], rawCondition.operator);
+
+		return {
+			field,
+			operator,
+			value: rawCondition.value,
+			uuid: rawCondition.uuid,
+		};
+	};
+
 	const addCondition = (newCondition: FormCreateConditionValue): void => {
+		const parsedNewCondition = parseCondition({
+			...newCondition,
+			uuid: uuid(),
+		});
+
+		if (!parsedNewCondition) {
+			return;
+		}
+
 		onSubmit({
 			...view,
 			query: {
 				...view.query,
-				conditions: [...view.query.conditions, parseCondition(newCondition)],
+				conditions: [...view.query.conditions, parsedNewCondition],
 			},
 		});
 		setshowCreateConditionForm(false);
@@ -53,14 +117,20 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 
 	const updateCondition = (
 		updatedCondition: FormCreateConditionValue,
-		updatedConditionIndex: number
+		updatedConditionIndex?: number
 	): void => {
+		const parsedUpdatedCondition = parseCondition(updatedCondition);
+
+		if (!parsedUpdatedCondition) {
+			return;
+		}
+
 		onSubmit({
 			...view,
 			query: {
 				...view.query,
 				conditions: view.query.conditions.map((condition, index) =>
-					updatedConditionIndex === index ? parseCondition(updatedCondition) : condition
+					updatedConditionIndex === index ? parsedUpdatedCondition : condition
 				),
 			},
 		});
@@ -69,15 +139,6 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 	const showForm = (): void => {
 		setshowCreateConditionForm(!showCreateConditionForm);
 	};
-
-	const conditionFields =
-		contentType?.fields.map(
-			(field): SelectOptions => ({
-				key: field.uuid as string,
-				label: field.label,
-				value: field.uuid as string,
-			})
-		) || [];
 
 	/**
 	 * Render
@@ -89,20 +150,28 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 
 				<FormViewConditions
 					formState={view}
-					fields={conditionFields}
+					fields={contentType.fields}
 					onDelete={deleteCondition}
 					onSubmit={updateCondition}
 				/>
 
 				{showCreateConditionForm && (
-					<FormCreateCondition onSubmit={addCondition} fields={conditionFields}>
+					<FormCreateCondition onSubmit={addCondition} fields={contentType.fields}>
 						{({ submitForm }) => (
 							<>
-								<Button className="u-margin-right-xs" onClick={submitForm}>
-									Voeg toe
+								<Button
+									className="u-margin-right-xs u-margin-bottom"
+									type="success"
+									onClick={submitForm}
+								>
+									{t(CORE_TRANSLATIONS.BUTTON_ADD)}
 								</Button>
-								<Button onClick={() => setshowCreateConditionForm(false)} outline>
-									Annuleer
+								<Button
+									className="u-margin-bottom"
+									onClick={() => setshowCreateConditionForm(false)}
+									outline
+								>
+									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 								</Button>
 							</>
 						)}

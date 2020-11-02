@@ -1,69 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useObservable } from '@mindspace-io/react';
 
-import { viewsApiService, ViewSchema } from '../../services/views';
+import { ViewSchema } from '../../services/views';
+import { viewsFacade } from '../../store/views';
 import { LoadingState } from '../../views.types';
 
-const useView = (
-	siteId: string,
-	uuid: string | null = null
-): [
-	LoadingState,
-	ViewSchema | null,
-	(view: ViewSchema) => Promise<void>,
-	(view: ViewSchema) => Promise<void>
-] => {
-	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
-	const [view, setView] = useState<ViewSchema | null>(null);
+const useView = (): [LoadingState, ViewSchema | undefined, LoadingState] => {
+	const [fetchLoadingState] = useObservable(viewsFacade.isFetchingOne$, LoadingState.Loading);
+	const [updateLoadingState] = useObservable(viewsFacade.isUpdating$, LoadingState.Loaded);
+	const [createLoadingState] = useObservable(viewsFacade.isCreating$, LoadingState.Loaded);
+	const [view] = useObservable(viewsFacade.view$);
+	const [error] = useObservable(viewsFacade.error$);
 
-	const localUpdateView = (view: ViewSchema): Promise<void> => {
-		setLoadingState(LoadingState.Updating);
+	const upsertLoadingState = [updateLoadingState, createLoadingState].includes(
+		LoadingState.Loading
+	)
+		? LoadingState.Loading
+		: LoadingState.Loaded;
 
-		return viewsApiService
-			.updateView(siteId, view)
-			.then(result => {
-				setLoadingState(LoadingState.Loaded);
-				setView(result);
-			})
-			.catch(() => {
-				setLoadingState(LoadingState.Error);
-			});
-	};
+	const loadingState = error ? LoadingState.Error : fetchLoadingState;
 
-	const localCreateView = (view: ViewSchema): Promise<void> => {
-		setLoadingState(LoadingState.Creating);
-
-		return viewsApiService
-			.createView(siteId, view)
-			.then(result => {
-				setLoadingState(LoadingState.Loaded);
-				setView(result);
-			})
-			.catch(() => {
-				setLoadingState(LoadingState.Error);
-			});
-	};
-
-	useEffect(() => {
-		if (!uuid) {
-			return setLoadingState(LoadingState.Error);
-		}
-
-		setLoadingState(LoadingState.Loading);
-		viewsApiService
-			.getView(siteId, uuid)
-			.then(result => {
-				if (result) {
-					setView(result);
-				}
-
-				setLoadingState(LoadingState.Loaded);
-			})
-			.catch(() => {
-				setLoadingState(LoadingState.Error);
-			});
-	}, [siteId, uuid]);
-
-	return [loadingState, view, localUpdateView, localCreateView];
+	return [loadingState, view, upsertLoadingState];
 };
 
 export default useView;

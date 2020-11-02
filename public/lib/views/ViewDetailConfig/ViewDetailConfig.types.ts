@@ -11,6 +11,7 @@ export interface ViewDetailConfigProps<
 	view: ViewSchema;
 	tenantId: string;
 	loading: boolean;
+	isChanged: boolean;
 	onCancel: () => void;
 	onSubmit: (sectionData: any, tab: Tab) => void;
 }

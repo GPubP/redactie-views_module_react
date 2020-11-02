@@ -1,9 +1,16 @@
-import { Select, TextField } from '@acpaas-ui/react-components';
-import { Field, Formik, FormikProps } from 'formik';
-import React, { FC, useMemo } from 'react';
+import { Select } from '@acpaas-ui/react-components';
+import { Field, FieldInputProps, Formik, FormikProps } from 'formik';
+import React, { FC, ReactElement, useMemo } from 'react';
 
-import { DEFAULT_OPERATORS } from './FormCreateCondition.const';
-import { FormCreateConditionProps, FormCreateConditionValue } from './FormCreateCondition.types';
+import { FieldValueField } from '../../FieldValueField/FieldValueField';
+import { MetaValueField } from '../../MetaValueField/MetaValueField';
+
+import { DEFAULT_OPERATORS, META_FILTER_OPTIONS } from './FormCreateCondition.const';
+import {
+	FieldOption,
+	FormCreateConditionProps,
+	FormCreateConditionValue,
+} from './FormCreateCondition.types';
 
 const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	children,
@@ -11,48 +18,103 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	fields,
 	initialValues,
 }) => {
-	const formValues = useMemo(
+	/**
+	 * HOOKS
+	 */
+	const fieldOptions: FieldOption[] = useMemo(
+		() =>
+			fields.reduce((acc, field) => {
+				if (
+					!field.fieldType.data.generalConfig.isQueryable ||
+					!field.fieldType.data.operators.length
+				) {
+					return acc;
+				}
+
+				return acc.concat([
+					{
+						key: `fields.${field.name}`,
+						label: field.label,
+						value: `fields.${field.name}`,
+						operators: field.fieldType.data.operators,
+					},
+				]);
+			}, META_FILTER_OPTIONS as FieldOption[]),
+		[fields]
+	);
+	const formValues: FormCreateConditionValue = useMemo(
 		() => ({
-			field: initialValues?.field || (fields && fields.length > 0) ? fields[0].key : '',
-			operator: initialValues?.operator || DEFAULT_OPERATORS[0].value,
+			field: initialValues?.field || fieldOptions[0]?.value,
+			operator: initialValues?.operator || fieldOptions[0]?.operators[0]?.value || '',
 			value: initialValues?.value || '',
+			uuid: initialValues?.uuid || '',
 		}),
-		[fields, initialValues]
+		[fieldOptions, initialValues]
 	);
 
+	/**
+	 * RENDER
+	 */
+
+	const RenderValue: FC<FieldInputProps<any> & {
+		selectedField: string;
+		setFieldValue: (value: any) => void;
+		label: string;
+		placeholder: string;
+	}> = (props): ReactElement | null => {
+		const valueToPathTest = /^(meta|fields)\.(.*)$/.exec(props.selectedField);
+
+		if (valueToPathTest && valueToPathTest[1] === 'meta') {
+			return <MetaValueField {...props} />;
+		}
+
+		if (valueToPathTest && valueToPathTest[1] === 'fields') {
+			return (
+				<FieldValueField {...props} fields={fields} selectedField={valueToPathTest[2]} />
+			);
+		}
+
+		return null;
+	};
+
 	return (
-		<Formik enableReinitialize={true} initialValues={formValues} onSubmit={onSubmit}>
+		<Formik initialValues={formValues} onSubmit={onSubmit}>
 			{props => (
 				<div className="u-margin-top">
 					<div className="row">
-						<div className="col-xs-12 col-sm-6">
+						<div className="col-xs-12 col-sm-6 u-margin-bottom">
 							<Field
 								id="field"
 								name="field"
 								label="Veld"
-								loading={fields.length === 0}
-								options={fields}
+								loading={fieldOptions.length === 0}
+								options={fieldOptions}
 								as={Select}
 							/>
 						</div>
-						<div className="col-xs-12 col-sm-6">
+						<div className="col-xs-12 col-sm-6 u-margin-bottom">
 							<Field
 								id="operator"
 								name="operator"
 								label="Operator"
-								options={DEFAULT_OPERATORS}
+								options={
+									fieldOptions.find(option => option.value === props.values.field)
+										?.operators || DEFAULT_OPERATORS
+								}
 								as={Select}
 							/>
 						</div>
 					</div>
-					<div className="row u-margin-top u-margin-bottom">
+					<div className="row">
 						<div className="col-xs-12">
 							<Field
 								id="value"
 								name="value"
 								label="Waarde"
 								placeholder="Geef een waarde op"
-								as={TextField}
+								selectedField={props.values.field}
+								setFieldValue={(value: any) => props.setFieldValue('value', value)}
+								as={RenderValue}
 							/>
 						</div>
 					</div>

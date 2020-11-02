@@ -1,28 +1,172 @@
-import { useEffect, useState } from 'react';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { alertService, BaseEntityFacade } from '@redactie/utils';
 
-import { ViewSchema } from '../../services/views';
+import { SearchParams } from '../../services/api';
+import { viewsApiService, ViewsApiService, ViewSchema } from '../../services/views';
 
-import { internalQuery } from './views.query';
+import { getAlertMessages } from './views.messages';
+import { ViewsQuery, viewsQuery } from './views.query';
+import { viewsStore, ViewsStore } from './views.store';
 
-export const useViewFacade = (): ViewSchema | null => {
-	const [view, setView] = useState<ViewSchema | null>(null);
+export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, ViewsQuery> {
+	public readonly meta$ = this.query.meta$;
+	public readonly views$ = this.query.views$;
+	public readonly view$ = this.query.view$;
+	public readonly viewDraft$ = this.query.viewDraft$;
 
-	useEffect(() => {
-		const destroyed$: Subject<boolean> = new Subject<boolean>();
+	public getViews(siteId: string, searchParams: SearchParams): void {
+		const { isFetching } = this.query.getValue();
 
-		internalQuery.view$.pipe(takeUntil(destroyed$)).subscribe(view => {
-			if (view) {
-				return setView(view);
-			}
+		if (isFetching) {
+			return;
+		}
+
+		this.store.setIsFetching(true);
+
+		this.service
+			.getViews(siteId, searchParams)
+			.then(response => {
+				if (!response) {
+					throw new Error('Getting views failed!');
+				}
+
+				this.store.set(response._embedded);
+				this.store.update({
+					meta: response._page,
+					isFetching: false,
+				});
+			})
+			.catch(error => {
+				this.store.update({
+					error,
+					isFetching: false,
+				});
+			});
+	}
+
+	public getView(siteId: string, uuid: string): void {
+		const { isFetchingOne, contentType } = this.query.getValue();
+		if (isFetchingOne || contentType?.uuid === uuid) {
+			return;
+		}
+
+		this.store.setIsFetchingOne(true);
+		this.service
+			.getView(siteId, uuid)
+			.then(response => {
+				if (!response) {
+					throw new Error(`Getting view '${uuid}' failed!`);
+				}
+
+				this.store.update({
+					view: response,
+					isFetchingOne: false,
+				});
+			})
+			.catch(error => {
+				this.store.update({
+					error,
+					isFetchingOne: false,
+				});
+			});
+	}
+
+	public updateView(siteId: string, body: ViewSchema, alertId: string): void {
+		const { isUpdating } = this.query.getValue();
+
+		if (isUpdating) {
+			return;
+		}
+
+		this.store.setIsUpdating(true);
+
+		this.service
+			.updateView(siteId, body)
+			.then(response => {
+				if (!response) {
+					throw new Error(`Updateing view '${body.uuid}' failed!`);
+				}
+
+				this.store.update({
+					view: response,
+					viewDraft: response,
+					isUpdating: false,
+				});
+				alertService.success(getAlertMessages(response).update.success, {
+					containerId: alertId,
+				});
+			})
+			.catch(error => {
+				this.store.update({
+					error,
+					isUpdating: false,
+				});
+
+				alertService.danger(getAlertMessages(body).update.error, {
+					containerId: alertId,
+				});
+			});
+	}
+
+	public createView(siteId: string, body: ViewSchema, alertId: string): void {
+		const { isCreating } = this.query.getValue();
+
+		if (isCreating) {
+			return;
+		}
+
+		this.store.setIsCreating(true);
+
+		this.service
+			.createView(siteId, body)
+			.then(response => {
+				if (!response) {
+					throw new Error(`Creating view '${body?.meta?.label}' failed!`);
+				}
+
+				this.store.update({
+					view: response,
+					viewDraft: response,
+					isCreating: false,
+				});
+				alertService.success(getAlertMessages(response).create.success, {
+					containerId: alertId,
+				});
+			})
+			.catch(error => {
+				this.store.update({
+					error,
+					isCreating: false,
+				});
+
+				alertService.danger(getAlertMessages(body).create.error, {
+					containerId: alertId,
+				});
+			});
+	}
+
+	public setView(view: ViewSchema): void {
+		this.store.update({
+			view,
 		});
+	}
 
-		return () => {
-			destroyed$.next(true);
-			destroyed$.complete();
-		};
-	}, []);
+	public setViewDraft(viewDraft: ViewSchema): void {
+		this.store.update({
+			viewDraft,
+		});
+	}
 
-	return view;
-};
+	public unsetViewDraft(): void {
+		this.store.update({
+			viewDraft: undefined,
+		});
+	}
+
+	public unsetView(): void {
+		this.store.update({
+			view: undefined,
+		});
+	}
+}
+
+export const viewsFacade = new ViewsFacade(viewsStore, viewsApiService, viewsQuery);

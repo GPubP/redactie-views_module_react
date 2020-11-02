@@ -31,6 +31,7 @@ export interface SelectOptions {
 	key: string;
 	value: string;
 	label: string;
+	disabled?: boolean;
 }
 
 export enum LoadingState {
@@ -59,4 +60,9 @@ export interface Editor {
 	nickname: string | null;
 	type: string;
 	username: string;
+}
+
+export interface ContextHeaderBadge {
+	name: string;
+	type: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
 }

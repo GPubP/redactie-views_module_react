@@ -6,5 +6,6 @@ export { default as useViews } from './useViews/useViews';
 export { default as useCcViews } from './useCcViews/useCcViews';
 export { default as useCcViewItem } from './useCcViewItem/useCcViewItem';
 export { default as useView } from './useView/useView';
+export { default as useViewDraft } from './useViewDraft/useViewDraft';
 export { default as useContentTypes } from './useContentTypes/useContentTypes';
 export { default as useContentType } from './useContentType/useContentType';

@@ -1,36 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useObservable } from '@mindspace-io/react';
 
-import { ResponsePaging, SearchParams } from '../../services/api';
-import { viewsApiService, ViewSchema } from '../../services/views';
+import { ResponsePaging } from '../../services/api';
+import { ViewSchema } from '../../services/views';
+import { viewsFacade } from '../../store/views';
 import { LoadingState } from '../../views.types';
 
-type UseViewsReturn = [LoadingState, ViewSchema[], ResponsePaging | null];
+const useView = (): [
+	LoadingState,
+	ViewSchema[] | null | undefined,
+	ResponsePaging | null | undefined
+] => {
+	const [loading] = useObservable(viewsFacade.isFetching$, LoadingState.Loading);
+	const [views] = useObservable(viewsFacade.views$, null);
+	const [viewsPaging] = useObservable(viewsFacade.meta$, null);
+	const [error] = useObservable(viewsFacade.error$, null);
 
-const useViews = (siteId: string, searchParams: SearchParams): UseViewsReturn => {
-	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
-	const [views, setViews] = useState<ViewSchema[]>([]);
-	const [viewsMeta, setViewsMeta] = useState<ResponsePaging | null>(null);
+	const loadingState = error ? LoadingState.Error : loading;
 
-	useEffect(() => {
-		setLoadingState(LoadingState.Loading);
-
-		viewsApiService
-			.getViews(siteId, searchParams)
-			.then(result => {
-				if (result?._embedded && result._embedded.length >= 0) {
-					setViews(result._embedded);
-				}
-				if (result?._page) {
-					setViewsMeta(result._page);
-				}
-				setLoadingState(LoadingState.Loaded);
-			})
-			.catch(() => {
-				setLoadingState(LoadingState.Error);
-			});
-	}, [searchParams, siteId]);
-
-	return [loadingState, views, viewsMeta];
+	return [loadingState, views, viewsPaging];
 };
 
-export default useViews;
+export default useView;
