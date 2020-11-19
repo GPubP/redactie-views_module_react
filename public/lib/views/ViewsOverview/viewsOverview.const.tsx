@@ -42,7 +42,7 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 		{
 			label: t(CORE_TRANSLATIONS['TABLE_LAST-MODIFIED']),
 			value: 'lastModified',
-			disableSorting: true,
+			disableSorting: false,
 			format(data: string) {
 				return moment(data).format('DD/MM/YYYY');
 			},
