@@ -1,5 +1,4 @@
 import { Button, Card } from '@acpaas-ui/react-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
@@ -9,7 +8,7 @@ import {
 	META_FILTER_OPTIONS,
 } from '../../components/forms/FormCreateCondition/FormCreateCondition.const';
 import { FormCreateConditionValue } from '../../components/forms/FormCreateCondition/FormCreateCondition.types';
-import { useCoreTranslation } from '../../connectors/translations';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { ViewQueryCondition } from '../../services/views';
 
 import { ViewDetailConditionsProps } from './ViewDetailConditions.types';

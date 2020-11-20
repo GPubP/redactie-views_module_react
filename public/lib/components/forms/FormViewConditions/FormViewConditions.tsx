@@ -1,9 +1,8 @@
 import { Button } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useState } from 'react';
 
-import { useCoreTranslation } from '../../../connectors/translations';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import FormCreateCondition from '../FormCreateCondition/FormCreateCondition';
 
 import { FIELD_COLUMNS } from './FormViewConditions.const';

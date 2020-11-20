@@ -1,19 +1,19 @@
 import { ViewFieldProps } from '@redactie/form-renderer-module';
-import React, { ReactElement, useContext, useEffect } from 'react';
+import { useNavigate, useSiteContext, useTenantContext } from '@redactie/utils';
+import React, { ReactElement, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import './ViewSelect.scss';
 
-import contentConnector from '../../../connectors/content';
-import { useCcViewItem, useNavigate } from '../../../hooks';
+import { useCcViewItem } from '../../../hooks';
 import { ccViewsFacade } from '../../../store/ccViews';
-import { MODULE_PATHS } from '../../../views.const';
+import { MODULE_PATHS, SITES_ROOT } from '../../../views.const';
 import DataLoader from '../../DataLoader/DataLoader';
 
 const ViewSelectView: React.FC<ViewFieldProps> = ({ value, fieldSchema }: ViewFieldProps) => {
-	// This will be rendered on the content page so this context its needed.
-	const { siteId, tenantId } = useContext((contentConnector.api as any).contentTenantContext);
-	const { generatePath } = useNavigate();
+	const { siteId } = useSiteContext();
+	const { tenantId } = useTenantContext();
+	const { generatePath } = useNavigate(SITES_ROOT);
 	const [contentItemLoadingState, ccViewItem] = useCcViewItem(value);
 
 	useEffect(() => {

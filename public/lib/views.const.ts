@@ -30,6 +30,7 @@ export const VIEW_DETAIL_TAB_MAP: { [key in 'settings' | 'config']: Tab } = {
 	},
 };
 
+export const SITES_ROOT = 'sites';
 export const VIEW_DETAIL_TABS: Tab[] = [VIEW_DETAIL_TAB_MAP.settings, VIEW_DETAIL_TAB_MAP.config];
 export const urlSiteParam = 'siteId';
 export const TENANT_ROOT = '/:tenantId/sites';

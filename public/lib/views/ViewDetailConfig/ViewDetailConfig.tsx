@@ -4,21 +4,29 @@ import {
 	ActionBarContentSection,
 	Container,
 } from '@acpaas-ui/react-editorial-components';
-import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
-import React, { FC, ReactElement, useEffect, useMemo } from 'react';
+import {
+	AlertContainer,
+	LeavePrompt,
+	RenderChildRoutes,
+	useDetectValueChanges,
+	useNavigate,
+} from '@redactie/utils';
+import React, { FC, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { FormViewNewList } from '../../components';
-import { useCoreTranslation } from '../../connectors/translations';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useContentTypes, useViewDraft } from '../../hooks';
-import useNavigate from '../../hooks/useNavigate/useNavigate';
 import { DEFAULT_CONTENT_TYPES_SEARCH_PARAMS } from '../../services/contentTypes';
 import { ViewSchema } from '../../services/views';
 import { contentTypesFacade } from '../../store/contentTypes';
 import { viewsFacade } from '../../store/views';
-import { ALERT_CONTAINER_IDS, MODULE_PATHS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
+import {
+	ALERT_CONTAINER_IDS,
+	MODULE_PATHS,
+	SITES_ROOT,
+	VIEW_DETAIL_TAB_MAP,
+} from '../../views.const';
 import { SelectOptions } from '../../views.types';
 
 import {
@@ -43,7 +51,7 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 	const [view] = useViewDraft();
 	const [t] = useCoreTranslation();
 	const [isChanged, resetIsChanged] = useDetectValueChanges(!!view, view);
-	const { navigate } = useNavigate();
+	const { navigate } = useNavigate(SITES_ROOT);
 	const contentTypeOptions: SelectOptions[] = useMemo(() => {
 		if (Array.isArray(contentTypes)) {
 			const cts = contentTypes.map(ct => ({
@@ -136,14 +144,6 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 	/**
 	 * Render
 	 */
-	const renderChildRoutes = (): ReactElement | null => {
-		return Core.routes.render(route.routes as ModuleRouteConfig[], {
-			tenantId,
-			view,
-			onSubmit: onConfigChange,
-		});
-	};
-
 	return (
 		<>
 			<Container>
@@ -163,7 +163,16 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 							</div>
 						</Card>
 					</div>
-					<div className="col-xs-12">{renderChildRoutes()}</div>
+					<div className="col-xs-12">
+						<RenderChildRoutes
+							routes={route.routes}
+							extraOptions={{
+								tenantId,
+								view,
+								onSubmit: onConfigChange,
+							}}
+						/>
+					</div>
 				</div>
 			</Container>
 			<ActionBar className="o-action-bar--fixed" isOpen>
