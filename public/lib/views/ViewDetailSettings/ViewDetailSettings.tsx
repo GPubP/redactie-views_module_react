@@ -1,4 +1,4 @@
-import { Button, Textarea, TextField } from '@acpaas-ui/react-components';
+import { Button, Textarea, TextField, Card, CardBody, CardTitle } from '@acpaas-ui/react-components';
 import {
 	ActionBar,
 	ActionBarContentSection,
@@ -89,17 +89,6 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 										bijvoorbeeld &lsquo;Titel&lsquo;
 									</div>
 								</div>
-
-								<div className="col-xs-12 col-md-4 u-margin-top">
-									<div className="u-margin-top-xs">
-										{t(CORE_TRANSLATIONS['GENERAL_SYSTEM-NAME'])}:{' '}
-										<b>
-											{isUpdate
-												? view.meta.safeLabel
-												: kebabCase(values.meta.label)}
-										</b>
-									</div>
-								</div>
 							</div>
 							<div className="row">
 								<div className="col-xs-12">
@@ -124,21 +113,27 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 							{view.uuid && (
 								<div className="row u-margin-top">
 									<div className="col-xs-12 ">
-										<span>UID</span>
-										<p className="u-margin-top-xs">
-											<span className="u-text-light u-margin-right-xs">
-												{view.uuid}
-											</span>
-											<CopyToClipboard text={view.uuid}>
-												<Button
-													className="u-button-as-link"
-													htmlType="button"
-													type="transparent"
-												>
-													Kopieer
-												</Button>
-											</CopyToClipboard>
-										</p>
+										<Card>
+											<CardBody>
+												<CardTitle>UUID</CardTitle>
+												<div className="u-margin-top">
+													<p className="u-margin-top-xs">
+														<span className="u-text-light u-margin-right-xs">
+															{view.uuid}
+														</span>
+														<CopyToClipboard text={view.uuid}>
+															<Button
+																className="u-button-as-link"
+																htmlType="button"
+																type="transparent"
+															>
+																Kopieer
+															</Button>
+														</CopyToClipboard>
+													</p>
+												</div>
+											</CardBody>
+										</Card>
 									</div>
 								</div>
 							)}
