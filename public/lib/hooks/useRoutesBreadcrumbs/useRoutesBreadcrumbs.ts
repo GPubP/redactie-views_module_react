@@ -1,17 +1,15 @@
 import { Breadcrumb, ModuleRouteConfig, useBreadcrumbs } from '@redactie/redactie-core';
+import { useNavigate, useRoutes, useSiteContext } from '@redactie/utils';
 import { ReactNode } from 'react';
-import { useParams } from 'react-router-dom';
 
-import { useNavigate } from '../../hooks';
-import { BREADCRUMB_OPTIONS, MODULE_PATHS } from '../../views.const';
-import useRoutes from '../useRoutes/useRoutes';
+import { BREADCRUMB_OPTIONS, MODULE_PATHS, SITES_ROOT } from '../../views.const';
 
 const useRoutesBreadcrumbs = (
 	extraBreadcrumbs: Breadcrumb[] = [],
 	extraProps?: Record<string, unknown>
 ): ReactNode => {
-	const { generatePath } = useNavigate();
-	const { siteId } = useParams();
+	const { generatePath } = useNavigate(SITES_ROOT);
+	const { siteId } = useSiteContext();
 	const routes = useRoutes();
 	const breadcrumbs = useBreadcrumbs(routes as ModuleRouteConfig[], {
 		...BREADCRUMB_OPTIONS,

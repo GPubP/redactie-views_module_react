@@ -1,13 +1,13 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import { ContextHeaderBadge } from '@redactie/content-module/dist/lib/content.types';
+import { RenderChildRoutes, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { DataLoader, RenderChildRoutes } from '../../components';
+import { DataLoader } from '../../components';
 import {
 	useActiveTabs,
 	useContentType,
-	useNavigate,
 	useRoutesBreadcrumbs,
 	useView,
 	useViewDraft,
@@ -15,7 +15,7 @@ import {
 import { ViewSchema } from '../../services/views';
 import { contentTypesFacade } from '../../store/contentTypes';
 import { viewsFacade } from '../../store/views';
-import { ALERT_CONTAINER_IDS, MODULE_PATHS, VIEW_DETAIL_TABS } from '../../views.const';
+import { ALERT_CONTAINER_IDS, MODULE_PATHS, SITES_ROOT, VIEW_DETAIL_TABS } from '../../views.const';
 import { LoadingState, Tab, ViewsRouteProps } from '../../views.types';
 
 const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = ({
@@ -28,7 +28,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const { siteId, viewUuid } = useParams<{ viewUuid?: string; siteId: string }>();
-	const { generatePath } = useNavigate();
+	const { generatePath } = useNavigate(SITES_ROOT);
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
 			name: 'Views',

@@ -1,15 +1,13 @@
-import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import React, { FC, ReactElement, useContext, useEffect } from 'react';
+import { RenderChildRoutes, useNavigate, useSiteContext, useTenantContext } from '@redactie/utils';
+import React, { FC, ReactElement, useEffect } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
 import { NavList } from '../../components';
 import DataLoader from '../../components/DataLoader/DataLoader';
-import TenantContext from '../../context/TenantContext/TenantContext';
 import { useContentType, useViewDraft } from '../../hooks';
-import useNavigate from '../../hooks/useNavigate/useNavigate';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
-import { MODULE_PATHS } from '../../views.const';
+import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
 
 import { VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfigDynamic.const';
 import { ViewDetailConfigDynamicProps } from './ViewDetailConfigDynamic.types';
@@ -19,8 +17,9 @@ const ViewConfigDynamic: FC<ViewDetailConfigDynamicProps> = ({ route }) => {
 	 * Hooks
 	 */
 	const { viewUuid } = useParams<Record<string, string>>();
-	const { siteId, tenantId } = useContext(TenantContext);
-	const { navigate } = useNavigate();
+	const { tenantId } = useTenantContext();
+	const { siteId } = useSiteContext();
+	const { navigate } = useNavigate(SITES_ROOT);
 	const [contentTypeLoading, activeContentType] = useContentType();
 	const [view] = useViewDraft();
 
@@ -40,14 +39,6 @@ const ViewConfigDynamic: FC<ViewDetailConfigDynamicProps> = ({ route }) => {
 	/**
 	 * Render
 	 */
-	const renderChildRoutes = (): ReactElement | null => {
-		return Core.routes.render(route.routes as ModuleRouteConfig[], {
-			tenantId,
-			view,
-			contentType: activeContentType,
-			onSubmit: onConfigChange,
-		});
-	};
 
 	const renderConfigSection = (): ReactElement | null => {
 		if (!view?.query?.contentType || !activeContentType) {
@@ -67,7 +58,17 @@ const ViewConfigDynamic: FC<ViewDetailConfigDynamicProps> = ({ route }) => {
 						}))}
 					/>
 				</div>
-				<div className="col-xs-12 col-md-9">{renderChildRoutes()}</div>
+				<div className="col-xs-12 col-md-9">
+					<RenderChildRoutes
+						routes={route.routes}
+						extraOptions={{
+							tenantId,
+							view,
+							contentType: activeContentType,
+							onSubmit: onConfigChange,
+						}}
+					/>
+				</div>
 			</div>
 		);
 	};

@@ -1,7 +1,7 @@
 import { Button, Card } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import React, { FC, ReactElement, useContext, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useSiteContext, useTenantContext } from '@redactie/utils';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
@@ -9,13 +9,11 @@ import { FormEditStaticCondition } from '../../components/forms/FormEditStaticCo
 import { FormUpdateConditionalValue } from '../../components/forms/FormEditStaticCondition/FormEditStaticCondition.types';
 import { FIELD_COLUMNS } from '../../components/forms/FormViewConditions/FormViewConditions.const';
 import { FormViewConditionsRow } from '../../components/forms/FormViewConditions/FormViewConditions.types';
-import { useCoreTranslation } from '../../connectors/translations';
-import TenantContext from '../../context/TenantContext/TenantContext';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useViewDraft } from '../../hooks';
-import useNavigate from '../../hooks/useNavigate/useNavigate';
 import { ViewQueryCondition } from '../../services/views';
 import { viewsFacade } from '../../store/views';
-import { MODULE_PATHS } from '../../views.const';
+import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
 
 import { ViewDetailConfigStaticProps } from './ViewDetailConfigStatic.types';
 
@@ -24,12 +22,13 @@ const ViewConfigStatic: FC<ViewDetailConfigStaticProps> = () => {
 	 * Hooks
 	 */
 	const { viewUuid } = useParams<Record<string, string>>();
-	const { siteId, tenantId } = useContext(TenantContext);
+	const { tenantId } = useTenantContext();
+	const { siteId } = useSiteContext();
 	const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
 	const [showCreateConditionForm, setshowCreateConditionForm] = useState(false);
 	const [view] = useViewDraft();
 	const [t] = useCoreTranslation();
-	const { navigate } = useNavigate();
+	const { navigate } = useNavigate(SITES_ROOT);
 
 	const onShowEdit = (rowData: FormViewConditionsRow, rowIndex: number): void => {
 		setshowCreateConditionForm(false);

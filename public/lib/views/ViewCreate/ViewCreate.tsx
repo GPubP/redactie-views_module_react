@@ -1,21 +1,16 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import { RenderChildRoutes, useNavigate } from '@redactie/utils';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
-import {
-	useActiveTabs,
-	useNavigate,
-	useRoutesBreadcrumbs,
-	useView,
-	useViewDraft,
-} from '../../hooks';
+import { useActiveTabs, useRoutesBreadcrumbs, useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import {
 	ALERT_CONTAINER_IDS,
 	MODULE_PATHS,
+	SITES_ROOT,
 	VIEW_DETAIL_TAB_MAP,
 	VIEW_DETAIL_TABS,
 } from '../../views.const';
@@ -28,7 +23,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const { navigate, generatePath } = useNavigate();
+	const { navigate, generatePath } = useNavigate(SITES_ROOT);
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
 			name: 'Views',
@@ -99,16 +94,19 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	/**
 	 * Render
 	 */
-	const renderChildRoutes = (): any => {
-		return Core.routes.render(route.routes as ModuleRouteConfig[], {
-			tenantId,
-			routes: route.routes,
-			view: view || generateEmptyView(),
-			loading: isLoading,
-			onCancel: navigateToOverview,
-			onSubmit: (sectionData: any, tab: Tab) => upsertView(sectionData, tab),
-		});
-	};
+	const renderChildRoutes = (): ReactElement => (
+		<RenderChildRoutes
+			routes={route.routes}
+			extraOptions={{
+				tenantId,
+				routes: route.routes,
+				view: view || generateEmptyView(),
+				loading: isLoading,
+				onCancel: navigateToOverview,
+				onSubmit: (sectionData: any, tab: Tab) => upsertView(sectionData, tab),
+			}}
+		/>
+	);
 
 	return (
 		<>

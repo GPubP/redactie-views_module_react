@@ -1,11 +1,9 @@
 import { TextField } from '@acpaas-ui/react-components';
 import { FormSchema } from '@redactie/form-renderer-module';
 import { Field, FieldInputProps } from 'formik';
-import React, { FC, useContext, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 
-import contentConnector from '../../connectors/content';
 import { getForm } from '../../connectors/formRenderer';
-import TenantContext from '../../context/TenantContext/TenantContext';
 import { parseFields } from '../../helpers/parseFields';
 import { ContentTypeFieldResponse } from '../../services/contentTypes/contentTypes.service.types';
 import { DEFAULT_VALIDATION_SCHEMA } from '../forms/FormCreateCondition/FormCreateCondition.const';
@@ -48,9 +46,7 @@ export const FieldValueField: FC<FieldInputProps<any> & {
 		() => (selectedFieldsField ? parseFieldToForm(selectedFieldsField, { label }) : null),
 		[label, selectedFieldsField]
 	);
-	const { siteId, tenantId } = useContext(TenantContext);
 
-	const ContentTenantContext = contentConnector.api.contentTenantContext;
 	const initialValues = value
 		? { value: value }
 		: selectedFieldsField?.defaultValue
@@ -78,14 +74,12 @@ export const FieldValueField: FC<FieldInputProps<any> & {
 	 * Render
 	 */
 	return (
-		<ContentTenantContext.Provider value={{ siteId, tenantId }}>
-			<FormRenderer
-				schema={formSchema}
-				initialValues={initialValues}
-				validationSchema={DEFAULT_VALIDATION_SCHEMA}
-				errorMessages={{}}
-				onChange={input => setFieldValue(input?.value)}
-			/>
-		</ContentTenantContext.Provider>
+		<FormRenderer
+			schema={formSchema}
+			initialValues={initialValues}
+			validationSchema={DEFAULT_VALIDATION_SCHEMA}
+			errorMessages={{}}
+			onChange={input => setFieldValue(input?.value)}
+		/>
 	);
 };

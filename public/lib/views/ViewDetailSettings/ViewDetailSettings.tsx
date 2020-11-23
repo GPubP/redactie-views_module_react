@@ -4,14 +4,13 @@ import {
 	ActionBarContentSection,
 	Container,
 } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { ErrorMessage, Field, Formik } from 'formik';
 import kebabCase from 'lodash.kebabcase';
 import React, { FC } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-import { useCoreTranslation } from '../../connectors/translations';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';

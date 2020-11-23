@@ -6,19 +6,19 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
+import { useNavigate } from '@redactie/utils';
 import { FormikHelpers } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm, FilterFormState, ResetForm } from '../../components';
 import rolesRightsConnector from '../../connectors/rolesRights';
-import { useCoreTranslation } from '../../connectors/translations';
-import { useNavigate, useRoutesBreadcrumbs, useViews } from '../../hooks';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
+import { useRoutesBreadcrumbs, useViews } from '../../hooks';
 import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING, OrderBy } from '../../services/api';
 import { parseOrderBy } from '../../services/api/api.service';
 import { FilterItemSchema } from '../../services/filterItems/filterItems.service.types';
 import { viewsFacade } from '../../store/views';
-import { MODULE_PATHS } from '../../views.const';
+import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
 import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
@@ -41,7 +41,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		siteUuid: siteId,
 		onlyKeys: true,
 	});
-	const { navigate } = useNavigate();
+	const { navigate } = useNavigate(SITES_ROOT);
 	const [t] = useCoreTranslation();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [loadingState, views, viewsPaging] = useViews();

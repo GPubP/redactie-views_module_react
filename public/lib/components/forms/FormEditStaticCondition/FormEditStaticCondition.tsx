@@ -1,13 +1,10 @@
 import { Button } from '@acpaas-ui/react-components';
 import { InputFieldProps } from '@redactie/form-renderer-module';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { Field, FieldProps, Formik } from 'formik';
-import React, { FC, ReactElement, useContext, useMemo } from 'react';
+import React, { FC, ReactElement, useMemo } from 'react';
 
-import contentConnector from '../../../connectors/content';
 import { getFieldRegistery } from '../../../connectors/formRenderer';
-import { useCoreTranslation } from '../../../connectors/translations';
-import TenantContext from '../../../context/TenantContext/TenantContext';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { useViewDraft } from '../../../hooks';
 
 import { FormEditStaticConditionProps } from './FormEditStaticCondition.types';
@@ -23,9 +20,7 @@ export const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
 	/**
 	 * Hooks
 	 */
-	const { siteId, tenantId } = useContext(TenantContext);
 	const [view] = useViewDraft();
-	const ContentTenantContext = contentConnector.api.contentTenantContext;
 	const [t] = useCoreTranslation();
 	const ContentSelect: React.FC<InputFieldProps> | null | undefined = useMemo(() => {
 		const fieldRegistry = getFieldRegistery();
@@ -57,25 +52,23 @@ export const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
 				<>
 					<div className="row">
 						<div className="col-xs-12">
-							<ContentTenantContext.Provider value={{ siteId, tenantId }}>
-								<Field name="value">
-									{(fieldProps: FieldProps<any, {}>) => {
-										return (
-											<ContentSelect
-												fieldProps={fieldProps}
-												fieldHelperProps={getFieldHelpers('value')}
-												fieldSchema={
-													{
-														label: 'Waarde',
-														name: 'value',
-														config: {},
-													} as any
-												}
-											/>
-										);
-									}}
-								</Field>
-							</ContentTenantContext.Provider>
+							<Field name="value">
+								{(fieldProps: FieldProps<any, {}>) => {
+									return (
+										<ContentSelect
+											fieldProps={fieldProps}
+											fieldHelperProps={getFieldHelpers('value')}
+											fieldSchema={
+												{
+													label: 'Waarde',
+													name: 'value',
+													config: {},
+												} as any
+											}
+										/>
+									);
+								}}
+							</Field>
 						</div>
 					</div>
 					<div className="row u-margin-top">

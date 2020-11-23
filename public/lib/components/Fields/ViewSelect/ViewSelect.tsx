@@ -1,12 +1,12 @@
 import { Autocomplete } from '@acpaas-ui/react-components';
 import { InputFieldProps } from '@redactie/form-renderer-module';
+import { useSiteContext } from '@redactie/utils';
 import { getIn } from 'formik';
-import React, { useContext } from 'react';
+import React from 'react';
 import { first } from 'rxjs/operators';
 
 import './ViewSelect.scss';
 
-import contentConnector from '../../../connectors/content';
 import { ErrorMessage } from '../../../connectors/formRenderer';
 import useCcViews from '../../../hooks/useCcViews/useCcViews';
 import { ViewSchema } from '../../../services/views';
@@ -25,8 +25,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 	const error = getIn(form.errors, field.name);
 
 	const state = !!error && !!touch ? 'error' : '';
-	// This will be rendered on the content page so this context its needed.
-	const { siteId } = useContext((contentConnector.api as any).contentTenantContext);
+	const { siteId } = useSiteContext();
 
 	const [viewLoadingState] = useCcViews(field.value);
 

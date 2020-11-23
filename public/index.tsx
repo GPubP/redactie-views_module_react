@@ -1,10 +1,9 @@
+import { RenderChildRoutes, SiteContext, TenantContext } from '@redactie/utils';
 import React, { FC, useMemo } from 'react';
 
-import { RenderChildRoutes } from './lib/components';
 import { registerCCFields } from './lib/components/Fields';
 import rolesRightsConnector from './lib/connectors/rolesRights';
 import { registerRoutes } from './lib/connectors/sites';
-import { TenantContext } from './lib/context';
 import {
 	ViewCreate,
 	ViewDetailConditions,
@@ -37,12 +36,14 @@ const ViewsComponent: FC<ViewsRouteProps<{ siteId: string }>> = ({ route, match,
 		[match.url, tenantId, route.routes]
 	);
 	return (
-		<TenantContext.Provider value={{ tenantId, siteId }}>
-			<RenderChildRoutes
-				routes={route.routes}
-				guardsMeta={guardsMeta}
-				extraOptions={extraOptions}
-			/>
+		<TenantContext.Provider value={{ tenantId }}>
+			<SiteContext.Provider value={{ siteId }}>
+				<RenderChildRoutes
+					routes={route.routes}
+					guardsMeta={guardsMeta}
+					extraOptions={extraOptions}
+				/>
+			</SiteContext.Provider>
 		</TenantContext.Provider>
 	);
 };
