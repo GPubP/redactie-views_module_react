@@ -1,3 +1,5 @@
+import { FieldCompartment } from '@redactie/form-renderer-module';
+
 export interface BaseContentTypeField {
 	uuid?: string;
 	label: string;
@@ -14,8 +16,9 @@ export interface BaseContentTypeField {
 		disabled: boolean;
 		min?: number;
 		max?: number;
-		guideline?: string;
+		guideline: string;
 	};
+	compartment: FieldCompartment;
 }
 
 export interface ContentTypeFieldSchema extends BaseContentTypeField {
