@@ -6,7 +6,6 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { ErrorMessage, Field, Formik } from 'formik';
-import kebabCase from 'lodash.kebabcase';
 import React, { FC } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -88,17 +87,6 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 										bijvoorbeeld &lsquo;Titel&lsquo;
 									</div>
 								</div>
-
-								<div className="col-xs-12 col-md-4 u-margin-top">
-									<div className="u-margin-top-xs">
-										{t(CORE_TRANSLATIONS['GENERAL_SYSTEM-NAME'])}:{' '}
-										<b>
-											{isUpdate
-												? view.meta.safeLabel
-												: kebabCase(values.meta.label)}
-										</b>
-									</div>
-								</div>
 							</div>
 							<div className="row">
 								<div className="col-xs-12">
@@ -123,7 +111,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 							{view.uuid && (
 								<div className="row u-margin-top">
 									<div className="col-xs-12 ">
-										<span>UID</span>
+										<label>UUID</label>
 										<p className="u-margin-top-xs">
 											<span className="u-text-light u-margin-right-xs">
 												{view.uuid}
