@@ -113,27 +113,21 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 							{view.uuid && (
 								<div className="row u-margin-top">
 									<div className="col-xs-12 ">
-										<Card>
-											<CardBody>
-												<CardTitle>UUID</CardTitle>
-												<div className="u-margin-top">
-													<p className="u-margin-top-xs">
-														<span className="u-text-light u-margin-right-xs">
-															{view.uuid}
-														</span>
-														<CopyToClipboard text={view.uuid}>
-															<Button
-																className="u-button-as-link"
-																htmlType="button"
-																type="transparent"
-															>
-																Kopieer
-															</Button>
-														</CopyToClipboard>
-													</p>
-												</div>
-											</CardBody>
-										</Card>
+										<label>UUID</label>
+										<p className="u-margin-top-xs">
+											<span className="u-text-light u-margin-right-xs">
+												{view.uuid}
+											</span>
+											<CopyToClipboard text={view.uuid}>
+												<Button
+													className="u-button-as-link"
+													htmlType="button"
+													type="transparent"
+												>
+													Kopieer
+												</Button>
+											</CopyToClipboard>
+										</p>
 									</div>
 								</div>
 							)}
