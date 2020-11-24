@@ -1,4 +1,4 @@
-import { Button, Textarea, TextField, Card, CardBody, CardTitle } from '@acpaas-ui/react-components';
+import { Button, Textarea, TextField } from '@acpaas-ui/react-components';
 import {
 	ActionBar,
 	ActionBarContentSection,
@@ -7,7 +7,6 @@ import {
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { ErrorMessage, Field, Formik } from 'formik';
-import kebabCase from 'lodash.kebabcase';
 import React, { FC } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
