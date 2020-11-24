@@ -46,7 +46,7 @@
     "@redactie/roles-rights-module": "^0.7.0",
     "@redactie/translations-module": "^0.6.1",
     "@redactie/content-module": "^0.15.7",
-    "@redactie/form-renderer-module": "^0.12.5-2",
+    "@redactie/form-renderer-module": "^0.12.5",
     "@redactie/utils": "^0.15.0",
     "@testing-library/jest-dom": "5.0.2",
     "@testing-library/react": "9.4.0",
