@@ -64,6 +64,7 @@ if (rolesRightsConnector.api) {
 			renderContext: 'site',
 			context: 'site',
 			label: 'Views',
+			order: 2,
 			canShown: [
 				rolesRightsConnector.api.canShowns.securityRightsSiteCanShown(urlSiteParam, [
 					rolesRightsConnector.securityRights.read,
