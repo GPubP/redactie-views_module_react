@@ -1,10 +1,9 @@
 import { TextField } from '@acpaas-ui/react-components';
-import { FormSchema } from '@redactie/form-renderer-module';
+import { ContentTypeFieldSchema, FormSchema } from '@redactie/form-renderer-module';
 import { Field, FieldInputProps } from 'formik';
 import React, { FC, useMemo } from 'react';
 
-import { getForm } from '../../connectors/formRenderer';
-import { parseFields } from '../../helpers/parseFields';
+import { getForm, parseFields } from '../../connectors/formRenderer';
 import { ContentTypeFieldResponse } from '../../services/contentTypes/contentTypes.service.types';
 import { DEFAULT_VALIDATION_SCHEMA } from '../forms/FormCreateCondition/FormCreateCondition.const';
 
@@ -14,7 +13,7 @@ const parseFieldToForm = (
 ): FormSchema => {
 	return {
 		fields: parseFields([
-			{
+			({
 				...(selectedField || {}),
 				generalConfig: {
 					...selectedField?.generalConfig,
@@ -24,7 +23,8 @@ const parseFieldToForm = (
 				},
 				name: 'value',
 				label,
-			},
+			// TODO: look into why types mismatch
+			} as unknown) as ContentTypeFieldSchema,
 		]),
 	};
 };

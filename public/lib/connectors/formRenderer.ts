@@ -10,3 +10,5 @@ export const getFieldRegistery: () => FormsAPI['fieldRegistry'] | undefined = ()
 export const getForm: () => FormsAPI['Form'] | undefined = () => formsAPI?.Form;
 export const getView: () => FormsAPI['View'] | undefined = () => formsAPI?.View;
 export const ErrorMessage = formsAPI?.ErrorMessage as FormsAPI['ErrorMessage'];
+export const parseFields: FormsAPI['parseFields'] = fields =>
+	formsAPI?.parseFields ? formsAPI.parseFields(fields) : [];
