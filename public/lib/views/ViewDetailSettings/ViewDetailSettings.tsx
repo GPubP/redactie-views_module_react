@@ -4,10 +4,9 @@ import {
 	ActionBarContentSection,
 	Container,
 } from '@acpaas-ui/react-editorial-components';
-import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import { AlertContainer, CopyValue, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { ErrorMessage, Field, Formik } from 'formik';
 import React, { FC } from 'react';
-import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useView, useViewDraft } from '../../hooks';
@@ -110,23 +109,12 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 							</div>
 							{view.uuid && (
 								<div className="row u-margin-top">
-									<div className="col-xs-12 ">
-										<label>UUID</label>
-										<p className="u-margin-top-xs">
-											<span className="u-text-light u-margin-right-xs">
-												{view.uuid}
-											</span>
-											<CopyToClipboard text={view.uuid}>
-												<Button
-													className="u-button-as-link"
-													htmlType="button"
-													type="transparent"
-												>
-													Kopieer
-												</Button>
-											</CopyToClipboard>
-										</p>
-									</div>
+									<CopyValue
+										label="UUID"
+										value={view.uuid}
+										buttonText={t(CORE_TRANSLATIONS.GENERAL_COPY)}
+										className="col-xs-12"
+									/>
 								</div>
 							)}
 							<ActionBar className="o-action-bar--fixed" isOpen>
