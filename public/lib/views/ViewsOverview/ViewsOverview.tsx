@@ -143,7 +143,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 					: 'Onbekend',
 			lastModified: view.meta.lastModified as string,
 			navigate: (viewUuid: string) =>
-				navigate(MODULE_PATHS.detailSettings, { siteId, viewUuid }),
+				navigate(MODULE_PATHS.detailConfig, { siteId, viewUuid }),
 		}));
 
 		return (
