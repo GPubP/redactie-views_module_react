@@ -18,8 +18,6 @@ import {
 import { MODULE_PATHS, urlSiteParam } from './lib/views.const';
 import { ViewsRouteProps } from './lib/views.types';
 
-console.log('render view module');
-
 const ViewsComponent: FC<ViewsRouteProps<{ siteId: string }>> = ({ route, match, tenantId }) => {
 	const { siteId } = match.params;
 	const guardsMeta = useMemo(
