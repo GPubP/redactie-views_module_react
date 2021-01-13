@@ -52,6 +52,7 @@ if (rolesRightsConnector.api) {
 	registerRoutes({
 		path: MODULE_PATHS.root,
 		component: ViewsComponent,
+		breadcrumb: false,
 		redirect: MODULE_PATHS.overview,
 		guardOptions: {
 			guards: [
@@ -74,10 +75,12 @@ if (rolesRightsConnector.api) {
 		routes: [
 			{
 				path: MODULE_PATHS.overview,
+				breadcrumb: false,
 				component: ViewsOverview,
 			},
 			{
 				path: MODULE_PATHS.create,
+				breadcrumb: false,
 				component: ViewCreate,
 				redirect: MODULE_PATHS.createSettings,
 				guardOptions: {
@@ -90,12 +93,14 @@ if (rolesRightsConnector.api) {
 				routes: [
 					{
 						path: MODULE_PATHS.createSettings,
+						breadcrumb: false,
 						component: ViewDetailSettings,
 					},
 				],
 			},
 			{
 				path: MODULE_PATHS.detail,
+				breadcrumb: false,
 				component: ViewUpdate,
 				redirect: MODULE_PATHS.detailSettings,
 				guardOptions: {
@@ -108,30 +113,36 @@ if (rolesRightsConnector.api) {
 				routes: [
 					{
 						path: MODULE_PATHS.detailSettings,
+						breadcrumb: false,
 						component: ViewDetailSettings,
 					},
 					{
 						path: MODULE_PATHS.detailConfig,
+						breadcrumb: false,
 						component: ViewDetailConfig,
 						redirect: MODULE_PATHS.detailConfigDynamic,
 						routes: [
 							{
 								path: MODULE_PATHS.detailConfigDynamic,
+								breadcrumb: false,
 								component: ViewDetailConfigDynamic,
 								redirect: MODULE_PATHS.detailDynamicConditions,
 								routes: [
 									{
 										path: MODULE_PATHS.detailDynamicConditions,
+										breadcrumb: false,
 										component: ViewDetailConditions,
 									},
 									{
 										path: MODULE_PATHS.detailDynamicOptions,
+										breadcrumb: false,
 										component: ViewDetailOptions,
 									},
 								],
 							},
 							{
 								path: MODULE_PATHS.detailConfigStatic,
+								breadcrumb: false,
 								component: ViewDetailConfigStatic,
 							},
 						],

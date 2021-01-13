@@ -1,20 +1,7 @@
 import { Tab } from './views.types';
 
 export const BREADCRUMB_OPTIONS = {
-	excludePaths: [
-		'/',
-		'/:tenantId',
-		'/:tenantId/sites',
-		'/:tenantId/sites/:siteId',
-		'/:tenantId/sites/:siteId/views',
-		'/:tenantId/sites/:siteId/views/aanmaken/instellingen',
-		'/:tenantId/sites/:siteId/views/:viewUuid/instellingen',
-		'/:tenantId/sites/:siteId/views/:viewUuid/configuratie',
-		'/:tenantId/sites/:siteId/views/:viewUuid/configuratie/statisch',
-		'/:tenantId/sites/:siteId/views/:viewUuid/configuratie/dynamisch',
-		'/:tenantId/sites/:siteId/views/:viewUuid/configuratie/dynamisch/voorwaarden',
-		'/:tenantId/sites/:siteId/views/:viewUuid/configuratie/dynamisch/sorteer-opties',
-	],
+	excludePaths: ['/', '/:tenantId', '/:tenantId/sites', '/:tenantId/sites/:siteId'],
 };
 
 export const VIEW_DETAIL_TAB_MAP: { [key in 'settings' | 'config']: Tab } = {
