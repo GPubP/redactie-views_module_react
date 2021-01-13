@@ -23,7 +23,7 @@ const parseFieldToForm = (
 				},
 				name: 'value',
 				label,
-			// TODO: look into why types mismatch
+				// TODO: look into why types mismatch
 			} as unknown) as ContentTypeFieldSchema,
 		]),
 	};

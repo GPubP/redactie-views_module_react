@@ -28,7 +28,6 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 	const [, initialValues] = useView();
 	const [t] = useCoreTranslation();
 	const [isChanged, resetIsChanged] = useDetectValueChanges(!loading, view);
-	const isUpdate = !!view?.uuid;
 
 	/**
 	 * Methods
