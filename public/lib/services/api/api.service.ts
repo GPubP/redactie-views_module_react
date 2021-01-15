@@ -18,6 +18,7 @@ export const proxyApi: KyInstance = ky.create({
 
 export const api: KyInstance = ky.create({
 	prefixUrl: '/v1/proxy/admin/content/v1',
+	timeout: false,
 	headers: {
 		'x-tenant-id': CoreConfig.tenantId,
 	},
