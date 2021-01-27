@@ -64,23 +64,12 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		{ name }: FilterFormState,
 		formikHelpers: FormikHelpers<FilterFormState>
 	): void => {
-		// Add item to filterItems for Taglist
-		const request = { label: name, value: name };
+		setFilterItems([{ label: name, value: name }]);
 
-		// Return when search term already exist
-		if (filterItems.find(filterItem => filterItem.value === name)) {
-			return;
-		}
-
-		const newFilters = filterItems?.concat(request);
-		// Get value array from filterItems
-		const search = newFilters.map(item => item['value']);
-
-		setFilterItems(newFilters);
 		// Add array to searchParams
 		setSearchParams({
 			...searchParams,
-			search,
+			search: [name],
 		});
 		formikHelpers.resetForm();
 	};
