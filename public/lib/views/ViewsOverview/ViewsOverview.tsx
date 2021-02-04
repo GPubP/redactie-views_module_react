@@ -145,7 +145,9 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 					activeFilters={filterItems}
 				/>
 				<PaginatedTable
+					fixed
 					className="u-margin-top"
+					tableClassName="a-table--fixed--sm"
 					columns={VIEWS_OVERVIEW_COLUMNS(t, mySecurityrights)}
 					rows={viewsRows}
 					currentPage={currentPage}
