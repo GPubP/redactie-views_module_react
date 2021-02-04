@@ -22,6 +22,7 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_NAME),
 			value: 'label',
+			width: canUpdate ? '45%' : '50%',
 			component(value: any, rowData: ViewsOverviewTableRow) {
 				return (
 					<>
@@ -41,14 +42,14 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			label: 'Auteur',
 			value: 'lastEditor',
 			ellipsis: true,
-			width: '200px',
+			width: canUpdate ? '25%' : '30%',
 			disableSorting: true,
 		},
 		{
 			label: t(CORE_TRANSLATIONS['TABLE_LAST-MODIFIED']),
 			value: 'lastModified',
 			disableSorting: false,
-			width: '120px',
+			width: '20%',
 			format(data: string) {
 				return moment(data).format('DD/MM/YYYY');
 			},
@@ -65,7 +66,7 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			label: '',
 			classList: ['u-text-right'],
 			disableSorting: true,
-			width: '100px',
+			width: '10%',
 			component(value: unknown, rowData: ViewsOverviewTableRow) {
 				const { id, navigate } = rowData;
 
