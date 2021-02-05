@@ -23,16 +23,20 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			label: t(CORE_TRANSLATIONS.TABLE_NAME),
 			value: 'label',
 			width: canUpdate ? '45%' : '50%',
-			component(value: any, rowData: ViewsOverviewTableRow) {
+			component(value: any, { id, description }: ViewsOverviewTableRow) {
 				return (
 					<>
-						<AUILink to={`${rowData.id}/instellingen`} component={Link}>
+						<AUILink to={`${id}/instellingen`} component={Link}>
 							<EllipsisWithTooltip>{value}</EllipsisWithTooltip>
 						</AUILink>
-						<p className="u-text-light u-margin-top-xs">
-							<EllipsisWithTooltip>
-								{rowData?.description || 'Geen beschrijving'}
-							</EllipsisWithTooltip>
+						<p className="small">
+							{description ? (
+								<EllipsisWithTooltip>{description}</EllipsisWithTooltip>
+							) : (
+								<span className="u-text-italic">
+									{t(CORE_TRANSLATIONS['TABLE_NO-DESCRIPTION'])}
+								</span>
+							)}
 						</p>
 					</>
 				);
