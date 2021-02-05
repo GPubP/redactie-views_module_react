@@ -1,4 +1,5 @@
 import { Link as AUILink, Button } from '@acpaas-ui/react-components';
+import { EllipsisWithTooltip } from '@acpaas-ui/react-editorial-components';
 import { TranslateFunc } from '@redactie/translations-module';
 import moment from 'moment';
 import React from 'react';
@@ -21,14 +22,21 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_NAME),
 			value: 'label',
-			component(value: any, rowData: ViewsOverviewTableRow) {
+			width: canUpdate ? '45%' : '50%',
+			component(value: any, { id, description }: ViewsOverviewTableRow) {
 				return (
 					<>
-						<AUILink to={`${rowData.id}/instellingen`} component={Link}>
-							{value}
+						<AUILink to={`${id}/instellingen`} component={Link}>
+							<EllipsisWithTooltip>{value}</EllipsisWithTooltip>
 						</AUILink>
-						<p className="u-text-light u-margin-top-xs">
-							{rowData?.description || 'Geen beschrijving'}
+						<p className="small">
+							{description ? (
+								<EllipsisWithTooltip>{description}</EllipsisWithTooltip>
+							) : (
+								<span className="u-text-italic">
+									{t(CORE_TRANSLATIONS['TABLE_NO-DESCRIPTION'])}
+								</span>
+							)}
 						</p>
 					</>
 				);
@@ -37,12 +45,15 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 		{
 			label: 'Auteur',
 			value: 'lastEditor',
+			ellipsis: true,
+			width: canUpdate ? '25%' : '30%',
 			disableSorting: true,
 		},
 		{
 			label: t(CORE_TRANSLATIONS['TABLE_LAST-MODIFIED']),
 			value: 'lastModified',
 			disableSorting: false,
+			width: '20%',
 			format(data: string) {
 				return moment(data).format('DD/MM/YYYY');
 			},
@@ -59,6 +70,7 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			label: '',
 			classList: ['u-text-right'],
 			disableSorting: true,
+			width: '10%',
 			component(value: unknown, rowData: ViewsOverviewTableRow) {
 				const { id, navigate } = rowData;
 
