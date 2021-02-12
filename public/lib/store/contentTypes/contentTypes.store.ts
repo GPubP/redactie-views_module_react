@@ -3,7 +3,7 @@ import { BaseEntityStore } from '@redactie/utils';
 
 import { ContentTypeModelSparse, ContentTypesState } from './contentTypes.model';
 
-@StoreConfig({ name: 'contentTypes', idKey: 'uuid' })
+@StoreConfig({ name: 'view-contentTypes', idKey: 'uuid' })
 export class ContentTypesStore extends BaseEntityStore<ContentTypesState, ContentTypeModelSparse> {}
 
 export const contentTypesStore = new ContentTypesStore();

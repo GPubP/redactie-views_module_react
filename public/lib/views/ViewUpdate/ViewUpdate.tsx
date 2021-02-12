@@ -1,6 +1,10 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import { ContextHeaderBadge } from '@redactie/content-module/dist/lib/content.types';
-import { RenderChildRoutes, useNavigate } from '@redactie/utils';
+import {
+	ContextHeaderBadge,
+	ContextHeaderTab,
+	RenderChildRoutes,
+	useNavigate,
+} from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -16,7 +20,10 @@ import { ViewSchema } from '../../services/views';
 import { contentTypesFacade } from '../../store/contentTypes';
 import { viewsFacade } from '../../store/views';
 import { ALERT_CONTAINER_IDS, MODULE_PATHS, SITES_ROOT, VIEW_DETAIL_TABS } from '../../views.const';
-import { LoadingState, Tab, ViewsRouteProps } from '../../views.types';
+import { LoadingState, ViewsRouteProps } from '../../views.types';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
+
+import { DEFAULT_BADGES } from './ViewUpdate.const';
 
 const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = ({
 	location,
@@ -27,6 +34,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
+	const [t] = useCoreTranslation();
 	const { siteId, viewUuid } = useParams<{ viewUuid?: string; siteId: string }>();
 	const { generatePath } = useNavigate(SITES_ROOT);
 	const breadcrumbs = useRoutesBreadcrumbs([
@@ -50,6 +58,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 	const badges: ContextHeaderBadge[] = useMemo(() => {
 		if (viewDraft?.query?.viewType === 'dynamic' && contentType?.meta?.label) {
 			return [
+				...DEFAULT_BADGES,
 				{
 					type: 'primary',
 					name: contentType?.meta?.label,
@@ -59,6 +68,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 
 		if (viewDraft?.query?.viewType === 'static') {
 			return [
+				...DEFAULT_BADGES,
 				{
 					type: 'primary',
 					name: 'Manueel geselecteerd',
@@ -66,7 +76,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			];
 		}
 
-		return [];
+		return DEFAULT_BADGES;
 	}, [contentType, viewDraft]);
 
 	useEffect(() => {
@@ -84,6 +94,13 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 				? contentTypesFacade.getContentType(siteId, view.query.contentType.uuid)
 				: null;
 		}
+
+		return () => {
+			// Clear previous (current) content type because there is a chance that we show
+			// a content content type while the user has not even select one from the dropdown list
+			// TODO: Refactor the store so we can get multiple content type details and store them locally
+			contentTypesFacade.clearContentType();
+		};
 	}, [siteId, view, viewLoadingState]);
 
 	useEffect(() => {
@@ -97,6 +114,16 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		};
 	}, [siteId, viewUuid]);
 
+	const title = useMemo(() => {
+		return viewDraft?.meta?.label ? (
+			<>
+				<i>{viewDraft.meta.label}</i> {t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
+			</>
+		) : (
+			<>{t(CORE_TRANSLATIONS.ROUTING_UPDATE)}</>
+		);
+	}, [viewDraft, t]);
+
 	/**
 	 * Methods
 	 */
@@ -108,7 +135,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		viewsFacade.setViewDraft(view);
 	};
 
-	const update = (updatedView: ViewSchema, tab: Tab): void => {
+	const update = (updatedView: ViewSchema, tab: ContextHeaderTab): void => {
 		if (!updatedView) {
 			return;
 		}
@@ -154,7 +181,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 					to: generatePath(`${MODULE_PATHS.detail}/${props.href}`, { siteId, viewUuid }),
 					component: Link,
 				})}
-				title={`${viewDraft?.meta?.label} bewerken`}
+				title={title}
 				badges={badges}
 			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>

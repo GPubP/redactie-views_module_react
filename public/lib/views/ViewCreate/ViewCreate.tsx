@@ -1,5 +1,5 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import { RenderChildRoutes, useNavigate } from '@redactie/utils';
+import { RenderChildRoutes, useNavigate, ContextHeaderTab } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -15,7 +15,8 @@ import {
 	VIEW_DETAIL_TABS,
 } from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
-import { LoadingState, Tab, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
+import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 
 const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, route, match }) => {
 	const { siteId } = match.params;
@@ -23,6 +24,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
+	const [t] = useCoreTranslation();
 	const { navigate, generatePath } = useNavigate(SITES_ROOT);
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
@@ -72,7 +74,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 
 	const upsertView = (
 		sectionData: any,
-		tab: Tab,
+		tab: ContextHeaderTab,
 		alertId = ALERT_CONTAINER_IDS.settings
 	): void => {
 		switch (tab.name) {
@@ -103,7 +105,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 				view: view || generateEmptyView(),
 				loading: isLoading,
 				onCancel: navigateToOverview,
-				onSubmit: (sectionData: any, tab: Tab) => upsertView(sectionData, tab),
+				onSubmit: (sectionData: any, tab: ContextHeaderTab) => upsertView(sectionData, tab),
 			}}
 		/>
 	);
@@ -117,7 +119,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 					to: generatePath(`${route.path}/${props.href}`, { siteId }),
 					component: Link,
 				})}
-				title="View aanmaken"
+				title={`View ${t(CORE_TRANSLATIONS.ROUTING_CREATE)}`}
 			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>

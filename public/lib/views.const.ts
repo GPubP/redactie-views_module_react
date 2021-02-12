@@ -1,24 +1,26 @@
-import { Tab } from './views.types';
+import { ContextHeaderTab } from '@redactie/utils';
 
 export const BREADCRUMB_OPTIONS = {
 	excludePaths: ['/', '/:tenantId', '/:tenantId/sites', '/:tenantId/sites/:siteId'],
 };
 
-export const VIEW_DETAIL_TAB_MAP: { [key in 'settings' | 'config']: Tab } = {
+export const VIEW_DETAIL_TAB_MAP: { [key in 'settings' | 'config']: ContextHeaderTab } = {
 	settings: {
 		name: 'Instellingen',
 		target: 'instellingen',
 		active: true,
+		disabled: false,
 	},
 	config: {
 		name: 'Configuratie',
 		target: 'configuratie',
 		active: false,
+		disabled: false,
 	},
 };
 
 export const SITES_ROOT = 'sites';
-export const VIEW_DETAIL_TABS: Tab[] = [VIEW_DETAIL_TAB_MAP.settings, VIEW_DETAIL_TAB_MAP.config];
+export const VIEW_DETAIL_TABS: ContextHeaderTab[] = [VIEW_DETAIL_TAB_MAP.settings, VIEW_DETAIL_TAB_MAP.config];
 export const urlSiteParam = 'siteId';
 export const TENANT_ROOT = '/:tenantId/sites';
 export const MODULE_PATHS = {

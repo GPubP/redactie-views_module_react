@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
+import { ContextHeaderTab } from '@redactie/utils';
 
-import { Tab } from '../../views.types';
-
-const useActiveTabs = (tabs: Tab[], pathname: string): Tab[] => {
+const useActiveTabs = (tabs: ContextHeaderTab[], pathname: string): ContextHeaderTab[] => {
 	const activeTabs = useMemo(
 		() =>
 			tabs.map(tab => ({

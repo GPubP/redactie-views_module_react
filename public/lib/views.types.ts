@@ -1,4 +1,5 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
+import { ContextHeaderTab } from '@redactie/utils';
 
 import { ViewSchema } from './services/views';
 import { InternalState } from './store/views';
@@ -21,7 +22,7 @@ export interface ViewsMatchProps {
 export interface ViewsDetailRouteProps<Params = {}> extends RouteConfigComponentProps<Params> {
 	view: ViewSchema;
 	onCancel: () => void;
-	onSubmit: (data: ViewSchema, tab: Tab) => void;
+	onSubmit: (data: ViewSchema, tab: ContextHeaderTab) => void;
 	routes: ModuleRouteConfig[];
 	state: InternalState;
 	tenantId: string;
@@ -42,13 +43,6 @@ export enum LoadingState {
 	Error = 'error',
 }
 
-export interface Tab {
-	name: string;
-	target: string;
-	active: boolean;
-	disabled?: boolean;
-}
-
 export interface Editor {
 	address: string | null;
 	domain: string;
@@ -60,9 +54,4 @@ export interface Editor {
 	nickname: string | null;
 	type: string;
 	username: string;
-}
-
-export interface ContextHeaderBadge {
-	name: string;
-	type: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
 }
