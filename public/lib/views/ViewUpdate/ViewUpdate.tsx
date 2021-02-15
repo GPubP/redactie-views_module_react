@@ -1,29 +1,18 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import {
-	ContextHeaderBadge,
-	ContextHeaderTab,
-	RenderChildRoutes,
-	useNavigate,
-} from '@redactie/utils';
+import { ContextHeaderTab, RenderChildRoutes, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
-import {
-	useActiveTabs,
-	useContentType,
-	useRoutesBreadcrumbs,
-	useView,
-	useViewDraft,
-} from '../../hooks';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
+import { useActiveTabs, useRoutesBreadcrumbs, useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { contentTypesFacade } from '../../store/contentTypes';
 import { viewsFacade } from '../../store/views';
 import { ALERT_CONTAINER_IDS, MODULE_PATHS, SITES_ROOT, VIEW_DETAIL_TABS } from '../../views.const';
 import { LoadingState, ViewsRouteProps } from '../../views.types';
-import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 
-import { DEFAULT_BADGES } from './ViewUpdate.const';
+import { DEFAULT_HEADER_BADGES } from './ViewUpdate.const';
 
 const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = ({
 	location,
@@ -54,30 +43,6 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 	}, [upsertViewLoadingState, viewLoadingState]);
 	const [viewDraft] = useViewDraft();
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
-	const [, contentType] = useContentType();
-	const badges: ContextHeaderBadge[] = useMemo(() => {
-		if (viewDraft?.query?.viewType === 'dynamic' && contentType?.meta?.label) {
-			return [
-				...DEFAULT_BADGES,
-				{
-					type: 'primary',
-					name: contentType?.meta?.label,
-				},
-			];
-		}
-
-		if (viewDraft?.query?.viewType === 'static') {
-			return [
-				...DEFAULT_BADGES,
-				{
-					type: 'primary',
-					name: 'Manueel geselecteerd',
-				},
-			];
-		}
-
-		return DEFAULT_BADGES;
-	}, [contentType, viewDraft]);
 
 	useEffect(() => {
 		if (viewLoadingState !== LoadingState.Loading) {
@@ -114,16 +79,6 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		};
 	}, [siteId, viewUuid]);
 
-	const title = useMemo(() => {
-		return viewDraft?.meta?.label ? (
-			<>
-				<i>{viewDraft.meta.label}</i> {t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
-			</>
-		) : (
-			<>{t(CORE_TRANSLATIONS.ROUTING_UPDATE)}</>
-		);
-	}, [viewDraft, t]);
-
 	/**
 	 * Methods
 	 */
@@ -148,9 +103,17 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 				: ALERT_CONTAINER_IDS.config
 		);
 	};
+
 	/**
 	 * Render
 	 */
+
+	const pageTitle = (
+		<>
+			<i>{viewDraft?.meta?.label ?? 'View'}</i> {t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
+		</>
+	);
+
 	const renderChildRoutes = (): ReactElement | null => {
 		if (!viewDraft) {
 			return null;
@@ -181,8 +144,8 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 					to: generatePath(`${MODULE_PATHS.detail}/${props.href}`, { siteId, viewUuid }),
 					component: Link,
 				})}
-				title={title}
-				badges={badges}
+				title={pageTitle}
+				badges={DEFAULT_HEADER_BADGES}
 			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>

@@ -1,5 +1,5 @@
 import { RouteConfigComponentProps } from '@redactie/redactie-core';
-import { ContextHeaderBadge, ContextHeaderTab } from '@redactie/utils';
+import { ContextHeaderTab } from '@redactie/utils';
 
 import { ViewSchema } from '../../services/views';
 export interface ViewDetailConfigDynamicProps<

@@ -1,9 +1,10 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import { RenderChildRoutes, useNavigate, ContextHeaderTab } from '@redactie/utils';
+import { ContextHeaderTab, RenderChildRoutes, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useActiveTabs, useRoutesBreadcrumbs, useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
@@ -16,7 +17,6 @@ import {
 } from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
 import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
-import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 
 const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, route, match }) => {
 	const { siteId } = match.params;
@@ -96,6 +96,8 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	/**
 	 * Render
 	 */
+	const pageTitle = `View ${t(CORE_TRANSLATIONS.ROUTING_CREATE)}`;
+
 	const renderChildRoutes = (): ReactElement => (
 		<RenderChildRoutes
 			routes={route.routes}
@@ -119,7 +121,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 					to: generatePath(`${route.path}/${props.href}`, { siteId }),
 					component: Link,
 				})}
-				title={`View ${t(CORE_TRANSLATIONS.ROUTING_CREATE)}`}
+				title={pageTitle}
 			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>

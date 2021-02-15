@@ -70,7 +70,7 @@ export class ContentTypesFacade extends BaseEntityFacade<
 	public clearContentType(): void {
 		this.store.update({
 			contentType: undefined,
-		})
+		});
 	}
 }
 
