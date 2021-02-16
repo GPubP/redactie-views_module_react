@@ -1,9 +1,10 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import { RenderChildRoutes, useNavigate } from '@redactie/utils';
+import { ContextHeaderTab, RenderChildRoutes, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { DataLoader } from '../../components';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useActiveTabs, useRoutesBreadcrumbs, useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
@@ -15,7 +16,7 @@ import {
 	VIEW_DETAIL_TABS,
 } from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
-import { LoadingState, Tab, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
+import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, route, match }) => {
 	const { siteId } = match.params;
@@ -23,6 +24,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
+	const [t] = useCoreTranslation();
 	const { navigate, generatePath } = useNavigate(SITES_ROOT);
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
@@ -72,7 +74,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 
 	const upsertView = (
 		sectionData: any,
-		tab: Tab,
+		tab: ContextHeaderTab,
 		alertId = ALERT_CONTAINER_IDS.settings
 	): void => {
 		switch (tab.name) {
@@ -94,6 +96,8 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 	/**
 	 * Render
 	 */
+	const pageTitle = `View ${t(CORE_TRANSLATIONS.ROUTING_CREATE)}`;
+
 	const renderChildRoutes = (): ReactElement => (
 		<RenderChildRoutes
 			routes={route.routes}
@@ -103,7 +107,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 				view: view || generateEmptyView(),
 				loading: isLoading,
 				onCancel: navigateToOverview,
-				onSubmit: (sectionData: any, tab: Tab) => upsertView(sectionData, tab),
+				onSubmit: (sectionData: any, tab: ContextHeaderTab) => upsertView(sectionData, tab),
 			}}
 		/>
 	);
@@ -117,7 +121,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 					to: generatePath(`${route.path}/${props.href}`, { siteId }),
 					component: Link,
 				})}
-				title="View aanmaken"
+				title={pageTitle}
 			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>

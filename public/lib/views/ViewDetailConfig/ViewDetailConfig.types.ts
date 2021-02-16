@@ -1,7 +1,7 @@
 import { RouteConfigComponentProps } from '@redactie/redactie-core';
+import { ContextHeaderTab } from '@redactie/utils';
 
 import { ViewSchema } from '../../services/views';
-import { Tab } from '../../views.types';
 
 export interface ViewDetailConfigProps<
 	Params extends {
@@ -13,7 +13,7 @@ export interface ViewDetailConfigProps<
 	loading: boolean;
 	isChanged: boolean;
 	onCancel: () => void;
-	onSubmit: (sectionData: any, tab: Tab) => void;
+	onSubmit: (sectionData: any, tab: ContextHeaderTab) => void;
 }
 
 export interface ViewDetailConfigMatchProps {

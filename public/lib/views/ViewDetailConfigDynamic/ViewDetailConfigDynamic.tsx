@@ -76,7 +76,9 @@ const ViewConfigDynamic: FC<ViewDetailConfigDynamicProps> = ({ route }) => {
 	return (
 		<DataLoader
 			loadingState={contentTypeLoading}
-			notFoundMessage={<div className="u-text-center">Selecteer een content-type</div>}
+			notFoundMessage={
+				<span className="u-block u-text-center">Selecteer een content-type</span>
+			}
 			render={renderConfigSection}
 		/>
 	);

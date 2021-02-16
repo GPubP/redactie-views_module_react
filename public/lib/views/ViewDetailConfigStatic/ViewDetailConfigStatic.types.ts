@@ -1,8 +1,7 @@
 import { RouteConfigComponentProps } from '@redactie/redactie-core';
+import { ContextHeaderTab } from '@redactie/utils';
 
 import { ViewSchema } from '../../services/views';
-import { Tab } from '../../views.types';
-
 export interface ViewDetailConfigStaticProps<
 	Params extends {
 		[K in keyof Params]?: string;
@@ -12,5 +11,5 @@ export interface ViewDetailConfigStaticProps<
 	tenantId: string;
 	loading: boolean;
 	onCancel: () => void;
-	onSubmit: (sectionData: any, tab: Tab) => void;
+	onSubmit: (sectionData: any, tab: ContextHeaderTab) => void;
 }
