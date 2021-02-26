@@ -1,8 +1,12 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
-import { EmbeddedResponse } from '@redactie/utils';
+import { EmbeddedResponse, SearchParams } from '@redactie/utils';
 
 import { Editor } from '../../views.types';
 import { ContentTypeSchema } from '../contentTypes';
+
+export interface ViewsSearchParams extends Omit<SearchParams, 'search'> {
+	search?: string[];
+}
 
 export interface ViewsRouteProps extends RouteConfigComponentProps {
 	basePath: string;
