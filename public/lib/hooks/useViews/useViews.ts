@@ -1,9 +1,9 @@
 import { useObservable } from '@mindspace-io/react';
+import { LoadingState } from '@redactie/utils';
 
 import { ResponsePaging } from '../../services/api';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
-import { LoadingState } from '../../views.types';
 
 const useView = (): [
 	LoadingState,

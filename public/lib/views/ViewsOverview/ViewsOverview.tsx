@@ -6,20 +6,26 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { useNavigate } from '@redactie/utils';
+import {
+	DataLoader,
+	FilterItem,
+	LoadingState,
+	OrderBy,
+	SearchParams,
+	useNavigate,
+} from '@redactie/utils';
 import { FormikHelpers } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
-import { DataLoader, FilterForm, FilterFormState, ResetForm } from '../../components';
+import { FilterForm, FilterFormState, ResetForm } from '../../components';
 import rolesRightsConnector from '../../connectors/rolesRights';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useRoutesBreadcrumbs, useViews } from '../../hooks';
-import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING, OrderBy } from '../../services/api';
 import { parseOrderBy } from '../../services/api/api.service';
-import { FilterItemSchema } from '../../services/filterItems/filterItems.service.types';
+import { DEFAULT_SEARCH_PARAMS } from '../../services/api';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
-import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
+import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
 import { VIEWS_OVERVIEW_COLUMNS, VIEWS_OVERVIEW_INITIAL_FILTER_STATE } from './viewsOverview.const';
@@ -31,7 +37,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	 */
 	const [activeSorting, setActiveSorting] = useState(DEFAULT_SORTING);
 	const [currentPage, setCurrentPage] = useState(DEFAULT_SEARCH_PARAMS.page);
-	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
+	const [filterItems, setFilterItems] = useState<FilterItem[]>([]);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [searchParams, setSearchParams] = useState(DEFAULT_SEARCH_PARAMS);
 	const [

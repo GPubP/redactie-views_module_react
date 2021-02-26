@@ -14,16 +14,19 @@ export const VIEWS_OVERVIEW_INITIAL_FILTER_STATE = {
 	name: '',
 };
 
-export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: string[]): any[] => {
+export const VIEWS_OVERVIEW_COLUMNS = (
+	t: TranslateFunc,
+	mySecurityRights: string[]
+): TableColumn<ViewsOverviewTableRow>[] => {
 	const canUpdate = rolesRightsConnector.api.helpers.checkSecurityRights(mySecurityRights, [
 		rolesRightsConnector.securityRights.update,
 	]);
-	const defaultColumns = [
+	const defaultColumns: TableColumn<ViewsOverviewTableRow>[] = [
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_NAME),
 			value: 'label',
 			width: canUpdate ? '45%' : '50%',
-			component(value: any, { id, description }: ViewsOverviewTableRow) {
+			component(value: any, { id, description }) {
 				return (
 					<>
 						<AUILink to={`${id}/instellingen`} component={Link}>
@@ -71,9 +74,7 @@ export const VIEWS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			classList: ['u-text-right'],
 			disableSorting: true,
 			width: '10%',
-			component(value: unknown, rowData: ViewsOverviewTableRow) {
-				const { id, navigate } = rowData;
-
+			component(value, { id, navigate }) {
 				return (
 					<Button
 						ariaLabel="Edit"

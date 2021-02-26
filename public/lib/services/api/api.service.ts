@@ -1,8 +1,6 @@
 import Core from '@redactie/redactie-core';
+import { OrderBy } from '@redactie/utils';
 import ky from 'ky';
-import { stringify } from 'query-string';
-
-import { OrderBy, SearchParams } from './api.service.types';
 
 export type KyInstance = typeof ky;
 
@@ -29,8 +27,4 @@ export const parseOrderBy = (orderBy: OrderBy): { sort: string; direction: numbe
 		sort: orderBy.key,
 		direction: orderBy.order === 'asc' ? 1 : -1,
 	};
-};
-
-export const parseSearchParams = (searchParams: SearchParams): string => {
-	return stringify(searchParams, { arrayFormat: 'comma' });
 };

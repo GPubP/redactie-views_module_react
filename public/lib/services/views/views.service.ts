@@ -1,4 +1,6 @@
-import { api, DEFAULT_SEARCH_PARAMS, parseSearchParams, SearchParams } from '../api';
+import { parseSearchParams, SearchParams } from '@redactie/utils';
+
+import { api, DEFAULT_SEARCH_PARAMS } from '../api';
 
 import { ViewSchema, ViewsSchema } from './views.service.types';
 

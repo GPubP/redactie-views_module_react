@@ -1,9 +1,9 @@
 import { useObservable } from '@mindspace-io/react';
+import { LoadingState } from '@redactie/utils';
 import { useMemo } from 'react';
 
 import { ViewSchema } from '../../services/views';
 import { ccViewsFacade } from '../../store/ccViews';
-import { LoadingState } from '../../views.types';
 
 const useCcViewItem = (uuid: string): [LoadingState, ViewSchema | null | undefined] => {
 	const isFetching$ = useMemo(() => ccViewsFacade.selectItemIsFetching(uuid), [uuid]);
