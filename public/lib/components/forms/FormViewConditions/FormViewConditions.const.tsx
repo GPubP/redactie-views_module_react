@@ -1,14 +1,15 @@
 import { Button } from '@acpaas-ui/react-components';
+import { TableColumn } from '@redactie/utils';
 import React from 'react';
 
 import { FormViewConditionsRow } from './FormViewConditions.types';
 
-export const FIELD_COLUMNS = [
+export const FIELD_COLUMNS: TableColumn<FormViewConditionsRow>[] = [
 	{
 		label: 'Veld',
 		value: 'field',
 		disableSorting: true,
-		format: (cellValue: any, col: any, rowData: FormViewConditionsRow) => {
+		format: (cellValue, col, rowData) => {
 			return rowData?.field?.label || '';
 		},
 	},
@@ -16,7 +17,7 @@ export const FIELD_COLUMNS = [
 		label: 'Operator',
 		value: 'operator',
 		disableSorting: true,
-		format: (cellValue: any, col: any, rowData: FormViewConditionsRow) => {
+		format: (cellValue, col, rowData) => {
 			return rowData?.operator?.label || '';
 		},
 	},
@@ -24,7 +25,7 @@ export const FIELD_COLUMNS = [
 		label: 'Type',
 		value: 'type',
 		disableSorting: true,
-		format: (cellValue: any, col: any, rowData: FormViewConditionsRow) => {
+		format: (cellValue, col, rowData) => {
 			return rowData.field.type;
 		},
 	},
@@ -36,7 +37,7 @@ export const FIELD_COLUMNS = [
 	{
 		label: '',
 		classList: ['u-text-right'],
-		component(value: any, rowData: FormViewConditionsRow, rowIndex: number) {
+		component(value, rowData, rowIndex) {
 			return (
 				<Button
 					ariaLabel="Edit"

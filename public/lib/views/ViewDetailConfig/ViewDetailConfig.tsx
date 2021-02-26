@@ -8,6 +8,7 @@ import {
 	AlertContainer,
 	LeavePrompt,
 	RenderChildRoutes,
+	SelectOption,
 	useDetectValueChanges,
 	useNavigate,
 } from '@redactie/utils';
@@ -27,7 +28,6 @@ import {
 	SITES_ROOT,
 	VIEW_DETAIL_TAB_MAP,
 } from '../../views.const';
-import { SelectOptions } from '../../views.types';
 
 import {
 	CONFIG_ALLOWED_LEAVE_PATHS,
@@ -52,7 +52,7 @@ const ViewConfig: FC<ViewDetailConfigProps> = ({
 	const [t] = useCoreTranslation();
 	const [isChanged, resetIsChanged] = useDetectValueChanges(!!view, view);
 	const { navigate } = useNavigate(SITES_ROOT);
-	const contentTypeOptions: SelectOptions[] = useMemo(() => {
+	const contentTypeOptions: SelectOption[] = useMemo(() => {
 		if (Array.isArray(contentTypes)) {
 			const cts = contentTypes.map(ct => ({
 				key: ct.uuid,

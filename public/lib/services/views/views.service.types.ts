@@ -1,8 +1,12 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
+import { EmbeddedResponse, SearchParams } from '@redactie/utils';
 
 import { Editor } from '../../views.types';
-import { ResponsePaging } from '../api';
 import { ContentTypeSchema } from '../contentTypes';
+
+export interface ViewsSearchParams extends Omit<SearchParams, 'search'> {
+	search?: string[];
+}
 
 export interface ViewsRouteProps extends RouteConfigComponentProps {
 	basePath: string;
@@ -10,11 +14,7 @@ export interface ViewsRouteProps extends RouteConfigComponentProps {
 	tenantId: string;
 }
 
-export interface ViewsSchema {
-	_embedded: ViewSchema[];
-	_page: ResponsePaging;
-	_links: Record<string, any>;
-}
+export type ViewsSchema = EmbeddedResponse<ViewSchema>;
 
 export interface ViewQueryConditionField {
 	fieldType?: string;

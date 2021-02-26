@@ -1,8 +1,8 @@
 import { useObservable } from '@mindspace-io/react';
+import { LoadingState } from '@redactie/utils';
 
 import { ContentTypeResponse } from '../../services/contentTypes';
 import { contentTypesFacade } from '../../store/contentTypes';
-import { LoadingState } from '../../views.types';
 
 const useContentType = (): [LoadingState, ContentTypeResponse | undefined] => {
 	const [loading] = useObservable(contentTypesFacade.isFetchingOne$, LoadingState.Loading);

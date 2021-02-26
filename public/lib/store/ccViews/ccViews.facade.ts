@@ -1,7 +1,6 @@
 import { BaseMultiEntityFacade } from '@redactie/utils';
 
-import { SearchParams } from '../../services/api';
-import { ViewsApiService, viewsApiService } from '../../services/views';
+import { ViewsApiService, viewsApiService, ViewsSearchParams } from '../../services/views';
 
 import { ccViewsQuery, CcViewsQuery } from './ccViews.query';
 import { ccViewsStore, CcViewsStore } from './ccViews.store';
@@ -19,7 +18,7 @@ export class CcViewsFacade extends BaseMultiEntityFacade<
 	public async getViews(
 		key: string,
 		siteId: string,
-		searchParams: SearchParams,
+		searchParams: ViewsSearchParams,
 		reload = false
 	): Promise<void> {
 		const oldValue = this.query.getItem(key);

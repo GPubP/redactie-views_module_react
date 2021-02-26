@@ -1,8 +1,8 @@
 import { useObservable } from '@mindspace-io/react';
+import { LoadingState } from '@redactie/utils';
 
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
-import { LoadingState } from '../../views.types';
 
 const useView = (): [LoadingState, ViewSchema | undefined, LoadingState] => {
 	const [fetchLoadingState] = useObservable(viewsFacade.isFetchingOne$, LoadingState.Loading);

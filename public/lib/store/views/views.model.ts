@@ -1,6 +1,5 @@
-import { BaseEntityState } from '@redactie/utils';
+import { BaseEntityState, Page } from '@redactie/utils';
 
-import { ResponsePaging } from '../../services/api';
 import { ViewSchema } from '../../services/views';
 
 export interface InternalState {
@@ -10,7 +9,7 @@ export interface InternalState {
 export type ViewModel = ViewSchema;
 
 export interface ViewsState extends BaseEntityState<ViewModel, string> {
-	meta?: ResponsePaging;
+	meta?: Page;
 	view?: ViewModel;
 	viewDraft?: ViewModel;
 }

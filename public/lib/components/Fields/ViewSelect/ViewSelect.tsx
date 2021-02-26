@@ -1,6 +1,6 @@
 import { Autocomplete } from '@acpaas-ui/react-components';
 import { InputFieldProps } from '@redactie/form-renderer-module';
-import { useSiteContext } from '@redactie/utils';
+import { LoadingState, useSiteContext } from '@redactie/utils';
 import { getIn } from 'formik';
 import React from 'react';
 import { first } from 'rxjs/operators';
@@ -11,13 +11,12 @@ import { ErrorMessage } from '../../../connectors/formRenderer';
 import useCcViews from '../../../hooks/useCcViews/useCcViews';
 import { ViewSchema } from '../../../services/views';
 import { ccViewsFacade } from '../../../store/ccViews';
-import { LoadingState } from '../../../views.types';
 
 const ContentSelect: React.FC<InputFieldProps> = ({
 	fieldProps,
 	fieldSchema,
 	fieldHelperProps,
-}: InputFieldProps) => {
+}) => {
 	const config = fieldSchema.config || {};
 	const { field, form } = fieldProps;
 
@@ -70,7 +69,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 							cb(newItems);
 						});
 				}}
-			></Autocomplete>
+			/>
 			{config.description ? (
 				<div className="a-input a-input__wrapper">
 					<small>{config.description}</small>

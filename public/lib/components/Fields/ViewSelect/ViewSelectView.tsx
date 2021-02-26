@@ -1,5 +1,5 @@
 import { ViewFieldProps } from '@redactie/form-renderer-module';
-import { useNavigate, useSiteContext, useTenantContext } from '@redactie/utils';
+import { DataLoader, useNavigate, useSiteContext, useTenantContext } from '@redactie/utils';
 import React, { ReactElement, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,9 +8,8 @@ import './ViewSelect.scss';
 import { useCcViewItem } from '../../../hooks';
 import { ccViewsFacade } from '../../../store/ccViews';
 import { MODULE_PATHS, SITES_ROOT } from '../../../views.const';
-import DataLoader from '../../DataLoader/DataLoader';
 
-const ViewSelectView: React.FC<ViewFieldProps> = ({ value, fieldSchema }: ViewFieldProps) => {
+const ViewSelectView: React.FC<ViewFieldProps> = ({ value, fieldSchema }) => {
 	const { siteId } = useSiteContext();
 	const { tenantId } = useTenantContext();
 	const { generatePath } = useNavigate(SITES_ROOT);
@@ -44,7 +43,7 @@ const ViewSelectView: React.FC<ViewFieldProps> = ({ value, fieldSchema }: ViewFi
 						tenantId,
 					})}
 				>
-					<span className="fa fa-chevron-right"></span>
+					<span className="fa fa-chevron-right" />
 					{ccViewItem?.meta.label}
 				</Link>
 			</div>

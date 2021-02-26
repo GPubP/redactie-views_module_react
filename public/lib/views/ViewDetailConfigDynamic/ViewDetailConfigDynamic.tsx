@@ -1,9 +1,14 @@
-import { RenderChildRoutes, useNavigate, useSiteContext, useTenantContext } from '@redactie/utils';
+import { NavList } from '@acpaas-ui/react-editorial-components';
+import {
+	DataLoader,
+	RenderChildRoutes,
+	useNavigate,
+	useSiteContext,
+	useTenantContext,
+} from '@redactie/utils';
 import React, { FC, ReactElement, useEffect } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, NavLink, useParams } from 'react-router-dom';
 
-import { NavList } from '../../components';
-import DataLoader from '../../components/DataLoader/DataLoader';
 import { useContentType, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
@@ -51,11 +56,13 @@ const ViewConfigDynamic: FC<ViewDetailConfigDynamicProps> = ({ route }) => {
 					<NavList
 						items={VIEW_CC_NAV_LIST_ITEMS.map(listItem => ({
 							...listItem,
+							activeClassName: 'is-active',
 							to: generatePath(`${route.path}/${listItem.to}`, {
 								siteId,
 								viewUuid,
 							}),
 						}))}
+						linkComponent={NavLink}
 					/>
 				</div>
 				<div className="col-xs-12 col-md-9">

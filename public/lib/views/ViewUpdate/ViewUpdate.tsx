@@ -1,16 +1,21 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import { ContextHeaderTab, RenderChildRoutes, useNavigate } from '@redactie/utils';
+import {
+	ContextHeaderTab,
+	DataLoader,
+	LoadingState,
+	RenderChildRoutes,
+	useNavigate,
+} from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { DataLoader } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useActiveTabs, useRoutesBreadcrumbs, useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { contentTypesFacade } from '../../store/contentTypes';
 import { viewsFacade } from '../../store/views';
 import { ALERT_CONTAINER_IDS, MODULE_PATHS, SITES_ROOT, VIEW_DETAIL_TABS } from '../../views.const';
-import { LoadingState, ViewsRouteProps } from '../../views.types';
+import { ViewsRouteProps } from '../../views.types';
 
 import { DEFAULT_HEADER_BADGES } from './ViewUpdate.const';
 

@@ -28,21 +28,6 @@ export interface ViewsDetailRouteProps<Params = {}> extends RouteConfigComponent
 	tenantId: string;
 }
 
-export interface SelectOptions {
-	key: string;
-	value: string;
-	label: string;
-	disabled?: boolean;
-}
-
-export enum LoadingState {
-	Loading = 'loading',
-	Creating = 'creating',
-	Updating = 'updating',
-	Loaded = 'loaded',
-	Error = 'error',
-}
-
 export interface Editor {
 	address: string | null;
 	domain: string;

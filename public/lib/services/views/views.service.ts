@@ -1,15 +1,17 @@
-import { api, DEFAULT_SEARCH_PARAMS, parseSearchParams, SearchParams } from '../api';
+import { parseSearchParams, SearchParams } from '@redactie/utils';
 
-import { ViewSchema, ViewsSchema } from './views.service.types';
+import { api, DEFAULT_SEARCH_PARAMS } from '../api';
+
+import { ViewSchema, ViewsSchema, ViewsSearchParams } from './views.service.types';
 
 export class ViewsApiService {
 	public async getViews(
 		siteId: string,
-		searchParams: SearchParams = DEFAULT_SEARCH_PARAMS
+		searchParams: ViewsSearchParams = DEFAULT_SEARCH_PARAMS
 	): Promise<ViewsSchema | null> {
 		try {
 			const response: ViewsSchema = await api
-				.get(`sites/${siteId}/views?${parseSearchParams(searchParams)}`)
+				.get(`sites/${siteId}/views?${parseSearchParams(searchParams as SearchParams)}`)
 				.json();
 
 			if (!response._embedded) {

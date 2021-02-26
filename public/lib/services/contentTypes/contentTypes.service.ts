@@ -1,4 +1,6 @@
-import { parseSearchParams, proxyApi, SearchParams } from '../api';
+import { parseSearchParams, SearchParams } from '@redactie/utils';
+
+import { proxyApi } from '../api';
 
 import { DEFAULT_CONTENT_TYPES_SEARCH_PARAMS } from './contentTypes.service.const';
 import { ContentTypeResponse, SparseContentTypesSchema } from './contentTypes.service.types';

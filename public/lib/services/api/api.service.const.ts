@@ -1,6 +1,6 @@
-import { OrderBy, SearchParams } from './api.service.types';
+import { OrderBy, SearchParams } from '@redactie/utils';
 
-export const DEFAULT_SEARCH_PARAMS: SearchParams = {
+export const DEFAULT_SEARCH_PARAMS: SearchParams & { limit: number } = {
 	page: 1,
 	limit: 10,
 	skip: 0,

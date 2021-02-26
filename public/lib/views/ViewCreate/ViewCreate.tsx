@@ -1,9 +1,14 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
-import { ContextHeaderTab, RenderChildRoutes, useNavigate } from '@redactie/utils';
+import {
+	ContextHeaderTab,
+	DataLoader,
+	LoadingState,
+	RenderChildRoutes,
+	useNavigate,
+} from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { DataLoader } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useActiveTabs, useRoutesBreadcrumbs, useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
@@ -16,7 +21,7 @@ import {
 	VIEW_DETAIL_TABS,
 } from '../../views.const';
 import { generateEmptyView } from '../../views.helpers';
-import { LoadingState, ViewsMatchProps, ViewsRouteProps } from '../../views.types';
+import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, route, match }) => {
 	const { siteId } = match.params;
