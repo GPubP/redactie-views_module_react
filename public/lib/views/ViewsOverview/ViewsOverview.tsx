@@ -159,6 +159,8 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 					activeSorting={activeSorting}
 					totalValues={viewsPaging?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
+					loadDataMessage="Views ophalen"
+					noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-RESULT'])}
 				/>
 			</>
 		);
