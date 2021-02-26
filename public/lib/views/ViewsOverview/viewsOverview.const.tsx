@@ -22,8 +22,8 @@ export const OVERVIEW_QUERY_PARAMS_CONFIG = {
 	skip: { defaultValue: DEFAULT_SEARCH_PARAMS.skip, type: 'number' },
 	sparse: { defaultValue: DEFAULT_SEARCH_PARAMS.sparse, type: 'boolean' },
 	search: { type: 'array' },
-	sort: { type: 'string' },
-	direction: { type: 'number' },
+	sort: { defaultValue: 'meta.label', type: 'string' },
+	direction: { defaultValue: 1, type: 'number' },
 } as const;
 
 export const VIEWS_OVERVIEW_COLUMNS = (

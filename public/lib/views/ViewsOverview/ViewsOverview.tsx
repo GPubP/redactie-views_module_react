@@ -11,7 +11,8 @@ import {
 	FilterItem,
 	LoadingState,
 	OrderBy,
-	SearchParams,
+	parseObjToOrderBy,
+	parseOrderByToObj,
 	useAPIQueryParams,
 	useNavigate,
 } from '@redactie/utils';
@@ -22,8 +23,8 @@ import { FilterForm, FilterFormState, ResetForm } from '../../components';
 import rolesRightsConnector from '../../connectors/rolesRights';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useRoutesBreadcrumbs, useViews } from '../../hooks';
-import { parseOrderBy } from '../../services/api/api.service';
-import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING } from '../../services/api';
+import { DEFAULT_SEARCH_PARAMS } from '../../services/api';
+import { ViewsSearchParams } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
 import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
@@ -40,7 +41,6 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	/**
 	 * Hooks
 	 */
-	const [activeSorting, setActiveSorting] = useState(DEFAULT_SORTING);
 
 	const [filterItems, setFilterItems] = useState<FilterItem[]>([]);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
@@ -66,7 +66,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		}
 	}, [loadingState, mySecurityRightsLoadingState]);
 
-	useEffect(() => viewsFacade.getViews(siteId, query as SearchParams), [query, siteId]);
+	useEffect(() => viewsFacade.getViews(siteId, query as ViewsSearchParams), [query, siteId]);
 
 	/**
 	 * Functions
@@ -109,11 +109,15 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	};
 
 	const handleOrderBy = (orderBy: OrderBy): void => {
-		setActiveSorting(orderBy);
 		setQuery({
 			...parseOrderByToObj({ ...orderBy, key: `meta.${orderBy.key}` }),
 		});
 	};
+
+	const activeSorting: OrderBy = parseObjToOrderBy({
+		sort: query.sort ? query.sort.split('.')[1] : '',
+		direction: query.direction ?? 1,
+	});
 
 	/**
 	 * Render
