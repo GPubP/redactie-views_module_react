@@ -1,7 +1,11 @@
 import { alertService, BaseEntityFacade } from '@redactie/utils';
 
-import { SearchParams } from '../../services/api';
-import { viewsApiService, ViewsApiService, ViewSchema } from '../../services/views';
+import {
+	viewsApiService,
+	ViewsApiService,
+	ViewSchema,
+	ViewsSearchParams,
+} from '../../services/views';
 
 import { getAlertMessages } from './views.messages';
 import { ViewsQuery, viewsQuery } from './views.query';
@@ -13,7 +17,7 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 	public readonly view$ = this.query.view$;
 	public readonly viewDraft$ = this.query.viewDraft$;
 
-	public getViews(siteId: string, searchParams: SearchParams): void {
+	public getViews(siteId: string, searchParams: ViewsSearchParams): void {
 		const { isFetching } = this.query.getValue();
 
 		if (isFetching) {
