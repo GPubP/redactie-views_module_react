@@ -17,7 +17,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 	fieldProps,
 	fieldSchema,
 	fieldHelperProps,
-}: InputFieldProps) => {
+}) => {
 	const config = fieldSchema.config || {};
 	const { field, form } = fieldProps;
 
@@ -70,7 +70,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 							cb(newItems);
 						});
 				}}
-			></Autocomplete>
+			/>
 			{config.description ? (
 				<div className="a-input a-input__wrapper">
 					<small>{config.description}</small>
