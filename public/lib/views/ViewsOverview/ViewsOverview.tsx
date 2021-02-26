@@ -22,7 +22,7 @@ import rolesRightsConnector from '../../connectors/rolesRights';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useRoutesBreadcrumbs, useViews } from '../../hooks';
 import { parseOrderBy } from '../../services/api/api.service';
-import { DEFAULT_SEARCH_PARAMS } from '../../services/api';
+import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING } from '../../services/api';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
 import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
