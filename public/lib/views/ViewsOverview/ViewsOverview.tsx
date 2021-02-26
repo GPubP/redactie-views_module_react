@@ -11,7 +11,9 @@ import {
 	FilterItem,
 	LoadingState,
 	OrderBy,
-	SearchParams,
+	parseObjToOrderBy,
+	parseOrderByToObj,
+	useAPIQueryParams,
 	useNavigate,
 } from '@redactie/utils';
 import { FormikHelpers } from 'formik';
@@ -21,25 +23,28 @@ import { FilterForm, FilterFormState, ResetForm } from '../../components';
 import rolesRightsConnector from '../../connectors/rolesRights';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useRoutesBreadcrumbs, useViews } from '../../hooks';
-import { parseOrderBy } from '../../services/api/api.service';
-import { DEFAULT_SEARCH_PARAMS, DEFAULT_SORTING } from '../../services/api';
+import { DEFAULT_SEARCH_PARAMS } from '../../services/api';
+import { ViewsSearchParams } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
 import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
-import { VIEWS_OVERVIEW_COLUMNS, VIEWS_OVERVIEW_INITIAL_FILTER_STATE } from './viewsOverview.const';
+import {
+	OVERVIEW_QUERY_PARAMS_CONFIG,
+	VIEWS_OVERVIEW_COLUMNS,
+	VIEWS_OVERVIEW_INITIAL_FILTER_STATE,
+} from './viewsOverview.const';
 
 const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const { siteId } = match.params;
 	/**
 	 * Hooks
 	 */
-	const [activeSorting, setActiveSorting] = useState(DEFAULT_SORTING);
-	const [currentPage, setCurrentPage] = useState(DEFAULT_SEARCH_PARAMS.page);
+
 	const [filterItems, setFilterItems] = useState<FilterItem[]>([]);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const [searchParams, setSearchParams] = useState(DEFAULT_SEARCH_PARAMS);
+	const [query, setQuery] = useAPIQueryParams(OVERVIEW_QUERY_PARAMS_CONFIG, false);
 	const [
 		mySecurityRightsLoadingState,
 		mySecurityrights,
@@ -61,7 +66,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		}
 	}, [loadingState, mySecurityRightsLoadingState]);
 
-	useEffect(() => viewsFacade.getViews(siteId, searchParams), [searchParams, siteId]);
+	useEffect(() => viewsFacade.getViews(siteId, query as ViewsSearchParams), [query, siteId]);
 
 	/**
 	 * Functions
@@ -70,13 +75,10 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		{ name }: FilterFormState,
 		formikHelpers: FormikHelpers<FilterFormState>
 	): void => {
-		setFilterItems([{ label: name, value: name }]);
+		setFilterItems([{ value: name }]);
 
 		// Add array to searchParams
-		setSearchParams({
-			...searchParams,
-			search: [name],
-		});
+		setQuery({ search: [name] });
 		formikHelpers.resetForm();
 	};
 
@@ -84,7 +86,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		// Clear filter items
 		setFilterItems([]);
 		// Reset search params
-		setSearchParams(DEFAULT_SEARCH_PARAMS);
+		setQuery(DEFAULT_SEARCH_PARAMS);
 		resetForm();
 	};
 
@@ -96,28 +98,26 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 
 		setFilterItems(newFilters);
 		// Add search to searchParams
-		setSearchParams({
-			...searchParams,
-			search,
-		});
+		setQuery({ search });
 	};
 
 	const handlePageChange = (pageNumber: number): void => {
-		setCurrentPage(pageNumber);
-		setSearchParams({
-			...searchParams,
+		setQuery({
 			page: pageNumber,
-			skip: (pageNumber - 1) * searchParams.limit,
+			skip: (pageNumber - 1) * DEFAULT_SEARCH_PARAMS.limit,
 		});
 	};
 
 	const handleOrderBy = (orderBy: OrderBy): void => {
-		setActiveSorting(orderBy);
-		setSearchParams({
-			...searchParams,
-			...parseOrderBy({ ...orderBy, key: `meta.${orderBy.key}` }),
+		setQuery({
+			...parseOrderByToObj({ ...orderBy, key: `meta.${orderBy.key}` }),
 		});
 	};
+
+	const activeSorting: OrderBy = parseObjToOrderBy({
+		sort: query.sort ? query.sort.split('.')[1] : '',
+		direction: query.direction ?? 1,
+	});
 
 	/**
 	 * Render
@@ -156,13 +156,15 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 					tableClassName="a-table--fixed--sm"
 					columns={VIEWS_OVERVIEW_COLUMNS(t, mySecurityrights)}
 					rows={viewsRows}
-					currentPage={currentPage}
+					currentPage={query.page}
 					itemsPerPage={DEFAULT_SEARCH_PARAMS.limit}
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
 					totalValues={viewsPaging?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
+					loadDataMessage="Views ophalen"
+					noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-RESULT'])}
 				/>
 			</>
 		);

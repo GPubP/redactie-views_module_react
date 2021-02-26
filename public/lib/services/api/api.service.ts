@@ -1,5 +1,4 @@
 import Core from '@redactie/redactie-core';
-import { OrderBy } from '@redactie/utils';
 import ky from 'ky';
 
 export type KyInstance = typeof ky;
@@ -21,10 +20,3 @@ export const api: KyInstance = ky.create({
 		'x-tenant-id': CoreConfig.tenantId,
 	},
 });
-
-export const parseOrderBy = (orderBy: OrderBy): { sort: string; direction: number } => {
-	return {
-		sort: orderBy.key,
-		direction: orderBy.order === 'asc' ? 1 : -1,
-	};
-};
