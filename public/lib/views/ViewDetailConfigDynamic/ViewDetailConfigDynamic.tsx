@@ -56,6 +56,7 @@ const ViewConfigDynamic: FC<ViewDetailConfigDynamicProps> = ({ route }) => {
 					<NavList
 						items={VIEW_CC_NAV_LIST_ITEMS.map(listItem => ({
 							...listItem,
+							activeClassName: 'is-active',
 							to: generatePath(`${route.path}/${listItem.to}`, {
 								siteId,
 								viewUuid,
