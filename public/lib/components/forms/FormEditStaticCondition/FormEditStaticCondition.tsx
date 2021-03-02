@@ -89,8 +89,9 @@ export const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
 								<Button
 									icon="trash"
 									onClick={() => onDelete(formData.index)}
-									type="danger"
-									transparent
+									type="secondary"
+									negative
+									size="small"
 								/>
 							)}
 						</div>

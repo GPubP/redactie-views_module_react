@@ -55,7 +55,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 				onSubmit={values => onSubmit(values, rowData.index)}
 			>
 				{({ submitForm }) => (
-					<>
+					<div className="u-margin-top">
 						<Button
 							className="u-margin-right-xs"
 							onClick={() => {
@@ -76,10 +76,11 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 							className="u-margin-right-xs"
 							icon="trash"
 							onClick={() => onDeleteCondition(rowData.index)}
-							type="danger"
-							transparent
+							type="secondary"
+							negative
+							size="small"
 						/>
-					</>
+					</div>
 				)}
 			</FormCreateCondition>
 		);
@@ -124,8 +125,9 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 							<Button
 								icon="trash"
 								onClick={onDeleteCondition}
-								type="danger"
-								transparent
+								type="secondary"
+								negative
+								size="small"
 							/>
 						</>
 					)}
