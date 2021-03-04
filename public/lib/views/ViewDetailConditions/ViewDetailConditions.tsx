@@ -157,7 +157,7 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 				{showCreateConditionForm && (
 					<FormCreateCondition onSubmit={addCondition} fields={contentType.fields}>
 						{({ submitForm }) => (
-							<>
+							<div className="u-margin-top">
 								<Button
 									className="u-margin-right-xs u-margin-bottom"
 									type="success"
@@ -172,7 +172,7 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 								>
 									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 								</Button>
-							</>
+							</div>
 						)}
 					</FormCreateCondition>
 				)}
