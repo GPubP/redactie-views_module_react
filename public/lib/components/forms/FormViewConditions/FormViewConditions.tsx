@@ -101,6 +101,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 				rowExpansionTemplate={(rowData: FormViewConditionsRow) =>
 					renderConditionForm(rowData)
 				}
+				noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-ITEMS'])}
 			/>
 			{showEditCondition && (
 				<FormCreateCondition fields={fields} onSubmit={values => onSubmit(values)}>
