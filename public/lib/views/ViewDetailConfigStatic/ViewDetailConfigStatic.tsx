@@ -171,6 +171,7 @@ const ViewConfigStatic: FC<ViewDetailConfigStaticProps> = () => {
 							rowExpansionTemplate={(rowData: FormViewConditionsRow) =>
 								renderConditionForm(rowData)
 							}
+							noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-ITEMS'])}
 						/>
 					</div>
 					<div className="col-xs-12 u-margin-top">
