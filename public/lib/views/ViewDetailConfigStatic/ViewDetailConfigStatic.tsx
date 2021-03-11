@@ -158,7 +158,7 @@ const ViewConfigStatic: FC<ViewDetailConfigStaticProps> = () => {
 	return (
 		<Card>
 			<div className="u-margin">
-				<h5>Content manueel selecteren</h5>
+				<h2 className="h3">Content manueel selecteren</h2>
 				<div className="row between-xs top-xs">
 					<div className="col-xs-12">
 						<Table
