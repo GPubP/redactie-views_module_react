@@ -145,7 +145,7 @@ const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType
 	return (
 		<Card>
 			<div className="u-margin">
-				<h5>Voorwaarden</h5>
+				<h2 className="h3">Voorwaarden</h2>
 
 				<FormViewConditions
 					formState={view}
