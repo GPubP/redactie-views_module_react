@@ -1,7 +1,7 @@
 import { Button, Select } from '@acpaas-ui/react-components';
 import { FormikOnChangeHandler, useDetectValueChanges } from '@redactie/utils';
 import { Field, Formik } from 'formik';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { ViewSchema } from '../../../services/views';
 
@@ -18,10 +18,14 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	 * Hooks
 	 */
 	const [formValue, setFormValue] = useState<ViewSchema | undefined>(formState);
-	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(
-		!!formState,
-		formValue || formState
-	);
+	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(!!formValue, formValue);
+
+	useEffect(() => {
+		if (!formState) {
+			return;
+		}
+		setFormValue(formState);
+	}, [formState]);
 
 	if (!formState) {
 		return null;
