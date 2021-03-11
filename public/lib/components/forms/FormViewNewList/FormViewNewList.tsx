@@ -33,6 +33,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 
 	const onSave = (newViewValue: ViewSchema): void => {
 		onSubmit(newViewValue);
+		setFormValue(newViewValue);
 		resetDetectValueChanges();
 	};
 
