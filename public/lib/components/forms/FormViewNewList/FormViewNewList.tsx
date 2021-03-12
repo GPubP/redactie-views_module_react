@@ -1,6 +1,9 @@
 import { Button, Select } from '@acpaas-ui/react-components';
+import { FormikOnChangeHandler, useDetectValueChanges } from '@redactie/utils';
 import { Field, Formik } from 'formik';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+
+import { ViewSchema } from '../../../services/views';
 
 import { FORM_VIEW_NEW_VALIDATION } from './FormViewNewList.const';
 import { FormViewNewListProps } from './FormViewNewList.types';
@@ -12,14 +15,37 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	readonly = false,
 	onSubmit,
 }) => {
+	/**
+	 * Hooks
+	 */
+	const [formValue, setFormValue] = useState<ViewSchema | undefined>(formState);
+	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(!!formValue, formValue);
+
+	useEffect(() => {
+		if (!formState) {
+			return;
+		}
+		setFormValue(formState);
+	}, [formState]);
+
 	if (!formState) {
 		return null;
 	}
 
+	const onSave = (newViewValue: ViewSchema): void => {
+		onSubmit(newViewValue);
+		setFormValue(newViewValue);
+		resetDetectValueChanges();
+	};
+
+	const onChange = (newViewValue: ViewSchema): void => {
+		setFormValue(newViewValue);
+	};
+
 	return (
 		<Formik
 			initialValues={formState}
-			onSubmit={onSubmit}
+			onSubmit={onSave}
 			validationSchema={FORM_VIEW_NEW_VALIDATION}
 		>
 			{({ submitForm, values, setFieldValue }) => {
@@ -33,6 +59,9 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 
 				return (
 					<>
+						<FormikOnChangeHandler
+							onChange={values => onChange(values as ViewSchema)}
+						/>
 						<div className="row u-margin-top">
 							<div className="col-xs-12 col-md-6 u-margin-bottom">
 								<Field
@@ -72,9 +101,11 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 						</div>
 
 						{!readonly && (
-							<Button onClick={submitForm} outline>
-								Wijzig
-							</Button>
+							<div className="end-xs">
+								<Button onClick={submitForm} disabled={!isChanged}>
+									Wijzig
+								</Button>
+							</div>
 						)}
 					</>
 				);
