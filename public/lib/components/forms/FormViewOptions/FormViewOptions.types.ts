@@ -5,8 +5,9 @@ export interface FormViewOptionsFormState extends Omit<ViewQueryOptions, 'orderB
 }
 
 export interface FormViewOptionsProps {
+	formState: FormViewOptionsFormState;
 	sortOptions: any[];
 	orderOptions: any[];
-	formState: FormViewOptionsFormState;
+	readonly?: boolean;
 	onSubmit: (formValues: any) => void;
 }

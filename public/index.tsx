@@ -106,7 +106,7 @@ if (rolesRightsConnector.api) {
 				guardOptions: {
 					guards: [
 						rolesRightsConnector.api.guards.securityRightsSiteGuard(urlSiteParam, [
-							rolesRightsConnector.securityRights.update,
+							rolesRightsConnector.securityRights.read,
 						]),
 					],
 				},

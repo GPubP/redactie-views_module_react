@@ -1,6 +1,7 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import {
 	ContextHeaderTab,
+	ContextHeaderTabLinkProps,
 	DataLoader,
 	LoadingState,
 	RenderChildRoutes,
@@ -9,6 +10,7 @@ import {
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import rolesRightsConnector from '../../connectors/rolesRights';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useActiveTabs, useRoutesBreadcrumbs, useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
@@ -40,6 +42,21 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		},
 	]);
 	const [viewLoadingState, view, upsertViewLoadingState] = useView();
+	const [
+		mySecurityRightsLoadingState,
+		mySecurityrights,
+	] = rolesRightsConnector.api.hooks.useMySecurityRightsForSite({
+		siteUuid: siteId,
+		onlyKeys: true,
+	});
+	const rights = useMemo(
+		() => ({
+			canUpdate: rolesRightsConnector.api.helpers.checkSecurityRights(mySecurityrights, [
+				rolesRightsConnector.securityRights.update,
+			]),
+		}),
+		[mySecurityrights]
+	);
 	const isLoading = useMemo(() => {
 		return (
 			viewLoadingState === LoadingState.Loading ||
@@ -50,12 +67,15 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 
 	useEffect(() => {
-		if (viewLoadingState !== LoadingState.Loading) {
+		if (
+			viewLoadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading
+		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [viewLoadingState]);
+	}, [mySecurityRightsLoadingState, viewLoadingState]);
 
 	useEffect(() => {
 		if (viewLoadingState !== LoadingState.Loading && view) {
@@ -135,6 +155,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 					onSubmit: update,
 					routes: route.routes,
 					loading: isLoading,
+					rights,
 				}}
 			/>
 		);
@@ -144,7 +165,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		<>
 			<ContextHeader
 				tabs={activeTabs}
-				linkProps={(props: any) => ({
+				linkProps={(props: ContextHeaderTabLinkProps) => ({
 					...props,
 					to: generatePath(`${MODULE_PATHS.detail}/${props.href}`, { siteId, viewUuid }),
 					component: Link,

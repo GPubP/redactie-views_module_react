@@ -5,23 +5,24 @@ import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
-import { FormEditStaticCondition } from '../../components/forms/FormEditStaticCondition/FormEditStaticCondition';
-import { FormUpdateConditionalValue } from '../../components/forms/FormEditStaticCondition/FormEditStaticCondition.types';
-import { FIELD_COLUMNS } from '../../components/forms/FormViewConditions/FormViewConditions.const';
-import { FormViewConditionsRow } from '../../components/forms/FormViewConditions/FormViewConditions.types';
+import {
+	FIELD_COLUMNS,
+	FormEditStaticCondition,
+	FormUpdateConditionalValue,
+	FormViewConditionsRow,
+} from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useViewDraft } from '../../hooks';
 import { ViewQueryCondition } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
+import { ViewsDetailRouteProps, ViewsMatchProps } from '../../views.types';
 
-import { ViewDetailConfigStaticProps } from './ViewDetailConfigStatic.types';
-
-const ViewConfigStatic: FC<ViewDetailConfigStaticProps> = () => {
+const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 	/**
 	 * Hooks
 	 */
-	const { viewUuid } = useParams<Record<string, string>>();
+	const { viewUuid } = useParams<ViewsMatchProps>();
 	const { tenantId } = useTenantContext();
 	const { siteId } = useSiteContext();
 	const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
@@ -165,7 +166,7 @@ const ViewConfigStatic: FC<ViewDetailConfigStaticProps> = () => {
 							className="u-margin-top"
 							dataKey="index"
 							expandedRows={expandedRows}
-							columns={FIELD_COLUMNS}
+							columns={FIELD_COLUMNS(!rights.canUpdate)}
 							rows={conditionRows}
 							responsive={false}
 							rowExpansionTemplate={(rowData: FormViewConditionsRow) =>
@@ -174,25 +175,27 @@ const ViewConfigStatic: FC<ViewDetailConfigStaticProps> = () => {
 							noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-ITEMS'])}
 						/>
 					</div>
-					<div className="col-xs-12 u-margin-top">
-						{!showCreateConditionForm ? (
-							<Button onClick={showForm} iconLeft="plus" type="primary">
-								Voorwaarde toevoegen
-							</Button>
-						) : (
-							<FormEditStaticCondition
-								formData={{
-									field: 'uuid',
-									index: 0,
-									value: '',
-								}}
-								onSubmit={addCondition}
-								onCancel={() => setshowCreateConditionForm(false)}
-								submitLabel={t(CORE_TRANSLATIONS.BUTTON_ADD)}
-								submitType="success"
-							/>
-						)}
-					</div>
+					{rights.canUpdate && (
+						<div className="col-xs-12 u-margin-top">
+							{!showCreateConditionForm ? (
+								<Button onClick={showForm} iconLeft="plus" type="primary">
+									Voorwaarde toevoegen
+								</Button>
+							) : (
+								<FormEditStaticCondition
+									formData={{
+										field: 'uuid',
+										index: 0,
+										value: '',
+									}}
+									onSubmit={addCondition}
+									onCancel={() => setshowCreateConditionForm(false)}
+									submitLabel={t(CORE_TRANSLATIONS.BUTTON_ADD)}
+									submitType="success"
+								/>
+							)}
+						</div>
+					)}
 				</div>
 			</div>
 		</Card>

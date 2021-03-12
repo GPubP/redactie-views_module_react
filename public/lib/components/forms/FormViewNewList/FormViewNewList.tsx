@@ -9,9 +9,10 @@ import { FORM_VIEW_NEW_VALIDATION } from './FormViewNewList.const';
 import { FormViewNewListProps } from './FormViewNewList.types';
 
 const FormViewNewList: FC<FormViewNewListProps> = ({
-	methodOptions,
 	contentTypeOptions,
 	formState,
+	methodOptions,
+	readonly = false,
 	onSubmit,
 }) => {
 	/**
@@ -65,6 +66,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 							<div className="col-xs-12 col-md-6 u-margin-bottom">
 								<Field
 									aria-describedby="descMethod"
+									disabled={readonly}
 									id="method"
 									name="query.viewType"
 									label="Methode"
@@ -79,12 +81,13 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 								<div className="col-xs-12 col-md-6 u-margin-bottom">
 									<Field
 										aria-describedby="descContentType"
+										disabled={readonly}
 										id="contentType"
 										name="query.contentType.uuid"
 										loading={contentTypeOptions?.length === 0}
 										label="Content type"
 										options={contentTypeOptions}
-										required={true}
+										required
 										as={Select}
 									/>
 									<div
@@ -97,11 +100,13 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 							) : null}
 						</div>
 
-						<div className="end-xs">
-							<Button onClick={submitForm} disabled={!isChanged}>
-								Wijzig
-							</Button>
-						</div>
+						{!readonly && (
+							<div className="end-xs">
+								<Button onClick={submitForm} disabled={!isChanged}>
+									Wijzig
+								</Button>
+							</div>
+						)}
 					</>
 				);
 			}}

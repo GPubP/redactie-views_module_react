@@ -13,15 +13,16 @@ import { useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { ALERT_CONTAINER_IDS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
+import { ViewsDetailRouteProps, ViewsMatchProps } from '../../views.types';
 
 import {
 	SETTNGS_ALLOWED_LEAVE_PATHS,
 	VIEW_SETTINGS_VALIDATION_SCHEMA,
 } from './ViewDetailSettings.const';
-import { ViewDetailSettingsMatchProps, ViewDetailSettingsProps } from './ViewDetailSettings.types';
 
-const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = ({
+const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	loading,
+	rights,
 	onSubmit,
 }) => {
 	const [view] = useViewDraft();
@@ -70,6 +71,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 								<div className="col-xs-12 col-md-8">
 									<Field
 										as={TextField}
+										disabled={!rights.canUpdate}
 										label="Label"
 										name="meta.label"
 										required
@@ -91,6 +93,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 									<Field
 										as={Textarea}
 										className="a-input--small"
+										disabled={!rights.canUpdate}
 										label="Beschrijving"
 										name="meta.description"
 										required
@@ -116,7 +119,7 @@ const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = 
 									/>
 								</div>
 							)}
-							<ActionBar className="o-action-bar--fixed" isOpen>
+							<ActionBar className="o-action-bar--fixed" isOpen={rights.canUpdate}>
 								<ActionBarContentSection>
 									<div className="u-wrapper row end-xs">
 										<Button

@@ -2,8 +2,8 @@ import { Select } from '@acpaas-ui/react-components';
 import { Field, FieldInputProps, Formik, FormikProps } from 'formik';
 import React, { FC, ReactElement, useMemo } from 'react';
 
-import { FieldValueField } from '../../FieldValueField/FieldValueField';
-import { MetaValueField } from '../../MetaValueField/MetaValueField';
+import { FieldValueField } from '../../FieldValueField';
+import { MetaValueField } from '../../MetaValueField';
 
 import { DEFAULT_OPERATORS, META_FILTER_OPTIONS } from './FormCreateCondition.const';
 import {

@@ -5,6 +5,7 @@ import { FormCreateConditionValue } from '../FormCreateCondition/FormCreateCondi
 export interface FormViewConditionsProps {
 	fields: ContentTypeFieldResponse[];
 	formState: ViewSchema;
+	readonly?: boolean;
 	onDelete: (conditionIndex: number) => void;
 	onSubmit: (updatedCondition: FormCreateConditionValue, conditionIndex?: number) => void;
 }

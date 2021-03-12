@@ -29,7 +29,7 @@ const parseFieldToForm = (
 	};
 };
 
-export const FieldValueField: FC<FieldInputProps<any> & {
+const FieldValueField: FC<FieldInputProps<any> & {
 	fields: ContentTypeFieldResponse[];
 	selectedField: string;
 	setFieldValue: (value: any) => void;
@@ -83,3 +83,5 @@ export const FieldValueField: FC<FieldInputProps<any> & {
 		/>
 	);
 };
+
+export default FieldValueField;
