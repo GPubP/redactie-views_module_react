@@ -24,6 +24,7 @@ export interface ViewsDetailRouteProps<Params = {}> extends RouteConfigComponent
 	view: ViewSchema;
 	onCancel: () => void;
 	onSubmit: (data: ViewSchema | Partial<ViewSchema>, tab: ContextHeaderTab) => void;
+	isCreating?: boolean;
 	loading: boolean;
 	rights: ViewRights;
 	routes: ModuleRouteConfig[];

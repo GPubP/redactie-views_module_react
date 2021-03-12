@@ -22,6 +22,7 @@ import {
 
 const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	loading,
+	isCreating,
 	rights,
 	onSubmit,
 }) => {
@@ -33,6 +34,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	/**
 	 * Methods
 	 */
+
 	const onSave = (newViewValue: ViewSchema): void => {
 		onSubmit(
 			{ ...(view || {}), meta: { ...view?.meta, ...newViewValue.meta } },
@@ -45,9 +47,12 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 		viewsFacade.setViewDraft(newViewValue);
 	};
 
+	const readonly = isCreating ? false : !rights.canUpdate;
+
 	/**
 	 * Render
 	 */
+
 	if (!view || !initialValues) {
 		return null;
 	}
@@ -71,7 +76,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 								<div className="col-xs-12 col-md-8">
 									<Field
 										as={TextField}
-										disabled={!rights.canUpdate}
+										disabled={readonly}
 										label="Label"
 										name="meta.label"
 										required
@@ -93,7 +98,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 									<Field
 										as={Textarea}
 										className="a-input--small"
-										disabled={!rights.canUpdate}
+										disabled={readonly}
 										label="Beschrijving"
 										name="meta.description"
 										required
@@ -119,7 +124,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 									/>
 								</div>
 							)}
-							<ActionBar className="o-action-bar--fixed" isOpen={rights.canUpdate}>
+							<ActionBar className="o-action-bar--fixed" isOpen={!readonly}>
 								<ActionBarContentSection>
 									<div className="u-wrapper row end-xs">
 										<Button
