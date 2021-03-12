@@ -166,7 +166,7 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 							className="u-margin-top"
 							dataKey="index"
 							expandedRows={expandedRows}
-							columns={FIELD_COLUMNS}
+							columns={FIELD_COLUMNS(!rights.canUpdate)}
 							rows={conditionRows}
 							responsive={false}
 							rowExpansionTemplate={(rowData: FormViewConditionsRow) =>

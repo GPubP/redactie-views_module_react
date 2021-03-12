@@ -7,9 +7,10 @@ import AutoSubmit from '../AutoSubmit/AutoSubmit';
 import { FormViewOptionsProps } from './FormViewOptions.types';
 
 const FormViewOptions: FC<FormViewOptionsProps> = ({
+	formState,
 	sortOptions,
 	orderOptions,
-	formState,
+	readonly = false,
 	onSubmit,
 }) => {
 	return (
@@ -20,6 +21,7 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 					<div className="row u-margin-top u-margin-bottom">
 						<div className="col-xs-6">
 							<Field
+								disabled={readonly}
 								id="orderBy"
 								name="orderBy"
 								label="Sorteer op"
@@ -29,6 +31,7 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 						</div>
 						<div className="col-xs-6">
 							<Field
+								disabled={readonly}
 								id="order"
 								name="order"
 								label="Volgorde"
@@ -42,6 +45,7 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 							<Field
 								as={TextField}
 								type="number"
+								disabled={readonly}
 								id="offset"
 								name="offset"
 								label="Aantal items overslaan"
@@ -51,6 +55,7 @@ const FormViewOptions: FC<FormViewOptionsProps> = ({
 							<Field
 								as={TextField}
 								type="number"
+								disabled={readonly}
 								id="limit"
 								name="limit"
 								label="Beperkt tot"

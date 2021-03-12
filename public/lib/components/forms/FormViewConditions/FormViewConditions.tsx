@@ -11,6 +11,7 @@ import { FormViewConditionsProps, FormViewConditionsRow } from './FormViewCondit
 const FormViewConditions: FC<FormViewConditionsProps> = ({
 	fields,
 	formState,
+	readonly = false,
 	onDelete,
 	onSubmit,
 }) => {
@@ -95,7 +96,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 				className="u-margin-top"
 				dataKey="index"
 				expandedRows={expandedRows}
-				columns={FIELD_COLUMNS}
+				columns={FIELD_COLUMNS(readonly)}
 				rows={conditionRows}
 				responsive={false}
 				rowExpansionTemplate={(rowData: FormViewConditionsRow) =>

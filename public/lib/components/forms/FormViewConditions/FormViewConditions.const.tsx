@@ -4,7 +4,7 @@ import React from 'react';
 
 import { FormViewConditionsRow } from './FormViewConditions.types';
 
-export const FIELD_COLUMNS: TableColumn<FormViewConditionsRow>[] = [
+export const FIELD_COLUMNS = (readonly: boolean): TableColumn<FormViewConditionsRow>[] => [
 	{
 		label: 'Veld',
 		value: 'field',
@@ -34,20 +34,24 @@ export const FIELD_COLUMNS: TableColumn<FormViewConditionsRow>[] = [
 		value: 'value',
 		disableSorting: true,
 	},
-	{
-		label: '',
-		classList: ['u-text-right'],
-		component(value, rowData, rowIndex) {
-			return (
-				<Button
-					ariaLabel="Edit"
-					icon="edit"
-					onClick={() => rowData.onShowEdit(rowData, rowIndex)}
-					type="primary"
-					transparent
-				/>
-			);
-		},
-		disableSorting: true,
-	},
+	...(!readonly
+		? ([
+				{
+					label: '',
+					classList: ['u-text-right'],
+					component(value, rowData, rowIndex) {
+						return (
+							<Button
+								ariaLabel="Edit"
+								icon="edit"
+								onClick={() => rowData.onShowEdit(rowData, rowIndex)}
+								type="primary"
+								transparent
+							/>
+						);
+					},
+					disableSorting: true,
+				},
+		  ] as TableColumn<FormViewConditionsRow>[])
+		: []),
 ];
