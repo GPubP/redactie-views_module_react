@@ -25,6 +25,7 @@ import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, route, match }) => {
 	const { siteId } = match.params;
+
 	/**
 	 * Hooks
 	 */
@@ -111,6 +112,7 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 				routes: route.routes,
 				view: view || generateEmptyView(),
 				loading: isLoading,
+				isCreating: true,
 				onCancel: navigateToOverview,
 				onSubmit: (sectionData: any, tab: ContextHeaderTab) => upsertView(sectionData, tab),
 			}}
