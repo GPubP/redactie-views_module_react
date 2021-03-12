@@ -1,6 +1,7 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 import { ContextHeaderTab } from '@redactie/utils';
 
+import { ContentTypeSchema } from './services/contentTypes';
 import { ViewSchema } from './services/views';
 import { InternalState } from './store/views';
 
@@ -22,10 +23,19 @@ export interface ViewsMatchProps {
 export interface ViewsDetailRouteProps<Params = {}> extends RouteConfigComponentProps<Params> {
 	view: ViewSchema;
 	onCancel: () => void;
-	onSubmit: (data: ViewSchema, tab: ContextHeaderTab) => void;
+	onSubmit: (data: ViewSchema | Partial<ViewSchema>, tab: ContextHeaderTab) => void;
+	loading: boolean;
+	rights: ViewRights;
 	routes: ModuleRouteConfig[];
 	state: InternalState;
 	tenantId: string;
+}
+
+export interface ViewsDetailConfigRouteProps {
+	view: ViewSchema;
+	contentType: ContentTypeSchema;
+	rights: ViewRights;
+	onSubmit: (data: ViewSchema | Partial<ViewSchema>) => void;
 }
 
 export interface Editor {
@@ -39,4 +49,8 @@ export interface Editor {
 	nickname: string | null;
 	type: string;
 	username: string;
+}
+
+export interface ViewRights {
+	canUpdate: boolean;
 }

@@ -28,15 +28,15 @@ import {
 	SITES_ROOT,
 	VIEW_DETAIL_TAB_MAP,
 } from '../../views.const';
+import { ViewsDetailRouteProps, ViewsMatchProps } from '../../views.types';
 
 import {
 	CONFIG_ALLOWED_LEAVE_PATHS,
 	CT_DEFAULT_DISABLED_OPTION,
 	METHOD_OPTIONS,
 } from './ViewDetailConfig.const';
-import { ViewDetailConfigProps } from './ViewDetailConfig.types';
 
-const ViewConfig: FC<ViewDetailConfigProps> = ({
+const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	loading,
 	route,
 	tenantId,

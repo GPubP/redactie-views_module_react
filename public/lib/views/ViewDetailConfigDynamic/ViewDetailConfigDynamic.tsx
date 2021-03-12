@@ -13,15 +13,15 @@ import { useContentType, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
+import { ViewsDetailRouteProps, ViewsMatchProps } from '../../views.types';
 
 import { VIEW_CC_NAV_LIST_ITEMS } from './ViewDetailConfigDynamic.const';
-import { ViewDetailConfigDynamicProps } from './ViewDetailConfigDynamic.types';
 
-const ViewConfigDynamic: FC<ViewDetailConfigDynamicProps> = ({ route }) => {
+const ViewConfigDynamic: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({ rights, route }) => {
 	/**
 	 * Hooks
 	 */
-	const { viewUuid } = useParams<Record<string, string>>();
+	const { viewUuid } = useParams<ViewsMatchProps>();
 	const { tenantId } = useTenantContext();
 	const { siteId } = useSiteContext();
 	const { navigate } = useNavigate(SITES_ROOT);

@@ -14,14 +14,13 @@ import { useViewDraft } from '../../hooks';
 import { ViewQueryCondition } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
+import { ViewsDetailRouteProps, ViewsMatchProps } from '../../views.types';
 
-import { ViewDetailConfigStaticProps } from './ViewDetailConfigStatic.types';
-
-const ViewConfigStatic: FC<ViewDetailConfigStaticProps> = () => {
+const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 	/**
 	 * Hooks
 	 */
-	const { viewUuid } = useParams<Record<string, string>>();
+	const { viewUuid } = useParams<ViewsMatchProps>();
 	const { tenantId } = useTenantContext();
 	const { siteId } = useSiteContext();
 	const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});

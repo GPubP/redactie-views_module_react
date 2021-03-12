@@ -13,14 +13,14 @@ import { useView, useViewDraft } from '../../hooks';
 import { ViewSchema } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { ALERT_CONTAINER_IDS, VIEW_DETAIL_TAB_MAP } from '../../views.const';
+import { ViewsDetailRouteProps, ViewsMatchProps } from '../../views.types';
 
 import {
 	SETTNGS_ALLOWED_LEAVE_PATHS,
 	VIEW_SETTINGS_VALIDATION_SCHEMA,
 } from './ViewDetailSettings.const';
-import { ViewDetailSettingsMatchProps, ViewDetailSettingsProps } from './ViewDetailSettings.types';
 
-const ViewSettings: FC<ViewDetailSettingsProps<ViewDetailSettingsMatchProps>> = ({
+const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	loading,
 	onSubmit,
 }) => {

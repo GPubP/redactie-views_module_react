@@ -4,15 +4,16 @@ import React, { FC, useMemo } from 'react';
 import { FormViewOptions } from '../../components';
 import { FormViewOptionsFormState } from '../../components/forms/FormViewOptions/FormViewOptions.types';
 import { useContentType, useViewDraft } from '../../hooks';
-import { ViewQueryOptionsOrderBy } from '../../services/views';
+import { ViewQueryOptionsOrderBy, ViewSchema } from '../../services/views';
+import { ViewsDetailConfigRouteProps } from '../../views.types';
 
 import { BASE_SORT_OPTIONS, ORDER_OPTIONS } from './ViewDetailOptions.const';
-import { ViewDetailOptionsProps } from './ViewDetailOptions.types';
 
-const ViewDetailOptions: FC<ViewDetailOptionsProps> = ({ onSubmit }) => {
+const ViewDetailOptions: FC<ViewsDetailConfigRouteProps> = ({ rights, onSubmit }) => {
 	/**
 	 * HOOKS
 	 */
+
 	const [, contentType] = useContentType();
 	const [view] = useViewDraft();
 	const sortOptions = useMemo(
@@ -108,7 +109,7 @@ const ViewDetailOptions: FC<ViewDetailOptionsProps> = ({ onSubmit }) => {
 					...(orderBy ? { orderBy } : {}),
 				},
 			},
-		};
+		} as ViewSchema;
 
 		onSubmit(updatedView);
 	};

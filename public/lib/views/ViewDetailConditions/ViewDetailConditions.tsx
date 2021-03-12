@@ -10,10 +10,14 @@ import {
 import { FormCreateConditionValue } from '../../components/forms/FormCreateCondition/FormCreateCondition.types';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { ViewQueryCondition } from '../../services/views';
+import { ViewsDetailConfigRouteProps } from '../../views.types';
 
-import { ViewDetailConditionsProps } from './ViewDetailConditions.types';
-
-const ViewDetailConditions: FC<ViewDetailConditionsProps> = ({ view, contentType, onSubmit }) => {
+const ViewDetailConditions: FC<ViewsDetailConfigRouteProps> = ({
+	view,
+	contentType,
+	rights,
+	onSubmit,
+}) => {
 	/**
 	 * Hooks
 	 */

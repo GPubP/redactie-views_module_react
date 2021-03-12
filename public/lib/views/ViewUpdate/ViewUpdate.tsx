@@ -1,6 +1,7 @@
 import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
 import {
 	ContextHeaderTab,
+	ContextHeaderTabLinkProps,
 	DataLoader,
 	LoadingState,
 	RenderChildRoutes,
@@ -144,7 +145,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		<>
 			<ContextHeader
 				tabs={activeTabs}
-				linkProps={(props: any) => ({
+				linkProps={(props: ContextHeaderTabLinkProps) => ({
 					...props,
 					to: generatePath(`${MODULE_PATHS.detail}/${props.href}`, { siteId, viewUuid }),
 					component: Link,
