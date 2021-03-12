@@ -9,7 +9,7 @@ import { useViewDraft } from '../../../hooks';
 
 import { FormEditStaticConditionProps } from './FormEditStaticCondition.types';
 
-export const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
+const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
 	formData,
 	onSubmit,
 	onDelete,
@@ -101,3 +101,5 @@ export const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
 		</Formik>
 	);
 };
+
+export default FormEditStaticCondition;

@@ -4,7 +4,7 @@ import React, { FC, useMemo } from 'react';
 import { getFieldRegistery } from '../../connectors/formRenderer';
 import { META_FILTER_OPTIONS } from '../forms/FormCreateCondition/FormCreateCondition.const';
 
-export const MetaValueField: FC<FieldInputProps<string> & {
+const MetaValueField: FC<FieldInputProps<string> & {
 	selectedField: string;
 	setFieldValue: (value: any) => void;
 	label: string;
@@ -52,3 +52,5 @@ export const MetaValueField: FC<FieldInputProps<string> & {
 		/>
 	);
 };
+
+export default MetaValueField;

@@ -5,10 +5,12 @@ import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
-import { FormEditStaticCondition } from '../../components/forms/FormEditStaticCondition/FormEditStaticCondition';
-import { FormUpdateConditionalValue } from '../../components/forms/FormEditStaticCondition/FormEditStaticCondition.types';
-import { FIELD_COLUMNS } from '../../components/forms/FormViewConditions/FormViewConditions.const';
-import { FormViewConditionsRow } from '../../components/forms/FormViewConditions/FormViewConditions.types';
+import {
+	FIELD_COLUMNS,
+	FormEditStaticCondition,
+	FormUpdateConditionalValue,
+	FormViewConditionsRow,
+} from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useViewDraft } from '../../hooks';
 import { ViewQueryCondition } from '../../services/views';

@@ -1,8 +1,7 @@
 import { Card } from '@acpaas-ui/react-components';
 import React, { FC, useMemo } from 'react';
 
-import { FormViewOptions } from '../../components';
-import { FormViewOptionsFormState } from '../../components/forms/FormViewOptions/FormViewOptions.types';
+import { FormViewOptions, FormViewOptionsFormState } from '../../components';
 import { useContentType, useViewDraft } from '../../hooks';
 import { ViewQueryOptionsOrderBy, ViewSchema } from '../../services/views';
 import { ViewsDetailConfigRouteProps } from '../../views.types';
@@ -121,6 +120,7 @@ const ViewDetailOptions: FC<ViewsDetailConfigRouteProps> = ({ rights, onSubmit }
 	/**
 	 * RENDER
 	 */
+
 	return (
 		<Card>
 			<div className="u-margin">
