@@ -127,9 +127,10 @@ const ViewDetailOptions: FC<ViewsDetailConfigRouteProps> = ({ rights, onSubmit }
 				<h5>Sorteer-opties</h5>
 
 				<FormViewOptions
+					formState={optionsValue}
 					sortOptions={sortOptions || []}
 					orderOptions={ORDER_OPTIONS}
-					formState={optionsValue}
+					readonly={!rights.canUpdate}
 					onSubmit={onOptionsChanged}
 				/>
 			</div>

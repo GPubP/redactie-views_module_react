@@ -154,6 +154,7 @@ const ViewDetailConditions: FC<ViewsDetailConfigRouteProps> = ({
 				<FormViewConditions
 					formState={view}
 					fields={contentType.fields}
+					readonly={!rights.canUpdate}
 					onDelete={deleteCondition}
 					onSubmit={updateCondition}
 				/>
@@ -181,7 +182,7 @@ const ViewDetailConditions: FC<ViewsDetailConfigRouteProps> = ({
 					</FormCreateCondition>
 				)}
 
-				{!showCreateConditionForm && (
+				{rights.canUpdate && !showCreateConditionForm && (
 					<Button
 						className="u-margin-top"
 						onClick={showForm}

@@ -22,6 +22,7 @@ import {
 
 const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	loading,
+	rights,
 	onSubmit,
 }) => {
 	const [view] = useViewDraft();
@@ -70,6 +71,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 								<div className="col-xs-12 col-md-8">
 									<Field
 										as={TextField}
+										disabled={!rights.canUpdate}
 										label="Label"
 										name="meta.label"
 										required
@@ -91,6 +93,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 									<Field
 										as={Textarea}
 										className="a-input--small"
+										disabled={!rights.canUpdate}
 										label="Beschrijving"
 										name="meta.description"
 										required
@@ -116,7 +119,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 									/>
 								</div>
 							)}
-							<ActionBar className="o-action-bar--fixed" isOpen>
+							<ActionBar className="o-action-bar--fixed" isOpen={rights.canUpdate}>
 								<ActionBarContentSection>
 									<div className="u-wrapper row end-xs">
 										<Button

@@ -38,6 +38,7 @@ import {
 
 const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	loading,
+	rights,
 	route,
 	tenantId,
 	onCancel,
@@ -46,7 +47,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	/**
 	 * Hooks
 	 */
-	const { siteId, viewUuid } = useParams<Record<string, string>>();
+	const { siteId, viewUuid } = useParams<ViewsMatchProps>();
 	const [, contentTypes] = useContentTypes();
 	const [view] = useViewDraft();
 	const [t] = useCoreTranslation();
@@ -74,8 +75,10 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	 * Functions
 	 */
 	const onConfigSave = (): void => {
-		onSubmit(view, VIEW_DETAIL_TAB_MAP.config);
-		resetIsChanged();
+		if (view) {
+			onSubmit(view, VIEW_DETAIL_TAB_MAP.config);
+			resetIsChanged();
+		}
 	};
 
 	const onConfigChange = (updatedView: ViewSchema): void => {
@@ -156,8 +159,9 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 							<div className="u-margin">
 								<FormViewNewList
 									contentTypeOptions={contentTypeOptions}
-									methodOptions={METHOD_OPTIONS}
 									formState={view}
+									methodOptions={METHOD_OPTIONS}
+									readonly={!rights.canUpdate}
 									onSubmit={onTypeFormChanged}
 								/>
 							</div>
@@ -167,15 +171,16 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 						<RenderChildRoutes
 							routes={route.routes}
 							extraOptions={{
-								tenantId,
+								rights,
 								view,
+								tenantId,
 								onSubmit: onConfigChange,
 							}}
 						/>
 					</div>
 				</div>
 			</Container>
-			<ActionBar className="o-action-bar--fixed" isOpen>
+			<ActionBar className="o-action-bar--fixed" isOpen={rights.canUpdate}>
 				<ActionBarContentSection>
 					<div className="u-wrapper row end-xs">
 						<Button className="u-margin-right-xs" onClick={onCancel} negative>

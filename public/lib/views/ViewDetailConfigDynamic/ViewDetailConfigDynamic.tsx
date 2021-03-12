@@ -72,6 +72,7 @@ const ViewConfigDynamic: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({ rights,
 							tenantId,
 							view,
 							contentType: activeContentType,
+							rights,
 							onSubmit: onConfigChange,
 						}}
 					/>

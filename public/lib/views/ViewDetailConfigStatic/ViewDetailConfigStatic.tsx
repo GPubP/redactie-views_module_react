@@ -175,25 +175,27 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 							noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-ITEMS'])}
 						/>
 					</div>
-					<div className="col-xs-12 u-margin-top">
-						{!showCreateConditionForm ? (
-							<Button onClick={showForm} iconLeft="plus" type="primary">
-								Voorwaarde toevoegen
-							</Button>
-						) : (
-							<FormEditStaticCondition
-								formData={{
-									field: 'uuid',
-									index: 0,
-									value: '',
-								}}
-								onSubmit={addCondition}
-								onCancel={() => setshowCreateConditionForm(false)}
-								submitLabel={t(CORE_TRANSLATIONS.BUTTON_ADD)}
-								submitType="success"
-							/>
-						)}
-					</div>
+					{rights.canUpdate && (
+						<div className="col-xs-12 u-margin-top">
+							{!showCreateConditionForm ? (
+								<Button onClick={showForm} iconLeft="plus" type="primary">
+									Voorwaarde toevoegen
+								</Button>
+							) : (
+								<FormEditStaticCondition
+									formData={{
+										field: 'uuid',
+										index: 0,
+										value: '',
+									}}
+									onSubmit={addCondition}
+									onCancel={() => setshowCreateConditionForm(false)}
+									submitLabel={t(CORE_TRANSLATIONS.BUTTON_ADD)}
+									submitType="success"
+								/>
+							)}
+						</div>
+					)}
 				</div>
 			</div>
 		</Card>
