@@ -1,8 +1,10 @@
 import { Button } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
+import { move } from 'ramda';
 import React, { FC, ReactElement, useState } from 'react';
 
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
+import { RowDnDEvent } from '../../../views.types';
 import FormCreateCondition from '../FormCreateCondition/FormCreateCondition';
 
 import { FIELD_COLUMNS } from './FormViewConditions.const';
@@ -14,6 +16,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 	readonly = false,
 	onDelete,
 	onSubmit,
+	onReorderConditions,
 }) => {
 	/**
 	 * Hooks
@@ -35,11 +38,22 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 		});
 	};
 
+	const onMoveRow = (from: number, to: number): void => {
+		const newQueryConditions = move(from, to, formState.query.conditions);
+		onReorderConditions(newQueryConditions);
+	};
+
+	const onMoveRowDnD = (source: RowDnDEvent, target: RowDnDEvent): void => {
+		onMoveRow(source.index, target.index);
+	};
+
 	const conditionRows: FormViewConditionsRow[] = formState.query.conditions.map(
 		(condition, index) => ({
 			...condition,
 			index,
 			onShowEdit,
+			canMoveUp: index > 0,
+			canMoveDown: formState.query.conditions.length - 1 !== index,
 		})
 	);
 
@@ -94,9 +108,11 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 		<>
 			<Table
 				className="u-margin-top"
-				dataKey="index"
+				dataKey="uuid"
+				draggable
+				moveRow={onMoveRowDnD}
 				expandedRows={expandedRows}
-				columns={FIELD_COLUMNS(readonly)}
+				columns={FIELD_COLUMNS(readonly, onMoveRow)}
 				rows={conditionRows}
 				responsive={false}
 				rowExpansionTemplate={(rowData: FormViewConditionsRow) =>

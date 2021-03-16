@@ -1,6 +1,7 @@
 import { Button, Card } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
 import { useNavigate, useSiteContext, useTenantContext } from '@redactie/utils';
+import { move } from 'ramda';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
@@ -16,7 +17,7 @@ import { useViewDraft } from '../../hooks';
 import { ViewQueryCondition } from '../../services/views';
 import { viewsFacade } from '../../store/views';
 import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
-import { ViewsDetailRouteProps, ViewsMatchProps } from '../../views.types';
+import { RowDnDEvent, ViewsDetailRouteProps, ViewsMatchProps } from '../../views.types';
 
 const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 	/**
@@ -47,6 +48,8 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 			...condition,
 			index,
 			onShowEdit,
+			canMoveUp: index > 0,
+			canMoveDown: view.query.conditions.length - 1 !== index,
 		}));
 	}, [view]);
 
@@ -78,6 +81,32 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 	 */
 	const showForm = (): void => {
 		setshowCreateConditionForm(!showCreateConditionForm);
+	};
+
+	const updateConditions = (conditions: ViewQueryCondition[]): void => {
+		if (!view) {
+			return;
+		}
+
+		viewsFacade.setViewDraft({
+			...view,
+			query: {
+				...view.query,
+				conditions,
+			},
+		});
+	};
+
+	const onMoveRow = (from: number, to: number): void => {
+		if (!view) {
+			return;
+		}
+		const newQueryConditions = move(from, to, view.query.conditions);
+		updateConditions(newQueryConditions);
+	};
+
+	const onMoveRowDnD = (source: RowDnDEvent, target: RowDnDEvent): void => {
+		onMoveRow(source.index, target.index);
 	};
 
 	const updateCondition = (updatedCondition: FormUpdateConditionalValue): void => {
@@ -163,10 +192,12 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 				<div className="row between-xs top-xs">
 					<div className="col-xs-12">
 						<Table
+							draggable
 							className="u-margin-top"
-							dataKey="index"
+							dataKey="uuid"
+							moveRow={onMoveRowDnD}
 							expandedRows={expandedRows}
-							columns={FIELD_COLUMNS(!rights.canUpdate)}
+							columns={FIELD_COLUMNS(!rights.canUpdate, onMoveRow)}
 							rows={conditionRows}
 							responsive={false}
 							rowExpansionTemplate={(rowData: FormViewConditionsRow) =>
@@ -187,6 +218,7 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 										field: 'uuid',
 										index: 0,
 										value: '',
+										uuid: '',
 									}}
 									onSubmit={addCondition}
 									onCancel={() => setshowCreateConditionForm(false)}
