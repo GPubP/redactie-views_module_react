@@ -27,7 +27,10 @@ const ViewDetailConditions: FC<ViewsDetailConfigRouteProps> = ({
 	/**
 	 * Methods
 	 */
-	const getField = (fieldName: string, operator: string): Omit<ViewQueryCondition, 'value'> => {
+	const getField = (
+		fieldName: string,
+		operator: string
+	): Omit<ViewQueryCondition, 'value' | 'uuid'> => {
 		const ctField = contentType.fields.find(field => field.name === fieldName);
 
 		return {
@@ -50,7 +53,7 @@ const ViewDetailConditions: FC<ViewsDetailConfigRouteProps> = ({
 		fieldName: string,
 		_id: string,
 		operator: string
-	): Omit<ViewQueryCondition, 'value'> => {
+	): Omit<ViewQueryCondition, 'value' | 'uuid'> => {
 		const metaField = META_FILTER_OPTIONS.find(opt => opt.value === fieldName);
 
 		return {
@@ -139,6 +142,16 @@ const ViewDetailConditions: FC<ViewsDetailConfigRouteProps> = ({
 		});
 	};
 
+	const updateConditions = (conditions: ViewQueryCondition[]): void => {
+		onSubmit({
+			...view,
+			query: {
+				...view.query,
+				conditions,
+			},
+		});
+	};
+
 	const showForm = (): void => {
 		setshowCreateConditionForm(!showCreateConditionForm);
 	};
@@ -157,6 +170,7 @@ const ViewDetailConditions: FC<ViewsDetailConfigRouteProps> = ({
 					readonly={!rights.canUpdate}
 					onDelete={deleteCondition}
 					onSubmit={updateCondition}
+					onReorderConditions={updateConditions}
 				/>
 
 				{showCreateConditionForm && (

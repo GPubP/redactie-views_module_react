@@ -7,7 +7,7 @@ export interface FormCreateConditionValue {
 	field: string;
 	operator: string;
 	value: string;
-	uuid?: string;
+	uuid: string;
 }
 
 export interface FormCreateConditionProps<Values = FormikValues> {

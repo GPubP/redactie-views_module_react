@@ -1,7 +1,7 @@
 export interface FormUpdateConditionalValue {
 	field: string;
 	value: string;
-	uuid?: string;
+	uuid: string;
 	index: number;
 }
 

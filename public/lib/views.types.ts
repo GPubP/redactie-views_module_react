@@ -55,3 +55,9 @@ export interface Editor {
 export interface ViewRights {
 	canUpdate: boolean;
 }
+
+export interface RowDnDEvent {
+	index: number;
+	type: string;
+	id: number;
+}

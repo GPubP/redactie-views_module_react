@@ -35,7 +35,7 @@ export interface ViewQueryCondition {
 	field: ViewQueryConditionField;
 	operator: ViewQueryOperator;
 	value: string;
-	uuid?: string;
+	uuid: string;
 }
 
 export interface ViewQueryOptionsOrderByValidation {

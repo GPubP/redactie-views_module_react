@@ -8,9 +8,12 @@ export interface FormViewConditionsProps {
 	readonly?: boolean;
 	onDelete: (conditionIndex: number) => void;
 	onSubmit: (updatedCondition: FormCreateConditionValue, conditionIndex?: number) => void;
+	onReorderConditions: (conditions: ViewQueryCondition[]) => void;
 }
 
 export interface FormViewConditionsRow extends ViewQueryCondition {
 	index: number;
 	onShowEdit: (rowData: FormViewConditionsRow, rowindex: number) => void;
+	canMoveUp: boolean;
+	canMoveDown: boolean;
 }

@@ -1,10 +1,50 @@
-import { Button } from '@acpaas-ui/react-components';
+import { Button, ButtonGroup } from '@acpaas-ui/react-components';
 import { TableColumn } from '@redactie/utils';
 import React from 'react';
 
 import { FormViewConditionsRow } from './FormViewConditions.types';
 
-export const FIELD_COLUMNS = (readonly: boolean): TableColumn<FormViewConditionsRow>[] => [
+export const FIELD_COLUMNS = (
+	readonly: boolean,
+	moveRow: (form: number, to: number) => void
+): TableColumn<FormViewConditionsRow>[] => [
+	{
+		label: ' ',
+		value: 'actions',
+		disableSorting: true,
+		component(cellValue, { canMoveUp, canMoveDown, index }) {
+			return (
+				<>
+					<div className="u-flex u-flex-align-center u-flex-no-wrap">
+						<ButtonGroup direction="vertical">
+							<Button
+								onClick={() => moveRow(index, index - 1)}
+								icon="chevron-up"
+								ariaLabel="Move item up"
+								type="primary"
+								htmlType="button"
+								size="tiny"
+								transparent
+								disabled={!canMoveUp}
+								negative
+							/>
+							<Button
+								onClick={() => moveRow(index, index + 1)}
+								icon="chevron-down"
+								ariaLabel="Move item down"
+								type="primary"
+								htmlType="button"
+								size="tiny"
+								disabled={!canMoveDown}
+								transparent
+								negative
+							/>
+						</ButtonGroup>
+					</div>
+				</>
+			);
+		},
+	},
 	{
 		label: 'Veld',
 		value: 'field',
