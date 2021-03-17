@@ -47,6 +47,7 @@ const MetaValueField: FC<FieldInputProps<string> & {
 					type: 'string',
 					config: {},
 					dataType: null,
+					label: props.label,
 				} as any
 			}
 		/>
