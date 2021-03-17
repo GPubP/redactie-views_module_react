@@ -103,7 +103,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 						{!readonly && (
 							<div className="end-xs">
 								<Button onClick={submitForm} disabled={!isChanged}>
-									Wijzig
+									Wijzigen
 								</Button>
 							</div>
 						)}

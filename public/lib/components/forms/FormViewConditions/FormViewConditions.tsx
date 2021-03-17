@@ -56,13 +56,14 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 				onSubmit={values => onSubmit(values, rowData.index)}
 			>
 				{({ submitForm }) => (
-					<div className="u-margin-top">
+					<div>
 						<Button
 							className="u-margin-right-xs"
 							onClick={() => {
 								submitForm();
 								setExpandedRows({});
 							}}
+							size="small"
 						>
 							Wijzig
 						</Button>
@@ -70,6 +71,7 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 							className="u-margin-right-xs"
 							onClick={() => setExpandedRows({})}
 							outline
+							size="small"
 						>
 							{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 						</Button>
