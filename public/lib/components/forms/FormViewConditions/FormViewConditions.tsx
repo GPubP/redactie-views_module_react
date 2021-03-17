@@ -18,12 +18,14 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 	/**
 	 * Hooks
 	 */
-	const [showEditCondition, setShowEditCondition] = useState(false);
+
 	const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
 	const [t] = useCoreTranslation();
+
 	/**
 	 * Methods
 	 */
+
 	const onDeleteCondition = (index: number): void => {
 		onDelete(index);
 		setExpandedRows({});
@@ -43,9 +45,14 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 		})
 	);
 
+	/**
+	 * Render
+	 */
+
 	const renderConditionForm = (rowData: FormViewConditionsRow): ReactElement => {
 		return (
 			<FormCreateCondition
+				className="u-padding-xs"
 				initialValues={{
 					...rowData,
 					field: `${rowData.field.group}.${rowData.field._id}`,
@@ -89,9 +96,6 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 		);
 	};
 
-	/**
-	 * Render
-	 */
 	return (
 		<>
 			<Table
@@ -106,37 +110,6 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 				}
 				noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-ITEMS'])}
 			/>
-			{showEditCondition && (
-				<FormCreateCondition fields={fields} onSubmit={values => onSubmit(values)}>
-					{({ submitForm }) => (
-						<>
-							<Button
-								className="u-margin-right-xs"
-								onClick={() => {
-									submitForm();
-									setShowEditCondition(false);
-								}}
-							>
-								Wijzig
-							</Button>
-							<Button
-								className="u-margin-right-xs"
-								onClick={() => setShowEditCondition(false)}
-								outline
-							>
-								Annuleer
-							</Button>
-							<Button
-								icon="trash"
-								onClick={onDeleteCondition}
-								type="secondary"
-								negative
-								size="small"
-							/>
-						</>
-					)}
-				</FormCreateCondition>
-			)}
 		</>
 	);
 };

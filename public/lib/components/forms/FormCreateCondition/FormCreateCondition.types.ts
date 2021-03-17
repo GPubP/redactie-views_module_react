@@ -11,6 +11,7 @@ export interface FormCreateConditionValue {
 }
 
 export interface FormCreateConditionProps<Values = FormikValues> {
+	className?: string;
 	children?: ((props: FormikProps<Values>) => React.ReactNode) | React.ReactNode;
 	fields: ContentTypeFieldResponse[];
 	initialValues?: FormCreateConditionValue;
