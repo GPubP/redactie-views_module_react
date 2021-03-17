@@ -14,6 +14,7 @@ import {
 
 const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	children,
+	className,
 	onSubmit,
 	fields,
 	initialValues,
@@ -80,7 +81,7 @@ const FormCreateCondition: FC<FormCreateConditionProps> = ({
 	return (
 		<Formik initialValues={formValues} onSubmit={onSubmit}>
 			{props => (
-				<div className="u-margin-top">
+				<div className={className}>
 					<div className="row">
 						<div className="col-xs-12 col-sm-6 u-margin-bottom">
 							<Field

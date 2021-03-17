@@ -3,6 +3,7 @@ import { FormikOnChangeHandler, useDetectValueChanges } from '@redactie/utils';
 import { Field, Formik } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
 
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { ViewSchema } from '../../../services/views';
 
 import { FORM_VIEW_NEW_VALIDATION } from './FormViewNewList.const';
@@ -19,6 +20,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	 * Hooks
 	 */
 	const [formValue, setFormValue] = useState<ViewSchema | undefined>(formState);
+	const [t] = useCoreTranslation();
 	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(!!formValue, formValue);
 
 	useEffect(() => {
@@ -103,7 +105,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 						{!readonly && (
 							<div className="end-xs">
 								<Button onClick={submitForm} disabled={!isChanged}>
-									Wijzig
+									{t(CORE_TRANSLATIONS.BUTTON_UPDATE)}
 								</Button>
 							</div>
 						)}
