@@ -34,9 +34,9 @@ const FormViewConditions: FC<FormViewConditionsProps> = ({
 		setExpandedRows({});
 	};
 
-	const onShowEdit = (rowData: FormViewConditionsRow, rowIndex: number): void => {
+	const onShowEdit = (rowData: FormViewConditionsRow): void => {
 		setExpandedRows({
-			[rowIndex]: true,
+			[rowData.uuid]: true,
 		});
 	};
 

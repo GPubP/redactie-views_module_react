@@ -62,7 +62,9 @@ const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
 												{
 													label: 'Waarde',
 													name: 'value',
-													config: {},
+													config: {
+														returnByValue: true,
+													},
 												} as any
 											}
 										/>
