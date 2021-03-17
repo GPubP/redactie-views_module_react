@@ -1,5 +1,5 @@
-import { Button, Card } from '@acpaas-ui/react-components';
-import React, { FC, useState } from 'react';
+import { Button, Card, CardBody } from '@acpaas-ui/react-components';
+import React, { FC, ReactElement, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { FormCreateCondition, FormViewConditions } from '../../components';
@@ -146,9 +146,34 @@ const ViewDetailConditions: FC<ViewsDetailConfigRouteProps> = ({
 	/**
 	 * Render
 	 */
+
+	const renderCreateForm = (): ReactElement => (
+		<Card className="u-margin-top">
+			<CardBody>
+				<h3 className="h4 u-margin-bottom">Voorwaarde toevoegen</h3>
+				<FormCreateCondition onSubmit={addCondition} fields={contentType.fields}>
+					{({ submitForm }) => (
+						<div className="u-margin-top">
+							<Button className="u-margin-right-xs" onClick={submitForm} size="small">
+								{t(CORE_TRANSLATIONS.BUTTON_ADD)}
+							</Button>
+							<Button
+								onClick={() => setshowCreateConditionForm(false)}
+								size="small"
+								outline
+							>
+								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+							</Button>
+						</div>
+					)}
+				</FormCreateCondition>
+			</CardBody>
+		</Card>
+	);
+
 	return (
 		<Card>
-			<div className="u-margin">
+			<div className="u-padding">
 				<h2 className="h3">Voorwaarden</h2>
 
 				<FormViewConditions
@@ -159,39 +184,18 @@ const ViewDetailConditions: FC<ViewsDetailConfigRouteProps> = ({
 					onSubmit={updateCondition}
 				/>
 
-				{showCreateConditionForm && (
-					<FormCreateCondition onSubmit={addCondition} fields={contentType.fields}>
-						{({ submitForm }) => (
-							<div className="u-margin-top">
-								<Button
-									className="u-margin-right-xs u-margin-bottom"
-									type="success"
-									onClick={submitForm}
-								>
-									{t(CORE_TRANSLATIONS.BUTTON_ADD)}
-								</Button>
-								<Button
-									className="u-margin-bottom"
-									onClick={() => setshowCreateConditionForm(false)}
-									outline
-								>
-									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
-								</Button>
-							</div>
-						)}
-					</FormCreateCondition>
-				)}
-
-				{rights.canUpdate && !showCreateConditionForm && (
-					<Button
-						className="u-margin-top"
-						onClick={showForm}
-						iconLeft="plus"
-						type="primary"
-					>
-						Voorwaarde toevoegen
-					</Button>
-				)}
+				{showCreateConditionForm
+					? renderCreateForm()
+					: rights.canUpdate && (
+							<Button
+								className="u-margin-top"
+								onClick={showForm}
+								iconLeft="plus"
+								type="primary"
+							>
+								Voorwaarde toevoegen
+							</Button>
+					  )}
 			</div>
 		</Card>
 	);
