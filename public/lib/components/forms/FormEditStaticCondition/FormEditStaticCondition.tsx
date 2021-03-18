@@ -14,8 +14,8 @@ const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
 	onSubmit,
 	onDelete,
 	onCancel,
-	submitLabel,
-	submitType,
+	submitLabel = 'Wijzig',
+	submitType = 'primary',
 }): ReactElement | null => {
 	/**
 	 * Hooks
@@ -77,14 +77,20 @@ const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
 						<div className="col-xs-12">
 							<Button
 								className="u-margin-right-xs"
-								type={submitType || 'primary'}
+								type={submitType}
 								onClick={() => {
 									submitForm();
 								}}
+								size="small"
 							>
-								{submitLabel || 'Wijzig'}
+								{submitLabel}
 							</Button>
-							<Button className="u-margin-right-xs" onClick={onCancel} outline>
+							<Button
+								className="u-margin-right-xs"
+								onClick={onCancel}
+								outline
+								size="small"
+							>
 								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 							</Button>
 							{onDelete && (

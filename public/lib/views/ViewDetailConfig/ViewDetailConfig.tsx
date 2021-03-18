@@ -7,6 +7,7 @@ import {
 import {
 	AlertContainer,
 	LeavePrompt,
+	LoadingState,
 	RenderChildRoutes,
 	SelectOption,
 	useDetectValueChanges,
@@ -48,7 +49,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	 * Hooks
 	 */
 	const { siteId, viewUuid } = useParams<ViewsMatchProps>();
-	const [, contentTypes] = useContentTypes();
+	const [contentTypesLoading, contentTypes] = useContentTypes();
 	const [view] = useViewDraft();
 	const [t] = useCoreTranslation();
 	const [isChanged, resetIsChanged] = useDetectValueChanges(!!view, view);
@@ -160,6 +161,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 								<FormViewNewList
 									contentTypeOptions={contentTypeOptions}
 									formState={view}
+									isLoading={contentTypesLoading === LoadingState.Loading}
 									methodOptions={METHOD_OPTIONS}
 									readonly={!rights.canUpdate}
 									onSubmit={onTypeFormChanged}

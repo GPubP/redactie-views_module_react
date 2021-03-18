@@ -6,6 +6,7 @@ export interface FormViewNewListProps {
 	contentTypeOptions: SelectOption[];
 	methodOptions: SelectOption[];
 	formState?: ViewSchema;
+	isLoading?: boolean;
 	readonly?: boolean;
 	onSubmit: (formValues: any) => void;
 }

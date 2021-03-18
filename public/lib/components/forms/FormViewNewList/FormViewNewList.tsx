@@ -13,6 +13,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	contentTypeOptions,
 	formState,
 	methodOptions,
+	isLoading = false,
 	readonly = false,
 	onSubmit,
 }) => {
@@ -21,7 +22,10 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	 */
 	const [formValue, setFormValue] = useState<ViewSchema | undefined>(formState);
 	const [t] = useCoreTranslation();
-	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(!!formValue, formValue);
+	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(
+		!!formValue && !isLoading,
+		formValue
+	);
 
 	useEffect(() => {
 		if (!formState) {
@@ -86,7 +90,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 										disabled={readonly}
 										id="contentType"
 										name="query.contentType.uuid"
-										loading={contentTypeOptions?.length === 0}
+										loading={isLoading}
 										label="Content type"
 										options={contentTypeOptions}
 										required
