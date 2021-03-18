@@ -34,6 +34,7 @@ export interface ViewQueryOperator {
 export interface ViewQueryCondition {
 	field: ViewQueryConditionField;
 	operator: ViewQueryOperator;
+	label?: string;
 	value: string;
 	uuid: string;
 }

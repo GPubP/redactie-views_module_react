@@ -1,6 +1,13 @@
+import { ContentSchema } from '@redactie/content-module';
+
+export interface ContentSelectItem {
+	value: string;
+	label: string;
+}
+
 export interface FormUpdateConditionalValue {
 	field: string;
-	value: string;
+	value: string | ContentSchema | ContentSelectItem;
 	uuid: string;
 	index: number;
 }
