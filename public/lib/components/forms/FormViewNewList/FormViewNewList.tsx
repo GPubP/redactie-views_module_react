@@ -1,7 +1,6 @@
 import { Button, Select } from '@acpaas-ui/react-components';
-import { FormikOnChangeHandler, useDetectValueChanges } from '@redactie/utils';
 import { Field, Formik } from 'formik';
-import React, { FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useState } from 'react';
 
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { ViewSchema } from '../../../services/views';
@@ -19,16 +18,8 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	/**
 	 * Hooks
 	 */
-	const [formValue, setFormValue] = useState<ViewSchema | undefined>(formState);
 	const [t] = useCoreTranslation();
-	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(!!formValue, formValue);
-
-	useEffect(() => {
-		if (!formState) {
-			return;
-		}
-		setFormValue(formState);
-	}, [formState]);
+	const [isChanged, setIsChanged] = useState<boolean>(false);
 
 	if (!formState) {
 		return null;
@@ -36,12 +27,12 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 
 	const onSave = (newViewValue: ViewSchema): void => {
 		onSubmit(newViewValue);
-		setFormValue(newViewValue);
-		resetDetectValueChanges();
+		setIsChanged(false);
 	};
 
-	const onChange = (newViewValue: ViewSchema): void => {
-		setFormValue(newViewValue);
+	const onChange = (e: ChangeEvent<HTMLInputElement>, setFieldValue: Function): void => {
+		setFieldValue(e.target.name, e.target.value);
+		setIsChanged(true);
 	};
 
 	return (
@@ -61,9 +52,6 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 
 				return (
 					<>
-						<FormikOnChangeHandler
-							onChange={values => onChange(values as ViewSchema)}
-						/>
 						<div className="row u-margin-top">
 							<div className="col-xs-12 col-md-6 u-margin-bottom">
 								<Field
@@ -74,6 +62,10 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 									label="Methode"
 									options={methodOptions}
 									as={Select}
+									value={values.query.viewType}
+									onChange={(e: ChangeEvent<HTMLInputElement>) =>
+										onChange(e, setFieldValue)
+									}
 								/>
 								<div id="descMethod" className="u-text-light u-margin-top-xs">
 									Selecteer hoe je de lijst wil opbouwen.
@@ -91,6 +83,10 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 										options={contentTypeOptions}
 										required
 										as={Select}
+										value={values.query.contentType?.uuid}
+										onChange={(e: ChangeEvent<HTMLInputElement>) =>
+											onChange(e, setFieldValue)
+										}
 									/>
 									<div
 										id="descContentType"
