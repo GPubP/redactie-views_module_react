@@ -1,4 +1,4 @@
-import { Button, Card } from '@acpaas-ui/react-components';
+import { Button, Card, CardBody } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
 import { useNavigate, useSiteContext, useTenantContext } from '@redactie/utils';
 import { move } from 'ramda';
@@ -213,18 +213,22 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 									Voorwaarde toevoegen
 								</Button>
 							) : (
-								<FormEditStaticCondition
-									formData={{
-										field: 'uuid',
-										index: 0,
-										value: '',
-										uuid: '',
-									}}
-									onSubmit={addCondition}
-									onCancel={() => setshowCreateConditionForm(false)}
-									submitLabel={t(CORE_TRANSLATIONS.BUTTON_ADD)}
-									submitType="success"
-								/>
+								<Card className="u-margin-top">
+									<CardBody>
+										<h3 className="h4 u-margin-bottom">Voorwaarde toevoegen</h3>
+										<FormEditStaticCondition
+											formData={{
+												field: 'uuid',
+												index: 0,
+												value: '',
+												uuid: '',
+											}}
+											onSubmit={addCondition}
+											onCancel={() => setshowCreateConditionForm(false)}
+											submitLabel={t(CORE_TRANSLATIONS.BUTTON_ADD)}
+										/>
+									</CardBody>
+								</Card>
 							)}
 						</div>
 					)}
