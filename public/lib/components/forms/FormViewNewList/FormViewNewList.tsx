@@ -31,8 +31,17 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	};
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>, setFieldValue: Function): void => {
+		const value = e.target.value;
+		const initialViewType = formState.query.viewType;
+		const initialContentType = formState.query.contentType?.uuid;
+
+		if (value !== initialViewType && value !== initialContentType) {
+			setIsChanged(true);
+		} else {
+			setIsChanged(false);
+		}
+
 		setFieldValue(e.target.name, e.target.value);
-		setIsChanged(true);
 	};
 
 	return (
