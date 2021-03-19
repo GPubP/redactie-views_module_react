@@ -71,8 +71,10 @@ export const FIELD_COLUMNS = (
 	},
 	{
 		label: 'Waarde',
-		value: 'value',
 		disableSorting: true,
+		format: (cellValue, col, rowData) => {
+			return rowData.label || rowData.value.toString();
+		},
 	},
 	...(!readonly
 		? ([

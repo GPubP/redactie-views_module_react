@@ -1,5 +1,6 @@
-import { Button, Card } from '@acpaas-ui/react-components';
+import { Button, Card, CardBody } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
+import { ContentSchema } from '@redactie/content-module';
 import { useNavigate, useSiteContext, useTenantContext } from '@redactie/utils';
 import { move } from 'ramda';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
@@ -7,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
 import {
+	ContentSelectItem,
 	FIELD_COLUMNS,
 	FormEditStaticCondition,
 	FormUpdateConditionalValue,
@@ -32,10 +34,10 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 	const [t] = useCoreTranslation();
 	const { navigate } = useNavigate(SITES_ROOT);
 
-	const onShowEdit = (rowData: FormViewConditionsRow, rowIndex: number): void => {
+	const onShowEdit = (rowData: FormViewConditionsRow): void => {
 		setshowCreateConditionForm(false);
 		setExpandedRows({
-			[rowIndex]: true,
+			[rowData.uuid]: true,
 		});
 	};
 
@@ -70,7 +72,13 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 				type: 'string',
 				_id: 'uuid',
 			},
-			value: rawCondition.value,
+			label:
+				(rawCondition.value as ContentSchema)?.meta?.label ||
+				(rawCondition.value as ContentSelectItem)?.label ||
+				'',
+			value:
+				(rawCondition.value as ContentSchema)?.uuid ||
+				(rawCondition.value as ContentSelectItem).value,
 			operator: { value: 'equals', label: 'equals' },
 			uuid: rawCondition.uuid,
 		};
@@ -213,18 +221,22 @@ const ViewConfigStatic: FC<ViewsDetailRouteProps> = ({ rights }) => {
 									Voorwaarde toevoegen
 								</Button>
 							) : (
-								<FormEditStaticCondition
-									formData={{
-										field: 'uuid',
-										index: 0,
-										value: '',
-										uuid: '',
-									}}
-									onSubmit={addCondition}
-									onCancel={() => setshowCreateConditionForm(false)}
-									submitLabel={t(CORE_TRANSLATIONS.BUTTON_ADD)}
-									submitType="success"
-								/>
+								<Card className="u-margin-top">
+									<CardBody>
+										<h3 className="h4 u-margin-bottom">Voorwaarde toevoegen</h3>
+										<FormEditStaticCondition
+											formData={{
+												field: 'uuid',
+												index: 0,
+												value: '',
+												uuid: '',
+											}}
+											onSubmit={addCondition}
+											onCancel={() => setshowCreateConditionForm(false)}
+											submitLabel={t(CORE_TRANSLATIONS.BUTTON_ADD)}
+										/>
+									</CardBody>
+								</Card>
 							)}
 						</div>
 					)}

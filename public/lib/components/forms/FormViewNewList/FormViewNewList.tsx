@@ -12,6 +12,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	contentTypeOptions,
 	formState,
 	methodOptions,
+	isLoading = false,
 	readonly = false,
 	onSubmit,
 }) => {
@@ -87,7 +88,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 										disabled={readonly}
 										id="contentType"
 										name="query.contentType.uuid"
-										loading={contentTypeOptions?.length === 0}
+										loading={isLoading}
 										label="Content type"
 										options={contentTypeOptions}
 										required
@@ -109,7 +110,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 
 						{!readonly && (
 							<div className="end-xs">
-								<Button onClick={submitForm} disabled={!isChanged}>
+								<Button onClick={submitForm} disabled={!isChanged || isLoading}>
 									{t(CORE_TRANSLATIONS.BUTTON_UPDATE)}
 								</Button>
 							</div>
