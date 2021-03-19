@@ -160,7 +160,14 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 							<div className="u-margin">
 								<FormViewNewList
 									contentTypeOptions={contentTypeOptions}
-									formState={view}
+									formState={{
+										query: {
+											viewType: view?.query.viewType || 'dynamic',
+											contentType: {
+												uuid: view?.query.contentType?.uuid || '',
+											},
+										},
+									}}
 									isLoading={contentTypesLoading === LoadingState.Loading}
 									methodOptions={METHOD_OPTIONS}
 									readonly={!rights.canUpdate}

@@ -1,12 +1,12 @@
 import { Button, Select } from '@acpaas-ui/react-components';
+import { FormikOnChangeHandler, useDetectValueChanges } from '@redactie/utils';
 import { Field, Formik } from 'formik';
-import React, { ChangeEvent, FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
-import { ViewSchema } from '../../../services/views';
 
 import { FORM_VIEW_NEW_VALIDATION } from './FormViewNewList.const';
-import { FormViewNewListProps } from './FormViewNewList.types';
+import { FormViewNewListFormState, FormViewNewListProps } from './FormViewNewList.types';
 
 const FormViewNewList: FC<FormViewNewListProps> = ({
 	contentTypeOptions,
@@ -20,29 +20,21 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	 * Hooks
 	 */
 	const [t] = useCoreTranslation();
-	const [isChanged, setIsChanged] = useState<boolean>(false);
+	const [formValue, setFormValue] = useState<FormViewNewListFormState | undefined>(formState);
+	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(!!formValue, formValue);
 
 	if (!formState) {
 		return null;
 	}
 
-	const onSave = (newViewValue: ViewSchema): void => {
-		onSubmit(newViewValue);
-		setIsChanged(false);
+	const onSave = (newFormState: FormViewNewListFormState): void => {
+		onSubmit(newFormState);
+		setFormValue(newFormState);
+		resetDetectValueChanges();
 	};
 
-	const onChange = (e: ChangeEvent<HTMLInputElement>, setFieldValue: Function): void => {
-		const value = e.target.value;
-		const initialViewType = formState.query.viewType;
-		const initialContentType = formState.query.contentType?.uuid;
-
-		if (value !== initialViewType && value !== initialContentType) {
-			setIsChanged(true);
-		} else {
-			setIsChanged(false);
-		}
-
-		setFieldValue(e.target.name, e.target.value);
+	const onChange = (newFormState: FormViewNewListFormState): void => {
+		setFormValue(newFormState);
 	};
 
 	return (
@@ -62,6 +54,11 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 
 				return (
 					<>
+						<FormikOnChangeHandler
+							onChange={newFormState =>
+								onChange(newFormState as FormViewNewListFormState)
+							}
+						/>
 						<div className="row u-margin-top">
 							<div className="col-xs-12 col-md-6 u-margin-bottom">
 								<Field
@@ -72,10 +69,6 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 									label="Methode"
 									options={methodOptions}
 									as={Select}
-									value={values.query.viewType}
-									onChange={(e: ChangeEvent<HTMLInputElement>) =>
-										onChange(e, setFieldValue)
-									}
 								/>
 								<div id="descMethod" className="u-text-light u-margin-top-xs">
 									Selecteer hoe je de lijst wil opbouwen.
@@ -93,10 +86,6 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 										options={contentTypeOptions}
 										required
 										as={Select}
-										value={values.query.contentType?.uuid}
-										onChange={(e: ChangeEvent<HTMLInputElement>) =>
-											onChange(e, setFieldValue)
-										}
 									/>
 									<div
 										id="descContentType"
