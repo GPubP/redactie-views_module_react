@@ -21,7 +21,10 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	 */
 	const [t] = useCoreTranslation();
 	const [formValue, setFormValue] = useState<FormViewNewListFormState | undefined>(formState);
-	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(!!formValue, formValue);
+	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(
+		!!formValue && !isLoading,
+		formValue
+	);
 
 	if (!formState) {
 		return null;
@@ -99,7 +102,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 
 						{!readonly && (
 							<div className="end-xs">
-								<Button onClick={submitForm} disabled={!isChanged || isLoading}>
+								<Button onClick={submitForm} disabled={!isChanged}>
 									{t(CORE_TRANSLATIONS.BUTTON_UPDATE)}
 								</Button>
 							</div>
