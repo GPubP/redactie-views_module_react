@@ -26,7 +26,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 	const state = !!error && !!touch ? 'error' : '';
 	const { siteId } = useSiteContext();
 
-	const [viewLoadingState] = useCcViews(field.value);
+	const [viewLoadingState] = useCcViews(`views_${fieldSchema.name}`);
 
 	return (
 		<>
@@ -44,7 +44,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 				}}
 				asyncItems={async (query: string, cb: (options: any[]) => void) => {
 					await ccViewsFacade.getViews(
-						fieldSchema.name,
+						`views_${fieldSchema.name}`,
 						siteId,
 						{
 							skip: 0,
@@ -58,7 +58,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 					);
 
 					ccViewsFacade
-						.selectItemValue(fieldSchema.name)
+						.selectItemValue(`views_${fieldSchema.name}`)
 						.pipe(first())
 						.subscribe(views => {
 							const newItems = (views as ViewSchema[]).map(c => ({
