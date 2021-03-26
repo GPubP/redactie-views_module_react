@@ -1,13 +1,12 @@
 import { Button, Select } from '@acpaas-ui/react-components';
 import { FormikOnChangeHandler, useDetectValueChanges } from '@redactie/utils';
 import { Field, Formik } from 'formik';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
-import { ViewSchema } from '../../../services/views';
 
 import { FORM_VIEW_NEW_VALIDATION } from './FormViewNewList.const';
-import { FormViewNewListProps } from './FormViewNewList.types';
+import { FormViewNewListFormState, FormViewNewListProps } from './FormViewNewList.types';
 
 const FormViewNewList: FC<FormViewNewListProps> = ({
 	contentTypeOptions,
@@ -20,32 +19,25 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	/**
 	 * Hooks
 	 */
-	const [formValue, setFormValue] = useState<ViewSchema | undefined>(formState);
 	const [t] = useCoreTranslation();
+	const [formValue, setFormValue] = useState<FormViewNewListFormState | undefined>(formState);
 	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(
 		!!formValue && !isLoading,
 		formValue
 	);
 
-	useEffect(() => {
-		if (!formState) {
-			return;
-		}
-		setFormValue(formState);
-	}, [formState]);
-
 	if (!formState) {
 		return null;
 	}
 
-	const onSave = (newViewValue: ViewSchema): void => {
-		onSubmit(newViewValue);
-		setFormValue(newViewValue);
+	const onSave = (newFormState: FormViewNewListFormState): void => {
+		onSubmit(newFormState);
+		setFormValue(newFormState);
 		resetDetectValueChanges();
 	};
 
-	const onChange = (newViewValue: ViewSchema): void => {
-		setFormValue(newViewValue);
+	const onChange = (newFormState: FormViewNewListFormState): void => {
+		setFormValue(newFormState);
 	};
 
 	return (
@@ -66,7 +58,9 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 				return (
 					<>
 						<FormikOnChangeHandler
-							onChange={values => onChange(values as ViewSchema)}
+							onChange={newFormState =>
+								onChange(newFormState as FormViewNewListFormState)
+							}
 						/>
 						<div className="row u-margin-top">
 							<div className="col-xs-12 col-md-6 u-margin-bottom">
