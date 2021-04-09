@@ -18,7 +18,7 @@ export const getAlertMessages = (data: ViewSchema): Record<string, any> => ({
 		},
 		error: {
 			title: 'Bewaren mislukt',
-			message: `Het bewaren de view "${data.meta.label}" is mislukt`,
+			message: `Het bewaren van de view "${data.meta.label}" is mislukt`,
 		},
 	},
 });
