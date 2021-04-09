@@ -66,7 +66,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 							<div className="col-xs-12 col-md-6 u-margin-bottom">
 								<Field
 									aria-describedby="descMethod"
-									disabled={readonly}
+									disabled={readonly || isLoading}
 									id="method"
 									name="query.viewType"
 									label="Methode"
@@ -102,7 +102,7 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 
 						{!readonly && (
 							<div className="end-xs">
-								<Button onClick={submitForm} disabled={!isChanged}>
+								<Button onClick={submitForm} disabled={!isChanged || isLoading}>
 									{t(CORE_TRANSLATIONS.BUTTON_UPDATE)}
 								</Button>
 							</div>
