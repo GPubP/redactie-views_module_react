@@ -68,7 +68,7 @@ export const META_FILTER_OPTIONS: (FieldOption & {
 	{
 		key: 'meta.firstPublished',
 		value: 'meta.firstPublished',
-		label: 'Eerste publicatedatum',
+		label: 'Eerste publicatiedatum',
 		operators: [
 			{ label: 'Gelijk aan', value: '$eq', key: '$eq' },
 			{ label: 'Niet gelijk aan', value: '$not', key: '$not' },
