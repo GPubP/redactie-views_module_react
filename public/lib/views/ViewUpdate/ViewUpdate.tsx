@@ -133,11 +133,9 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 	 * Render
 	 */
 
-	const pageTitle = (
-		<>
-			<i>{viewDraft?.meta?.label ?? 'View'}</i> {t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
-		</>
-	);
+	const pageTitle = `${viewDraft?.meta?.label ? `'${viewDraft?.meta?.label}'` : 'View'} ${t(
+		CORE_TRANSLATIONS.ROUTING_UPDATE
+	)}`;
 
 	const renderChildRoutes = (): ReactElement | null => {
 		if (!viewDraft) {
