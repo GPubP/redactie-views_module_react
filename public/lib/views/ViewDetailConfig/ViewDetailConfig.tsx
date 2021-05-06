@@ -98,6 +98,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 		contentTypesFacade.getContentType(siteId, updatedView.query.contentType.uuid);
 		viewsFacade.setViewDraft({
 			...updatedView,
+			uuid: view?.uuid,
 			query: {
 				...updatedView.query,
 				// Only uuid is updated but not the contentType as a whole. This fixes it.

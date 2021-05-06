@@ -30,7 +30,7 @@ export const BASE_SORT_OPTIONS = [
 	{
 		key: 'meta.firstPublished',
 		value: 'meta.firstPublished',
-		label: 'Eerste publicatedatum',
+		label: 'Eerste publicatiedatum',
 	},
 ];
 
