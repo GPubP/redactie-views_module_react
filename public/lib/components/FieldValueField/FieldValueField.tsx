@@ -19,7 +19,7 @@ const parseFieldToForm = (
 					...selectedField?.generalConfig,
 					hidden: false,
 					disabled: false,
-					required: true,
+					required: false,
 				},
 				name: 'value',
 				label,
