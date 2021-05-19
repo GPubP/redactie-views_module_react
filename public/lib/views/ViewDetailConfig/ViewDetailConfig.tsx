@@ -97,6 +97,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 
 		contentTypesFacade.getContentType(siteId, updatedView.query.contentType.uuid);
 		viewsFacade.setViewDraft({
+			...view,
 			...updatedView,
 			uuid: view?.uuid,
 			query: {
@@ -120,6 +121,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 		}
 
 		viewsFacade.setViewDraft({
+			...view,
 			...updatedView,
 			query: {
 				...updatedView.query,
@@ -145,6 +147,10 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 				: MODULE_PATHS.detailConfigStatic;
 		navigate(path, { siteId, viewUuid });
 	};
+
+	if (!view) {
+		return <></>;
+	}
 
 	/**
 	 * Render
