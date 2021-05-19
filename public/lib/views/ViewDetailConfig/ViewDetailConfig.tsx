@@ -99,7 +99,6 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 		viewsFacade.setViewDraft({
 			...view,
 			...updatedView,
-			uuid: view?.uuid,
 			query: {
 				...updatedView.query,
 				// Only uuid is updated but not the contentType as a whole. This fixes it.
