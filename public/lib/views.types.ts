@@ -23,7 +23,7 @@ export interface ViewsMatchProps {
 export interface ViewsDetailRouteProps<Params = {}> extends RouteConfigComponentProps<Params> {
 	view: ViewSchema;
 	onCancel: () => void;
-	onSubmit: (data: ViewSchema | Partial<ViewSchema>, tab: ContextHeaderTab) => void;
+	onSubmit: (data: ViewSchema | Partial<ViewSchema>, tab: ContextHeaderTab) => Promise<void>;
 	isCreating?: boolean;
 	loading: boolean;
 	rights: ViewRights;

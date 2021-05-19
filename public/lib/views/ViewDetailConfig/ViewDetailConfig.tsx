@@ -77,8 +77,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	 */
 	const onConfigSave = (): void => {
 		if (view) {
-			onSubmit(view, VIEW_DETAIL_TAB_MAP.config);
-			resetIsChanged();
+			onSubmit(view, VIEW_DETAIL_TAB_MAP.config).then(() => resetIsChanged());
 		}
 	};
 
@@ -97,8 +96,8 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 
 		contentTypesFacade.getContentType(siteId, updatedView.query.contentType.uuid);
 		viewsFacade.setViewDraft({
+			...view,
 			...updatedView,
-			uuid: view?.uuid,
 			query: {
 				...updatedView.query,
 				// Only uuid is updated but not the contentType as a whole. This fixes it.
@@ -120,6 +119,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 		}
 
 		viewsFacade.setViewDraft({
+			...view,
 			...updatedView,
 			query: {
 				...updatedView.query,
@@ -145,6 +145,10 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 				: MODULE_PATHS.detailConfigStatic;
 		navigate(path, { siteId, viewUuid });
 	};
+
+	if (!view) {
+		return <></>;
+	}
 
 	/**
 	 * Render
