@@ -1,7 +1,7 @@
 import { Button, Select } from '@acpaas-ui/react-components';
 import { FormikOnChangeHandler, useDetectValueChanges } from '@redactie/utils';
 import { Field, Formik } from 'formik';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 
@@ -20,24 +20,29 @@ const FormViewNewList: FC<FormViewNewListProps> = ({
 	 * Hooks
 	 */
 	const [t] = useCoreTranslation();
-	const [formValue, setFormValue] = useState<FormViewNewListFormState | undefined>(formState);
-	const [isChanged, resetDetectValueChanges] = useDetectValueChanges(
-		!!formValue && !isLoading,
-		formValue
-	);
+	const [formValue, setFormValue] = useState<FormViewNewListFormState>(formState);
+	const [isChanged, resetIsChanged] = useDetectValueChanges(!!formValue && !isLoading, formValue);
+
+	useEffect(() => {
+		if (!formState) {
+			return;
+		}
+
+		setFormValue(formState);
+	}, [formState]);
 
 	if (!formState) {
 		return null;
 	}
 
-	const onSave = (newFormState: FormViewNewListFormState): void => {
-		onSubmit(newFormState);
-		setFormValue(newFormState);
-		resetDetectValueChanges();
+	const onSave = (newViewValue: FormViewNewListFormState): void => {
+		onSubmit(newViewValue);
+		setFormValue(newViewValue);
+		resetIsChanged();
 	};
 
-	const onChange = (newFormState: FormViewNewListFormState): void => {
-		setFormValue(newFormState);
+	const onChange = (newViewValue: FormViewNewListFormState): void => {
+		setFormValue(newViewValue);
 	};
 
 	return (

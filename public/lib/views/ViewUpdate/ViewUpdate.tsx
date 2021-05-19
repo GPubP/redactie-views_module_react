@@ -115,12 +115,12 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		viewsFacade.setViewDraft(view);
 	};
 
-	const update = (updatedView: ViewSchema, tab: ContextHeaderTab): void => {
+	const update = (updatedView: ViewSchema, tab: ContextHeaderTab): Promise<void> => {
 		if (!updatedView) {
-			return;
+			return Promise.resolve();
 		}
 
-		viewsFacade.updateView(
+		return viewsFacade.updateView(
 			siteId,
 			updatedView,
 			tab.target === 'instellingen'

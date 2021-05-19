@@ -74,20 +74,20 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 			});
 	}
 
-	public updateView(siteId: string, body: ViewSchema, alertId: string): void {
+	public updateView(siteId: string, body: ViewSchema, alertId: string): Promise<void> {
 		const { isUpdating } = this.query.getValue();
 
 		if (isUpdating) {
-			return;
+			return Promise.resolve();
 		}
 
 		this.store.setIsUpdating(true);
 
-		this.service
+		return this.service
 			.updateView(siteId, body)
 			.then(response => {
 				if (!response) {
-					throw new Error(`Updateing view '${body.uuid}' failed!`);
+					throw new Error(`Updating view '${body.uuid}' failed!`);
 				}
 
 				this.store.update({
@@ -95,6 +95,7 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 					viewDraft: response,
 					isUpdating: false,
 				});
+
 				alertService.success(getAlertMessages(response).update.success, {
 					containerId: alertId,
 				});

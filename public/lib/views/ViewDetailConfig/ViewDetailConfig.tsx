@@ -45,6 +45,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	onCancel,
 	onSubmit,
 }) => {
+	console.log('A');
 	/**
 	 * Hooks
 	 */
@@ -77,8 +78,7 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	 */
 	const onConfigSave = (): void => {
 		if (view) {
-			onSubmit(view, VIEW_DETAIL_TAB_MAP.config);
-			resetIsChanged();
+			onSubmit(view, VIEW_DETAIL_TAB_MAP.config).then(() => resetIsChanged());
 		}
 	};
 
