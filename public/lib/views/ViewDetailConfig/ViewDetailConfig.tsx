@@ -45,7 +45,6 @@ const ViewConfig: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	onCancel,
 	onSubmit,
 }) => {
-	console.log('A');
 	/**
 	 * Hooks
 	 */
