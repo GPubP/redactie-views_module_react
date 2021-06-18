@@ -75,7 +75,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		{ name }: FilterFormState,
 		formikHelpers: FormikHelpers<FilterFormState>
 	): void => {
-		setFilterItems([{ value: name }]);
+		setFilterItems([{ value: name, valuePrefix: 'Naam' }]);
 
 		// Add array to searchParams
 		setQuery({ search: [name] });
@@ -86,7 +86,7 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		// Clear filter items
 		setFilterItems([]);
 		// Reset search params
-		setQuery(DEFAULT_SEARCH_PARAMS);
+		setQuery({ ...DEFAULT_SEARCH_PARAMS, search: undefined });
 		resetForm();
 	};
 
