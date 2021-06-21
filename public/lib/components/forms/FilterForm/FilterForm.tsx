@@ -1,6 +1,6 @@
 import { TextField } from '@acpaas-ui/react-components';
 import { Filter, FilterBody } from '@acpaas-ui/react-editorial-components';
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import React, { FC } from 'react';
 
 import { FILTER_FORM_VALIDATION_SCHEMA } from './FilterForm.const';
@@ -14,15 +14,15 @@ const FilterForm: FC<FilterFormProps> = ({
 	deleteActiveFilter,
 }) => {
 	return (
-		<>
-			<Formik
-				enableReinitialize={true}
-				initialValues={initialState}
-				onSubmit={onSubmit}
-				validationSchema={FILTER_FORM_VALIDATION_SCHEMA}
-			>
-				{({ submitForm, resetForm }) => {
-					return (
+		<Formik
+			enableReinitialize={true}
+			initialValues={initialState}
+			onSubmit={onSubmit}
+			validationSchema={FILTER_FORM_VALIDATION_SCHEMA}
+		>
+			{({ submitForm, resetForm }) => {
+				return (
+					<Form>
 						<Filter
 							title="Filter"
 							noFilterText="Geen filters beschikbaar"
@@ -46,10 +46,10 @@ const FilterForm: FC<FilterFormProps> = ({
 								</div>
 							</FilterBody>
 						</Filter>
-					);
-				}}
-			</Formik>
-		</>
+					</Form>
+				);
+			}}
+		</Formik>
 	);
 };
 
