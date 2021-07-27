@@ -7,3 +7,4 @@ export { default as ViewDetailConfigStatic } from './ViewDetailConfigStatic/View
 export { default as ViewDetailConditions } from './ViewDetailConditions/ViewDetailConditions';
 export { default as ViewDetailOptions } from './ViewDetailOptions/ViewDetailOptions';
 export { default as ViewUpdate } from './ViewUpdate/ViewUpdate';
+export { default as ViewDetailPreview } from './ViewDetailPreview/ViewDetailPreview';

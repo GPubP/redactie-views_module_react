@@ -1,8 +1,13 @@
-import { parseSearchParams, SearchParams } from '@redactie/utils';
+import { EmbeddedResponse, parseSearchParams, SearchParams } from '@redactie/utils';
 
 import { api, DEFAULT_SEARCH_PARAMS } from '../api';
 
-import { ViewSchema, ViewsSchema, ViewsSearchParams } from './views.service.types';
+import {
+	ViewPreviewSchema,
+	ViewSchema,
+	ViewsSchema,
+	ViewsSearchParams,
+} from './views.service.types';
 
 export class ViewsApiService {
 	public async getViews(
@@ -58,6 +63,31 @@ export class ViewsApiService {
 					json: view,
 				})
 				.json();
+
+			return response;
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
+	}
+
+	public async getViewPreview(
+		siteId: string,
+		viewId: string,
+		searchParams: ViewsSearchParams = DEFAULT_SEARCH_PARAMS
+	): Promise<EmbeddedResponse<ViewPreviewSchema> | null> {
+		try {
+			const response: EmbeddedResponse<ViewPreviewSchema> = await api
+				.get(
+					`sites/${siteId}/views/${viewId}/preview?${parseSearchParams(
+						searchParams as SearchParams
+					)}`
+				)
+				.json();
+
+			if (!response._embedded) {
+				throw new Error('Failed to get view preview');
+			}
 
 			return response;
 		} catch (err) {
