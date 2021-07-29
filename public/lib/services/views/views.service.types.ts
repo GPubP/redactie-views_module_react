@@ -89,3 +89,14 @@ export interface ViewSchema {
 	meta: ViewMeta;
 	uuid?: string;
 }
+
+export interface ViewPreviewMeta {
+	lastModified: string;
+	lastEditor: Editor;
+	label: string;
+}
+
+export interface ViewPreviewSchema {
+	uuid: string;
+	meta: ViewPreviewMeta;
+}
