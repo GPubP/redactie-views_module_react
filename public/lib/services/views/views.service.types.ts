@@ -94,6 +94,10 @@ export interface ViewPreviewMeta {
 	lastModified: string;
 	lastEditor: Editor;
 	label: string;
+	contentType: {
+		_id: string;
+		uuid: string;
+	};
 }
 
 export interface ViewPreviewSchema {
