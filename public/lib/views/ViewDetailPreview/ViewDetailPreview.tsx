@@ -72,7 +72,12 @@ const ViewDetailPreview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 						?.lastname || ''}`
 				: 'Onbekend',
 		lastModified: moment(content.meta.lastModified).format('DD/MM/YYYY'),
-		navigate: (contentUuid: string) => navigate(CONTENT_DETAIL_PATH, { siteId, contentUuid }),
+		navigate: (contentUuid: string) =>
+			navigate(CONTENT_DETAIL_PATH, {
+				siteId,
+				contentUuid,
+				contentTypeId: content.meta.contentType.uuid,
+			}),
 	}));
 
 	const renderTable = (): ReactElement => {
