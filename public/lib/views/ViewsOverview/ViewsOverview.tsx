@@ -16,10 +16,9 @@ import {
 	useAPIQueryParams,
 	useNavigate,
 } from '@redactie/utils';
-import { FormikHelpers } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
-import { FilterForm, FilterFormState, ResetForm } from '../../components';
+import { FilterForm, FilterFormState } from '../../components';
 import rolesRightsConnector from '../../connectors/rolesRights';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useRoutesBreadcrumbs, useViews } from '../../hooks';
@@ -30,11 +29,7 @@ import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
 import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
-import {
-	OVERVIEW_QUERY_PARAMS_CONFIG,
-	VIEWS_OVERVIEW_COLUMNS,
-	VIEWS_OVERVIEW_INITIAL_FILTER_STATE,
-} from './viewsOverview.const';
+import { OVERVIEW_QUERY_PARAMS_CONFIG, VIEWS_OVERVIEW_COLUMNS } from './viewsOverview.const';
 
 const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const { siteId } = match.params;
@@ -42,7 +37,6 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	 * Hooks
 	 */
 
-	const [filterItems, setFilterItems] = useState<FilterItem[]>([]);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [query, setQuery] = useAPIQueryParams(OVERVIEW_QUERY_PARAMS_CONFIG, false);
 	const [
@@ -71,34 +65,30 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	/**
 	 * Functions
 	 */
-	const onSubmit = (
-		{ name }: FilterFormState,
-		formikHelpers: FormikHelpers<FilterFormState>
-	): void => {
-		setFilterItems([{ value: name, valuePrefix: 'Naam' }]);
-
-		// Add array to searchParams
-		setQuery({ search: [name] });
-		formikHelpers.resetForm();
+	const onSubmit = ({ name }: FilterFormState): void => {
+		setQuery({ search: name });
 	};
 
-	const deleteAllFilters = (resetForm: ResetForm): void => {
-		// Clear filter items
-		setFilterItems([]);
-		// Reset search params
+	const createFilters = ({ name }: FilterFormState): FilterItem[] => {
+		return [
+			...(name
+				? [
+						{
+							key: 'search',
+							valuePrefix: 'Naam',
+							value: name,
+						},
+				  ]
+				: []),
+		].filter(f => !!f.value);
+	};
+
+	const deleteAllFilters = (): void => {
 		setQuery({ ...DEFAULT_SEARCH_PARAMS, search: undefined });
-		resetForm();
 	};
 
-	const deleteFilter = (item: any): void => {
-		// Delete item from filterItems
-		const newFilters = filterItems?.filter(el => el.value !== item.value);
-		// Get value array from filterItems
-		const search = newFilters.map(item => item['value']);
-
-		setFilterItems(newFilters);
-		// Add search to searchParams
-		setQuery({ search });
+	const deleteFilter = (item: FilterItem): void => {
+		setQuery({ [item.key as string]: '' });
 	};
 
 	const handlePageChange = (pageNumber: number): void => {
@@ -114,10 +104,12 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		});
 	};
 
+	const filterFormState: FilterFormState = { name: query.search ?? '' };
 	const activeSorting: OrderBy = parseObjToOrderBy({
 		sort: query.sort ? query.sort.split('.')[1] : '',
 		direction: query.direction ?? 1,
 	});
+	const activeFilters = createFilters(filterFormState);
 
 	/**
 	 * Render
@@ -144,11 +136,11 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 		return (
 			<>
 				<FilterForm
-					initialState={VIEWS_OVERVIEW_INITIAL_FILTER_STATE}
+					initialState={filterFormState}
 					onCancel={deleteAllFilters}
 					onSubmit={onSubmit}
 					deleteActiveFilter={deleteFilter}
-					activeFilters={filterItems}
+					activeFilters={activeFilters}
 				/>
 				<PaginatedTable
 					fixed
