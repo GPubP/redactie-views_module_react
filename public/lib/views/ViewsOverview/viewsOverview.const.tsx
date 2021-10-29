@@ -12,16 +12,12 @@ import { DEFAULT_SEARCH_PARAMS } from '../../services/api';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
 
-export const VIEWS_OVERVIEW_INITIAL_FILTER_STATE = {
-	name: '',
-};
-
 export const OVERVIEW_QUERY_PARAMS_CONFIG = {
 	page: { defaultValue: DEFAULT_SEARCH_PARAMS.page, type: 'number' },
 	limit: { defaultValue: DEFAULT_SEARCH_PARAMS.limit, type: 'number' },
 	skip: { defaultValue: DEFAULT_SEARCH_PARAMS.skip, type: 'number' },
 	sparse: { defaultValue: DEFAULT_SEARCH_PARAMS.sparse, type: 'boolean' },
-	search: { type: 'array' },
+	search: { type: 'string' },
 	sort: { defaultValue: 'meta.label', type: 'string' },
 	direction: { defaultValue: 1, type: 'number' },
 } as const;
