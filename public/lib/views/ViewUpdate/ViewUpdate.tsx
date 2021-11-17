@@ -6,6 +6,7 @@ import {
 	LoadingState,
 	RenderChildRoutes,
 	useNavigate,
+	useOnNextRender,
 } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -32,7 +33,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [t] = useCoreTranslation();
 	const { siteId, viewUuid } = useParams<{ viewUuid?: string; siteId: string }>();
-	const { generatePath } = useNavigate(SITES_ROOT);
+	const { generatePath, navigate } = useNavigate(SITES_ROOT);
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
 			name: 'Views',
@@ -65,6 +66,9 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 	}, [upsertViewLoadingState, viewLoadingState]);
 	const [viewDraft] = useViewDraft();
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
+	const [forceNavigateToOverview] = useOnNextRender(() =>
+		navigate(MODULE_PATHS.overview, { siteId })
+	);
 
 	useEffect(() => {
 		if (
@@ -129,6 +133,16 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 		);
 	};
 
+	const deleteView = async (view: ViewSchema): Promise<void> => {
+		return (
+			viewsFacade
+				.deleteView(siteId, view)
+				.then(forceNavigateToOverview)
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				.catch(() => {})
+		);
+	};
+
 	/**
 	 * Render
 	 */
@@ -151,6 +165,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 				extraOptions={{
 					onCancel,
 					onSubmit: update,
+					onDelete: deleteView,
 					routes: route.routes,
 					loading: isLoading,
 					rights,

@@ -6,6 +6,7 @@ import {
 	ViewSchema,
 	ViewsSearchParams,
 } from '../../services/views';
+import { ALERT_CONTAINER_IDS } from '../../views.const';
 
 import { getAlertMessages } from './views.messages';
 import { ViewsQuery, viewsQuery } from './views.query';
@@ -146,6 +147,45 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 				alertService.danger(getAlertMessages(body).create.error, {
 					containerId: alertId,
 				});
+			});
+	}
+
+	public async deleteView(siteId: string, body: ViewSchema): Promise<void> {
+		const { isUpdating } = this.query.getValue();
+
+		if (isUpdating) {
+			return Promise.resolve();
+		}
+
+		this.store.setIsUpdating(true);
+
+		return this.service
+			.deleteView(siteId, body.uuid as string)
+			.then(() => {
+				this.store.update({
+					view: undefined,
+					viewDraft: undefined,
+					isUpdating: false,
+				});
+
+				// Timeout because the alert should be visible on the overview page
+				setTimeout(() => {
+					alertService.success(getAlertMessages(body).delete.success, {
+						containerId: ALERT_CONTAINER_IDS.overview,
+					});
+				}, 300);
+			})
+			.catch(error => {
+				this.store.update({
+					error,
+					isUpdating: false,
+				});
+
+				alertService.danger(getAlertMessages(body).delete.error, {
+					containerId: ALERT_CONTAINER_IDS.settings,
+				});
+
+				throw new Error('Deleting view failed!');
 			});
 	}
 

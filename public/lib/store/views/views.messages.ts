@@ -21,4 +21,14 @@ export const getAlertMessages = (data: ViewSchema): Record<string, any> => ({
 			message: `Het bewaren van de view "${data.meta.label}" is mislukt`,
 		},
 	},
+	delete: {
+		success: {
+			title: 'Verwijderd',
+			message: `De view "${data.meta?.label}" is verwijderd`,
+		},
+		error: {
+			title: 'Verwijderen mislukt',
+			message: `Het verwijderen van de view "${data.meta.label}" is mislukt`,
+		},
+	},
 });

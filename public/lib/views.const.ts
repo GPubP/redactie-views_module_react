@@ -55,4 +55,5 @@ export const MODULE_PATHS = {
 export const ALERT_CONTAINER_IDS = {
 	settings: 'settings',
 	config: 'config',
+	overview: 'overview',
 };

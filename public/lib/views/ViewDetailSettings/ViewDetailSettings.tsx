@@ -1,12 +1,26 @@
-import { Button, Textarea, TextField } from '@acpaas-ui/react-components';
+import {
+	Button,
+	Card,
+	CardBody,
+	CardDescription,
+	CardTitle,
+	Textarea,
+	TextField,
+} from '@acpaas-ui/react-components';
 import {
 	ActionBar,
 	ActionBarContentSection,
 	Container,
 } from '@acpaas-ui/react-editorial-components';
-import { AlertContainer, CopyValue, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import {
+	AlertContainer,
+	CopyValue,
+	DeletePrompt,
+	LeavePrompt,
+	useDetectValueChanges,
+} from '@redactie/utils';
 import { ErrorMessage, Field, Formik } from 'formik';
-import React, { FC } from 'react';
+import React, { FC, ReactElement, useState } from 'react';
 
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useView, useViewDraft } from '../../hooks';
@@ -25,11 +39,13 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	isCreating,
 	rights,
 	onSubmit,
+	onDelete,
 }) => {
 	const [view] = useViewDraft();
 	const [, initialValues] = useView();
 	const [t] = useCoreTranslation();
 	const [isChanged, resetIsChanged] = useDetectValueChanges(!loading, view);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	/**
 	 * Methods
@@ -49,6 +65,19 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 
 	const readonly = isCreating ? false : !rights.canUpdate;
 
+	const onDeletePromptConfirm = async (): Promise<void> => {
+		if (!initialValues) {
+			return;
+		}
+
+		await onDelete(initialValues);
+		setShowDeleteModal(false);
+	};
+
+	const onDeletePromptCancel = (): void => {
+		setShowDeleteModal(false);
+	};
+
 	/**
 	 * Render
 	 */
@@ -56,6 +85,38 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	if (!view || !initialValues) {
 		return null;
 	}
+
+	const renderDelete = (): ReactElement => {
+		return (
+			<>
+				<Card className="u-margin-top">
+					<CardBody>
+						<CardTitle>Verwijderen</CardTitle>
+						<CardDescription>
+							Opgelet, indien u deze view verwijdert kan hij niet meer gebruikt worden
+							binnen een view referentie. Reeds bestaande verwijzingen naar deze view
+							worden ongeldig.
+						</CardDescription>
+						<Button
+							onClick={() => setShowDeleteModal(true)}
+							className="u-margin-top"
+							type="danger"
+							iconLeft="trash-o"
+						>
+							{t(CORE_TRANSLATIONS['BUTTON_REMOVE'])}
+						</Button>
+					</CardBody>
+				</Card>
+				<DeletePrompt
+					body="Ben je zeker dat je deze view wil verwijderen? Dit kan niet ongedaan gemaakt worden."
+					isDeleting={loading}
+					show={showDeleteModal}
+					onCancel={onDeletePromptCancel}
+					onConfirm={onDeletePromptConfirm}
+				/>
+			</>
+		);
+	};
 
 	return (
 		<Container>
@@ -159,6 +220,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 					);
 				}}
 			</Formik>
+			{!isCreating && renderDelete()}
 		</Container>
 	);
 };
