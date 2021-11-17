@@ -71,6 +71,10 @@ export class ViewsApiService {
 		}
 	}
 
+	public async deleteView(siteId: string, viewId: string): Promise<void> {
+		return api.delete(`sites/${siteId}/views/${viewId}`).json();
+	}
+
 	public async getViewPreview(
 		siteId: string,
 		viewId: string,

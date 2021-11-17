@@ -7,6 +7,7 @@ import {
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
 import {
+	AlertContainer,
 	DataLoader,
 	FilterItem,
 	LoadingState,
@@ -25,7 +26,7 @@ import { useRoutesBreadcrumbs, useViews } from '../../hooks';
 import { DEFAULT_SEARCH_PARAMS } from '../../services/api';
 import { ViewsSearchParams } from '../../services/views';
 import { viewsFacade } from '../../store/views';
-import { MODULE_PATHS, SITES_ROOT } from '../../views.const';
+import { ALERT_CONTAINER_IDS, MODULE_PATHS, SITES_ROOT } from '../../views.const';
 import { ViewsMatchProps, ViewsRouteProps } from '../../views.types';
 
 import { ViewsOverviewTableRow } from './ViewsOverview.types';
@@ -135,6 +136,9 @@ const ViewsOverview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 
 		return (
 			<>
+				<div className="u-margin-bottom">
+					<AlertContainer containerId={ALERT_CONTAINER_IDS.overview} />
+				</div>
 				<FilterForm
 					initialState={filterFormState}
 					onCancel={deleteAllFilters}
