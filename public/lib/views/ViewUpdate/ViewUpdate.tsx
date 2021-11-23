@@ -42,7 +42,12 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			}),
 		},
 	]);
-	const [viewLoadingState, view, upsertViewLoadingState] = useView();
+	const {
+		fetchingState: viewLoadingState,
+		upsertingState: upsertViewLoadingState,
+		removingState: removeViewLoadingState,
+		view,
+	} = useView();
 	const [
 		mySecurityRightsLoadingState,
 		mySecurityrights,
@@ -64,6 +69,9 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 			upsertViewLoadingState === LoadingState.Loading
 		);
 	}, [upsertViewLoadingState, viewLoadingState]);
+	const isRemoving = useMemo(() => {
+		return removeViewLoadingState === LoadingState.Loading;
+	}, [removeViewLoadingState]);
 	const [viewDraft] = useViewDraft();
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
 	const [forceNavigateToOverview] = useOnNextRender(() =>
@@ -168,6 +176,7 @@ const ViewUpdate: FC<ViewsRouteProps<{ viewUuid?: string; siteId: string }>> = (
 					onDelete: deleteView,
 					routes: route.routes,
 					loading: isLoading,
+					removing: isRemoving,
 					rights,
 				}}
 			/>
