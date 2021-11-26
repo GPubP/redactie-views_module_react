@@ -41,7 +41,11 @@ const ViewCreate: FC<ViewsRouteProps<ViewsMatchProps>> = ({ location, tenantId, 
 		},
 	]);
 	const activeTabs = useActiveTabs(VIEW_DETAIL_TABS, location.pathname);
-	const [viewLoadingState, view, upsertViewLoadingState] = useView();
+	const {
+		fetchingState: viewLoadingState,
+		view,
+		upsertingState: upsertViewLoadingState,
+	} = useView();
 	const [viewDraft] = useViewDraft();
 	const isLoading = useMemo(() => {
 		return (

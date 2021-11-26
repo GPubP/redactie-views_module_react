@@ -27,7 +27,7 @@ const ViewDetailPreview: FC<ViewsRouteProps<ViewsMatchProps>> = ({ match }) => {
 	const { navigate } = useNavigate(SITES_ROOT);
 	const [t] = useCoreTranslation();
 	const [loadingState, viewPreview, viewPreviewPaging] = useViewPreview();
-	const [, view] = useView();
+	const { view } = useView();
 
 	useEffect(() => {
 		if (loadingState === LoadingState.Loaded) {

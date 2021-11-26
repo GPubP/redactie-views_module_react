@@ -151,13 +151,13 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 	}
 
 	public async deleteView(siteId: string, body: ViewSchema): Promise<void> {
-		const { isUpdating } = this.query.getValue();
+		const { isRemoving } = this.query.getValue();
 
-		if (isUpdating) {
+		if (isRemoving) {
 			return Promise.resolve();
 		}
 
-		this.store.setIsUpdating(true);
+		this.store.setIsRemoving(true);
 
 		return this.service
 			.deleteView(siteId, body.uuid as string)
@@ -165,7 +165,7 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 				this.store.update({
 					view: undefined,
 					viewDraft: undefined,
-					isUpdating: false,
+					isRemoving: false,
 				});
 
 				// Timeout because the alert should be visible on the overview page
@@ -178,7 +178,7 @@ export class ViewsFacade extends BaseEntityFacade<ViewsStore, ViewsApiService, V
 			.catch(error => {
 				this.store.update({
 					error,
-					isUpdating: false,
+					isRemoving: false,
 				});
 
 				alertService.danger(getAlertMessages(body).delete.error, {

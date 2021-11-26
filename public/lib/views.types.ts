@@ -26,6 +26,7 @@ export interface ViewsDetailRouteProps<Params = {}> extends RouteConfigComponent
 	onSubmit: (data: ViewSchema | Partial<ViewSchema>, tab: ContextHeaderTab) => Promise<void>;
 	onDelete: (data: ViewSchema | Partial<ViewSchema>) => Promise<void>;
 	isCreating?: boolean;
+	isRemoving?: boolean;
 	loading: boolean;
 	rights: ViewRights;
 	routes: ModuleRouteConfig[];

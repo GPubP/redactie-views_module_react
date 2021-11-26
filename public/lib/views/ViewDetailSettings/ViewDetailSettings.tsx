@@ -37,12 +37,13 @@ import {
 const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 	loading,
 	isCreating,
+	isRemoving,
 	rights,
 	onSubmit,
 	onDelete,
 }) => {
 	const [view] = useViewDraft();
-	const [, initialValues] = useView();
+	const { view: initialValues } = useView();
 	const [t] = useCoreTranslation();
 	const [isChanged, resetIsChanged] = useDetectValueChanges(!loading, view);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -109,7 +110,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 				</Card>
 				<DeletePrompt
 					body="Ben je zeker dat je deze view wil verwijderen? Dit kan niet ongedaan gemaakt worden."
-					isDeleting={loading}
+					isDeleting={isRemoving}
 					show={showDeleteModal}
 					onCancel={onDeletePromptCancel}
 					onConfirm={onDeletePromptConfirm}
