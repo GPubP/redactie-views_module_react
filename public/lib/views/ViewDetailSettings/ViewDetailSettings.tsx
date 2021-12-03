@@ -94,9 +94,9 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 					<CardBody>
 						<CardTitle>Verwijderen</CardTitle>
 						<CardDescription>
-							Opgelet, indien u deze view verwijdert kan hij niet meer gebruikt worden
-							binnen een view referentie. Reeds bestaande verwijzingen naar deze view
-							worden ongeldig.
+							Opgelet: indien je deze view verwijdert kan hij niet meer gebruikt
+							worden binnen een view referentie. Reeds bestaande verwijzingen naar
+							deze view worden ongeldig.
 						</CardDescription>
 						<Button
 							onClick={() => setShowDeleteModal(true)}
