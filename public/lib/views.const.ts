@@ -35,7 +35,7 @@ export const VIEW_DETAIL_TABS: ContextHeaderTab[] = [
 ];
 export const urlSiteParam = 'siteId';
 export const TENANT_ROOT = '/:tenantId/sites';
-export const CONTENT_DETAIL_PATH = `/:${urlSiteParam}/content/content-types/:contentTypeId/content/:contentUuid/bekijk`;
+export const CONTENT_DETAIL_PATH = `/:${urlSiteParam}/content/content-types/:contentTypeId/content/:contentUuid/overzicht`;
 export const MODULE_PATHS = {
 	dashboard: `/:${urlSiteParam}/content`,
 	root: `/:${urlSiteParam}/views`,

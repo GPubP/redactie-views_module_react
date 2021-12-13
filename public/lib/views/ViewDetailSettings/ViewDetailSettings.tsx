@@ -150,8 +150,8 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 										name="meta.label"
 									/>
 									<div className="u-text-light u-margin-top-xs">
-										Geef deze contentlijst een gebruiksvriendelijke naam,
-										bijvoorbeeld &lsquo;Titel&lsquo;
+										Geef deze view een gebruiksvriendelijke naam, bijvoorbeeld
+										&lsquo;Titel&lsquo;
 									</div>
 								</div>
 							</div>
@@ -172,7 +172,7 @@ const ViewSettings: FC<ViewsDetailRouteProps<ViewsMatchProps>> = ({
 										name="meta.description"
 									/>
 									<div className="u-text-light u-margin-top-xs">
-										Geef een beschrijving voor deze content lijst.
+										Geef een beschrijving voor deze view.
 									</div>
 								</div>
 							</div>
