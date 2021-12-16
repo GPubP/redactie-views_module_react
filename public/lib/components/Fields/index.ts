@@ -1,9 +1,9 @@
-import { getFieldRegistery } from '../../connectors/formRenderer';
+import formRendererConnector from '../../connectors/formRenderer';
 
 import { ViewSelect, ViewSelectView } from './ViewSelect';
 
 export const registerCCFields = (): void => {
-	const fieldRegistery = getFieldRegistery();
+	const fieldRegistery = formRendererConnector.api.fieldRegistry;
 
 	if (fieldRegistery) {
 		fieldRegistery.add([

@@ -7,7 +7,7 @@ import { first } from 'rxjs/operators';
 
 import './ViewSelect.scss';
 
-import { ErrorMessage } from '../../../connectors/formRenderer';
+import formRendererConnector from '../../../connectors/formRenderer';
 import useCcViews from '../../../hooks/useCcViews/useCcViews';
 import { ViewSchema } from '../../../services/views';
 import { ccViewsFacade } from '../../../store/ccViews';
@@ -27,11 +27,18 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 	const { siteId } = useSiteContext();
 
 	const [viewLoadingState] = useCcViews(`views_${fieldSchema.name}`);
+	const FormRendererFieldTitle = formRendererConnector.api.FormRendererFieldTitle;
+	const ErrorMessage = formRendererConnector.api.ErrorMessage;
 
 	return (
 		<>
+			<FormRendererFieldTitle
+				isRequired={!!fieldSchema.config?.required}
+				className="u-margin-bottom-xs"
+			>
+				{fieldSchema?.label}
+			</FormRendererFieldTitle>
 			<Autocomplete
-				label={fieldSchema.label}
 				id={fieldSchema.name}
 				state={state}
 				multipleSelect={false}

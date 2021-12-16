@@ -1,7 +1,7 @@
 import { FieldInputProps, FormikValues, useField, useFormikContext } from 'formik';
 import React, { FC, useMemo } from 'react';
 
-import { getFieldRegistery } from '../../connectors/formRenderer';
+import formRendererConnector from '../../connectors/formRenderer';
 import { META_FILTER_OPTIONS } from '../forms/FormCreateCondition/FormCreateCondition.const';
 
 const MetaValueField: FC<FieldInputProps<string> & {
@@ -13,7 +13,7 @@ const MetaValueField: FC<FieldInputProps<string> & {
 	/**
 	 * Hooks
 	 */
-	const fieldRegistry = getFieldRegistery();
+	const fieldRegistry = formRendererConnector.api.fieldRegistry;
 	const form = useFormikContext<FormikValues>();
 	const [field, meta, helpers] = useField(props.name);
 	const selectedMetaField = useMemo(
