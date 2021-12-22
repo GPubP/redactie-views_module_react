@@ -3,7 +3,7 @@ import { ContentTypeFieldSchema, FormSchema } from '@redactie/form-renderer-modu
 import { Field, FieldInputProps } from 'formik';
 import React, { FC, useMemo } from 'react';
 
-import { getForm, parseFields } from '../../connectors/formRenderer';
+import formRendererConnector from '../../connectors/formRenderer';
 import { ContentTypeFieldResponse } from '../../services/contentTypes/contentTypes.service.types';
 import { DEFAULT_VALIDATION_SCHEMA } from '../forms/FormCreateCondition/FormCreateCondition.const';
 
@@ -12,7 +12,7 @@ const parseFieldToForm = (
 	{ label }: { label: string }
 ): FormSchema => {
 	return {
-		fields: parseFields([
+		fields: formRendererConnector.api.parseFields([
 			({
 				...(selectedField || {}),
 				generalConfig: {
@@ -52,7 +52,7 @@ const FieldValueField: FC<FieldInputProps<any> & {
 		: selectedFieldsField?.defaultValue
 		? { value: selectedFieldsField.defaultValue }
 		: {};
-	const FormRenderer = getForm();
+	const FormRenderer = formRendererConnector.api.Form;
 
 	/**
 	 * Methods

@@ -3,7 +3,7 @@ import { InputFieldProps } from '@redactie/form-renderer-module';
 import { Field, FieldProps, Formik } from 'formik';
 import React, { FC, ReactElement, useMemo } from 'react';
 
-import { getFieldRegistery } from '../../../connectors/formRenderer';
+import formRendererConnector from '../../../connectors/formRenderer';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { useViewDraft } from '../../../hooks';
 
@@ -23,7 +23,7 @@ const FormEditStaticCondition: FC<FormEditStaticConditionProps> = ({
 	const [view] = useViewDraft();
 	const [t] = useCoreTranslation();
 	const ContentSelect: React.FC<InputFieldProps> | null | undefined = useMemo(() => {
-		const fieldRegistry = getFieldRegistery();
+		const fieldRegistry = formRendererConnector.api.fieldRegistry;
 
 		if (!fieldRegistry) {
 			return null;
