@@ -31,7 +31,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 	const ErrorMessage = formRendererConnector.api.ErrorMessage;
 
 	return (
-		<>
+		<div className="a-view-select-input">
 			<FormRendererFieldTitle
 				isRequired={!!fieldSchema.config?.required}
 				className="u-margin-bottom-xs"
@@ -83,7 +83,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 				</div>
 			) : null}
 			<ErrorMessage name={field.name} />
-		</>
+		</div>
 	);
 };
 
