@@ -32,6 +32,11 @@ export const BASE_SORT_OPTIONS = [
 		value: 'meta.firstPublished',
 		label: 'Eerste publicatiedatum',
 	},
+	{
+		key: 'meta.issuedOn',
+		value: 'meta.issuedOn',
+		label: 'Uitgifte datum',
+	},
 ];
 
 export const ORDER_OPTIONS = [
