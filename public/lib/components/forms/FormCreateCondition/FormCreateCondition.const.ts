@@ -80,4 +80,19 @@ export const META_FILTER_OPTIONS: (FieldOption & {
 		type: 'dateTime',
 		typeLabel: 'Datum & tijd',
 	},
+	{
+		key: 'meta.issuedOn',
+		value: 'meta.issuedOn',
+		label: 'Uitgifte datum',
+		operators: [
+			{ label: 'Gelijk aan', value: '$eq', key: '$eq' },
+			{ label: 'Niet gelijk aan', value: '$not', key: '$not' },
+			{ label: 'Groter dan', value: '$gt', key: '$gt' },
+			{ label: 'Kleiner dan', value: '$lt', key: '$lt' },
+			{ label: 'Groter of gelijk dan', value: '$gte', key: '$gte' },
+			{ label: 'Kleiner of gelijk dan', value: '$lte', key: '$lte' },
+		],
+		type: 'dateTime',
+		typeLabel: 'Datum & tijd',
+	},
 ];
