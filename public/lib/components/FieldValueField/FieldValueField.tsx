@@ -1,7 +1,7 @@
 import { TextField } from '@acpaas-ui/react-components';
 import { ContentTypeFieldSchema, FormSchema } from '@redactie/form-renderer-module';
 import { Field, FieldInputProps } from 'formik';
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 
 import formRendererConnector from '../../connectors/formRenderer';
 import { ContentTypeFieldResponse } from '../../services/contentTypes/contentTypes.service.types';
@@ -52,7 +52,17 @@ const FieldValueField: FC<FieldInputProps<any> & {
 		: selectedFieldsField?.defaultValue
 		? { value: selectedFieldsField.defaultValue }
 		: {};
+
 	const FormRenderer = formRendererConnector.api.Form;
+
+	useEffect(() => {
+		if (value) {
+			return;
+		}
+
+		setFieldValue(initialValues?.value);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	/**
 	 * Methods
