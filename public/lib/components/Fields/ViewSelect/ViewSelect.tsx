@@ -34,6 +34,7 @@ const ContentSelect: React.FC<InputFieldProps> = ({
 		<div className="a-view-select-input">
 			<FormRendererFieldTitle
 				isRequired={!!fieldSchema.config?.required}
+				isSynced={config.synced}
 				className="u-margin-bottom-xs"
 			>
 				{fieldSchema?.label}
