@@ -73,7 +73,7 @@ export const FIELD_COLUMNS = (
 		label: 'Waarde',
 		disableSorting: true,
 		format: (cellValue, col, rowData) => {
-			return rowData.label || rowData.value.toString();
+			return rowData?.label || rowData?.value?.toString() || '';
 		},
 	},
 	...(!readonly
